@@ -84,9 +84,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 	private Path getConfigFileForCertificate(Path certFile) {
 		String certFilename = certFile.getFileName().toString();
-		System.out.println("bla1");
 		Path configFile = certFile.resolveSibling(certFilename + ".config");
-		System.out.println("bla2");
 
 		if (!Files.exists(configFile)) {
 			String message = String.format("Configuration of ImportCertTasks failed: \"%s\" missing", projectDir.relativize(configFile));

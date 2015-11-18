@@ -106,7 +106,8 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 	def "missing config file for certificate"() {
 		given:
-		Files.delete(testProjectDir.getRoot().toPath().resolve("certs/CAcert/root.crt.config"))
+		def configfile = Paths.get("certs", "CAcert", "root.crt.config")
+		Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
 		buildFile << """
             plugins {
                 id 'de.chkpnt.truststorebuilder'
@@ -121,7 +122,7 @@ class TrustStoreBuilderPluginTest extends Specification {
 				.buildAndFail()
 
 		then:
-		result.output.contains('Configuration of ImportCertTasks failed: "certs\\CAcert\\root.crt.config" missing')
+		result.output.contains("Configuration of ImportCertTasks failed: \"$configfile\" missing")
 	}
 
 	def "buildTrustStore task is included in task-list with pre Gradle 2.8"() {
