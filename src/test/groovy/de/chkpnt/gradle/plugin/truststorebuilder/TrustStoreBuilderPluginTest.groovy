@@ -7,6 +7,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 
@@ -67,7 +68,6 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 		then:
 		result.output.contains("buildTrustStore - Adds all certificates found")
-		//		result.task(":buildTrustStore").outcome == SUCCESS
 	}
 
 	def "buildTrustStore task builds a TrustStore"() {
@@ -104,6 +104,26 @@ class TrustStoreBuilderPluginTest extends Specification {
 		assert output.contains(FINGERPRINT_LETSENCRYPT_ROOT_CA)
 	}
 
+	def "missing config file for certificate"() {
+		given:
+		Files.delete(testProjectDir.getRoot().toPath().resolve("certs/CAcert/root.crt.config"))
+		buildFile << """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+        """
+
+		when:
+		def result = GradleRunner.create()
+				.withProjectDir(testProjectDir.root)
+				.withArguments("buildTrustStore")
+				.withPluginClasspath(pluginClasspath)
+				.buildAndFail()
+
+		then:
+		result.output.contains('Configuration of ImportCertTasks failed: "certs\\CAcert\\root.crt.config" missing')
+	}
+
 	def "buildTrustStore task is included in task-list with pre Gradle 2.8"() {
 		given:
 		def classpathString = pluginClasspath
@@ -129,6 +149,5 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 		then:
 		result.output.contains('buildTrustStore - Adds all certificates found')
-		//		result.task(":buildTrustStore").outcome == SUCCESS
 	}
 }

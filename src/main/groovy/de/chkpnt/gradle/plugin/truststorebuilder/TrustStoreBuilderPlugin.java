@@ -4,6 +4,7 @@ import groovy.util.ConfigObject;
 import groovy.util.ConfigSlurper;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,9 +23,13 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 	private static final String BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore";
 	private static final String IMPORT_CERT_TASK_NAME_PREFIX = "importCert";
 
+	private Path projectDir;
+
 	@Override
 	public void apply(Project project) {
 		project.getPluginManager().apply(BasePlugin.class);
+
+		projectDir = project.getProjectDir().toPath();
 
 		TrustStoreBuilderConfiguration configuration = project.getExtensions().create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderConfiguration.class, project);
 
@@ -45,8 +50,6 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 	}
 
 	private void configureImportCertTasks(Project project, TrustStoreBuilderConfiguration configuration, AbstractTask dependingTask) throws IOException {
-		Path projectDir = project.getProjectDir().toPath();
-
 		Files.walkFileTree(configuration.getInputDir(), new SimpleFileVisitor<Path>() {
 			private int counter = 0;
 
@@ -56,24 +59,20 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 				Path filename = file.getFileName();
 				if (configuration.getPathMatcherForAcceptedFileEndings().matches(filename)) {
+					Path configFile = getConfigFileForCertificate(file);
+					ConfigObject configObject = parseCertConfigFile(configFile);
+
 					String taskname = String.format("%s%d_%s", IMPORT_CERT_TASK_NAME_PREFIX, ++counter, filename);
 					String description = String.format("Adds \"%s\" to the TrustStore.", projectDir.relativize(file));
 
 					ImportCertTask importCertTask = project.getTasks().create(taskname, ImportCertTask.class);
 					importCertTask.setGroup("TrustStore");
-					// importCertTask.setGroup(BasePlugin.BUILD_GROUP);
 					importCertTask.setDescription(description);
 					importCertTask.setKeytool(configuration.getKeytool());
 					importCertTask.setKeystore(configuration.getTrustStore());
 					importCertTask.setPassword(configuration.getPassword());
-
-					ConfigSlurper configSlurper = new ConfigSlurper();
-					Path configfile = file.resolveSibling(filename.toString() + ".config");
-					ConfigObject configObject = configSlurper.parse(configfile.toUri().toURL());
-
-					importCertTask.setAlias((String) configObject.get("alias"));
-
 					importCertTask.setFile(file);
+					importCertTask.setAlias((String) configObject.get("alias"));
 
 					dependingTask.getDependsOn().add(importCertTask);
 				}
@@ -81,5 +80,31 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 				return FileVisitResult.CONTINUE;
 			}
 		});
+	}
+
+	private Path getConfigFileForCertificate(Path certFile) {
+		String certFilename = certFile.getFileName().toString();
+		System.out.println("bla1");
+		Path configFile = certFile.resolveSibling(certFilename + ".config");
+		System.out.println("bla2");
+
+		if (!Files.exists(configFile)) {
+			String message = String.format("Configuration of ImportCertTasks failed: \"%s\" missing", projectDir.relativize(configFile));
+			throw new ProjectConfigurationException(message, null);
+		}
+
+		return configFile;
+	}
+
+	private ConfigObject parseCertConfigFile(Path configFile) throws MalformedURLException {
+		ConfigSlurper configSlurper = new ConfigSlurper();
+		ConfigObject configObject = configSlurper.parse(configFile.toUri().toURL());
+
+		if (!configObject.isSet("alias")) {
+			String message = String.format("Configuration of ImportCertTasks failed: \"alias\" missing in file \"%s\"", projectDir.relativize(configFile));
+			throw new ProjectConfigurationException(message, null);
+		}
+
+		return configObject;
 	}
 }
