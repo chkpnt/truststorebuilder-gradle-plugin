@@ -102,6 +102,20 @@ class TrustStoreBuilderPluginTest extends Specification {
 		result.output.contains("Configuration of ImportCertTasks failed: \"$configfilepath\" missing")
 	}
 
+	def "missing entry in config file for certificate"() {
+		given:
+		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
+		def configfile = testProjectDir.getRoot().toPath().resolve(configfilepath)
+		configfile.write("foobar")
+
+		when:
+		def result = buildGradleRunner("buildTrustStore")
+				.buildAndFail()
+
+		then:
+		result.output.contains("Configuration of ImportCertTasks failed: \"alias\" missing in file \"$configfilepath\"")
+	}
+
 	private def GradleRunner buildGradleRunner(String... tasks) {
 		GradleRunner.create()
 				.withProjectDir(testProjectDir.root)
