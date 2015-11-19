@@ -40,6 +40,11 @@ class TrustStoreBuilderPluginTest extends Specification {
 	private def initProjectDir() {
 		copyCertsToProjectDir()
 		buildFile = testProjectDir.newFile('build.gradle')
+		buildFile << """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+        """
 	}
 
 	private def copyCertsToProjectDir() {
@@ -52,18 +57,8 @@ class TrustStoreBuilderPluginTest extends Specification {
 	}
 
 	def "buildTrustStore task is included in task-list"() {
-		given:
-		buildFile << """
-            plugins {
-                id 'de.chkpnt.truststorebuilder'
-            }
-        """
-
 		when:
-		def result = GradleRunner.create()
-				.withProjectDir(testProjectDir.root)
-				.withArguments("tasks", "--all")
-				.withPluginClasspath(pluginClasspath)
+		def result = buildGradleRunner("tasks", "--all")
 				.build()
 
 		then:
@@ -71,18 +66,8 @@ class TrustStoreBuilderPluginTest extends Specification {
 	}
 
 	def "buildTrustStore task builds a TrustStore"() {
-		given:
-		buildFile << """
-            plugins {
-                id 'de.chkpnt.truststorebuilder'
-            }
-        """
-
 		when:
-		def result = GradleRunner.create()
-				.withProjectDir(testProjectDir.root)
-				.withArguments("buildTrustStore")
-				.withPluginClasspath(pluginClasspath)
+		def result = buildGradleRunner("buildTrustStore")
 				.build()
 
 		then:
@@ -106,49 +91,21 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 	def "missing config file for certificate"() {
 		given:
-		def configfile = Paths.get("certs", "CAcert", "root.crt.config")
-		Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
-		buildFile << """
-            plugins {
-                id 'de.chkpnt.truststorebuilder'
-            }
-        """
+		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
+		Files.delete(testProjectDir.getRoot().toPath().resolve(configfilepath))
 
 		when:
-		def result = GradleRunner.create()
-				.withProjectDir(testProjectDir.root)
-				.withArguments("buildTrustStore")
-				.withPluginClasspath(pluginClasspath)
+		def result = buildGradleRunner("buildTrustStore")
 				.buildAndFail()
 
 		then:
-		result.output.contains("Configuration of ImportCertTasks failed: \"$configfile\" missing")
+		result.output.contains("Configuration of ImportCertTasks failed: \"$configfilepath\" missing")
 	}
 
-	def "buildTrustStore task is included in task-list with pre Gradle 2.8"() {
-		given:
-		def classpathString = pluginClasspath
-				.collect { it.absolutePath.replace('\\', '\\\\') } // escape backslashes in Windows paths
-				.collect { "'$it'" }
-				.join(", ")
-
-		buildFile << """
-            buildscript {
-                dependencies {
-                    classpath files($classpathString)
-                }
-            }
-            apply plugin: "de.chkpnt.truststorebuilder"
-        """
-
-		when:
-		def result = GradleRunner.create()
+	private def GradleRunner buildGradleRunner(String... tasks) {
+		GradleRunner.create()
 				.withProjectDir(testProjectDir.root)
-				.withArguments('tasks', '--all')
-				.withGradleVersion("2.7")
-				.build()
-
-		then:
-		result.output.contains('buildTrustStore - Adds all certificates found')
+				.withArguments(tasks)
+				.withPluginClasspath(pluginClasspath)
 	}
 }
