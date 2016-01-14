@@ -1,6 +1,7 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.security.cert.X509Certificate
+import java.time.Clock;
 import java.time.Duration
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.time.ZoneOffset;
 
 
 class CertificateService {
-	java.time.Clock clock = java.time.Clock.systemDefaultZone()
+	Clock clock = Clock.systemDefaultZone()
 
 	boolean isCertificateValidInFuture(X509Certificate cert, Duration duration) {
 		def notAfterInstant = cert.notAfter.toInstant()
