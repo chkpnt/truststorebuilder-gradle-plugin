@@ -16,9 +16,9 @@ import spock.lang.Specification
 
 import com.google.common.jimfs.Jimfs
 
-class ImportCertTaskTest extends Specification {
+class ImportCertsTaskTest extends Specification {
 
-	private ImportCertTask classUnderTest
+	private ImportCertsTask classUnderTest
 
 	private FileSystem fs
 
@@ -30,7 +30,7 @@ class ImportCertTaskTest extends Specification {
 		fs = Jimfs.newFileSystem()
 
 		project = ProjectBuilder.builder().build()
-		classUnderTest = project.task('importCert', type: ImportCertTask)
+		classUnderTest = project.task('importCert', type: ImportCertsTask)
 
 		classUnderTest.setProject(projectMock)
 	}
@@ -38,10 +38,9 @@ class ImportCertTaskTest extends Specification {
 	def "ExecHandle is correctly build"() {
 		given:
 		classUnderTest.keytool = fs.getPath("keytool")
-		classUnderTest.file = fs.getPath("letsencrypt.pem")
-		classUnderTest.alias = "Let's Encrypt Root CA"
 		classUnderTest.keystore = fs.getPath("truststore.jks")
 		classUnderTest.password = "changeit"
+		classUnderTest.importCert fs.getPath("letsencrypt.pem"), "Let's Encrypt Root CA"
 
 		and: 'mock for exec'
 		ExecHandle expectedExecHandle
@@ -82,8 +81,6 @@ class ImportCertTaskTest extends Specification {
 
 		and:
 		classUnderTest.keytool = fs.getPath("keytool")
-		classUnderTest.file = fs.getPath("letsencrypt.pem")
-		classUnderTest.alias = "Let's Encrypt Root CA"
 		classUnderTest.password = "changeit"
 
 		when:
@@ -100,13 +97,12 @@ class ImportCertTaskTest extends Specification {
 		then:
 		TaskExecutionException e = thrown()
 		IllegalArgumentException rootCause = e.cause.cause
-		rootCause.message == "The following properties has to be configured: keytool, file, alias, keystore, password"
+		rootCause.message == "The following properties has to be configured: keytool, keystore, password"
 	}
 
 	def "throwing exception some properties are not set"() {
 		given:
 		classUnderTest.keytool = fs.getPath("keytool")
-		classUnderTest.alias = "Let's Encrypt Root CA"
 		classUnderTest.keystore = fs.getPath("truststore.jks")
 
 		when:
@@ -115,6 +111,6 @@ class ImportCertTaskTest extends Specification {
 		then:
 		TaskExecutionException e = thrown()
 		IllegalArgumentException rootCause = e.cause.cause
-		rootCause.message == "The following properties has to be configured: file, password"
+		rootCause.message == "The following properties has to be configured: password"
 	}
 }

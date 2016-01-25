@@ -8,27 +8,32 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
 
-class ImportCertTask extends DefaultTask {
+class ImportCertsTask extends DefaultTask {
 	Path keytool
-	Path file
-	String alias
 	Path keystore
 	String password
+	List<ImportCertConfig> importCertConfigs = new ArrayList<>()
 
 	@TaskAction
 	def importCert() {
 		checkTaskConfiguration()
 		prepareOutputDir(keystore.getParent())
 
-		project.exec {
-			executable keytool
-			args '-importcert'
-			args '-noprompt'
-			args '-alias', alias
-			args '-file', file
-			args '-keystore', keystore
-			args '-storepass', password
+		for (def importCertConfig : importCertConfigs) {
+			project.exec {
+				executable keytool
+				args '-importcert'
+				args '-noprompt'
+				args '-alias', importCertConfig.alias
+				args '-file', importCertConfig.file
+				args '-keystore', keystore
+				args '-storepass', password
+			}
 		}
+	}
+	
+	def importCert(Path file, String alias) {
+		importCertConfigs.add(new ImportCertConfig(file, alias))
 	}
 
 	private def prepareOutputDir(Path outputDir) {
@@ -40,8 +45,6 @@ class ImportCertTask extends DefaultTask {
 	private def checkTaskConfiguration() {
 		def listOfUnconfiguredProperties = []
 		if (!keytool) listOfUnconfiguredProperties << 'keytool'
-		if (!file) listOfUnconfiguredProperties << 'file'
-		if (!alias) listOfUnconfiguredProperties << 'alias'
 		if (!keystore) listOfUnconfiguredProperties << 'keystore'
 		if (!password) listOfUnconfiguredProperties << 'password'
 
@@ -49,5 +52,18 @@ class ImportCertTask extends DefaultTask {
 			def unconfiguredProperties = String.join(", ", listOfUnconfiguredProperties)
 			throw new TaskExecutionException(this, new IllegalArgumentException("The following properties has to be configured: ${unconfiguredProperties}"))
 		}
+	}
+	
+	private static class ImportCertConfig {
+		
+		final Path file
+		
+		final String alias
+	
+		ImportCertConfig(Path file, String alias) {
+			this.file = file
+			this.alias = alias
+		}
+	
 	}
 }

@@ -21,7 +21,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 	private static final String TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder";
 	private static final String BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore";
-	private static final String IMPORT_CERT_TASK_NAME_PREFIX = "importCert";
+	private static final String IMPORT_CERTS_TASK_NAME = "importCerts";
 
 	private Path projectDir;
 
@@ -40,8 +40,17 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 			buildTruststoreTask.setTruststore(configuration.getTrustStore().toFile());
 			buildTruststoreTask.setInputDir(configuration.getInputDir().toFile());
 
+			ImportCertsTask importCertsTask = project.getTasks().create(IMPORT_CERTS_TASK_NAME, ImportCertsTask.class);
+			importCertsTask.setGroup("TrustStore");
+			importCertsTask.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", configuration.getInputDirName()));
+			importCertsTask.setKeytool(configuration.getKeytool());
+			importCertsTask.setKeystore(configuration.getTrustStore());
+			importCertsTask.setPassword(configuration.getPassword());
+			
+			buildTruststoreTask.dependsOn(importCertsTask);
+			
 			try {
-				configureImportCertTasks(p, configuration, buildTruststoreTask);
+				configureImportCertsTask(importCertsTask, configuration);
 			} catch (IOException e) {
 				throw new ProjectConfigurationException("Configuration of ImportCertTasks failed", e);
 			}
@@ -49,9 +58,8 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		});
 	}
 
-	private void configureImportCertTasks(Project project, TrustStoreBuilderConfiguration configuration, AbstractTask dependingTask) throws IOException {
+	private void configureImportCertsTask(ImportCertsTask importCertsTask, TrustStoreBuilderConfiguration configuration) throws IOException {
 		Files.walkFileTree(configuration.getInputDir(), new SimpleFileVisitor<Path>() {
-			private int counter = 0;
 
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -62,19 +70,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 					Path configFile = getConfigFileForCertificate(file);
 					ConfigObject configObject = parseCertConfigFile(configFile);
 
-					String taskname = String.format("%s%d_%s", IMPORT_CERT_TASK_NAME_PREFIX, ++counter, filename);
-					String description = String.format("Adds \"%s\" to the TrustStore.", projectDir.relativize(file));
-
-					ImportCertTask importCertTask = project.getTasks().create(taskname, ImportCertTask.class);
-					importCertTask.setGroup("TrustStore");
-					importCertTask.setDescription(description);
-					importCertTask.setKeytool(configuration.getKeytool());
-					importCertTask.setKeystore(configuration.getTrustStore());
-					importCertTask.setPassword(configuration.getPassword());
-					importCertTask.setFile(file);
-					importCertTask.setAlias((String) configObject.get("alias"));
-
-					dependingTask.getDependsOn().add(importCertTask);
+					importCertsTask.importCert(filename, (String) configObject.get("alias"));
 				}
 
 				return FileVisitResult.CONTINUE;
