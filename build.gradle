@@ -23,7 +23,7 @@ jacocoTestReport {
 	}
 	
 	// Gradle's Test-Kit doesn't support JaCoCo right now.
-	// This feature is targeted in Milestone 3:
+	// This feature is targeted in Milestone 4:
 	// https://github.com/gradle/gradle/blob/master/design-docs/testing-toolkit.md
 	// I'm excluding the corresponding test, until this feature is available.
 	afterEvaluate {
