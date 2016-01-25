@@ -4,12 +4,16 @@ import groovy.util.ConfigObject;
 import groovy.util.ConfigSlurper;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Optional;
+import java.util.Properties;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -67,38 +71,47 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 				Path filename = file.getFileName();
 				if (configuration.getPathMatcherForAcceptedFileEndings().matches(filename)) {
-					Path configFile = getConfigFileForCertificate(file);
-					ConfigObject configObject = parseCertConfigFile(configFile);
-
-					importCertsTask.importCert(filename, (String) configObject.get("alias"));
+					Optional<Properties> certConfig = getCertConfig(file);
+					String alias = getAlias(certConfig, filename.toString());
+                    
+					importCertsTask.importCert(file, alias);
 				}
 
 				return FileVisitResult.CONTINUE;
 			}
 		});
 	}
+	
+	private String getAlias(Optional<Properties> config, String defaultAlias) {
+		if (!config.isPresent()) {
+			return defaultAlias;
+		}
+		
+		return config.get().getProperty("alias", defaultAlias);
+	}
 
-	private Path getConfigFileForCertificate(Path certFile) {
+
+
+	private Optional<Properties> getCertConfig(Path certFile) throws IOException {
+		Optional<Path> configFile = getConfigFileForCertificate(certFile);
+		if (!configFile.isPresent()) {
+			return Optional.empty();
+		}
+		
+		InputStream inputStream = Files.newInputStream(configFile.get());
+		Properties properties = new Properties();
+		properties.load(inputStream);
+		return Optional.of(properties);
+	}
+	
+	private Optional<Path> getConfigFileForCertificate(Path certFile) {
 		String certFilename = certFile.getFileName().toString();
 		Path configFile = certFile.resolveSibling(certFilename + ".config");
 
 		if (!Files.exists(configFile)) {
-			String message = String.format("Configuration of ImportCertTasks failed: \"%s\" missing", projectDir.relativize(configFile));
-			throw new ProjectConfigurationException(message, null);
+			return Optional.empty();
 		}
 
-		return configFile;
-	}
-
-	private ConfigObject parseCertConfigFile(Path configFile) throws MalformedURLException {
-		ConfigSlurper configSlurper = new ConfigSlurper();
-		ConfigObject configObject = configSlurper.parse(configFile.toUri().toURL());
-
-		if (!configObject.isSet("alias")) {
-			String message = String.format("Configuration of ImportCertTasks failed: \"alias\" missing in file \"%s\"", projectDir.relativize(configFile));
-			throw new ProjectConfigurationException(message, null);
-		}
-
-		return configObject;
+		return Optional.of(configFile);
 	}
 }

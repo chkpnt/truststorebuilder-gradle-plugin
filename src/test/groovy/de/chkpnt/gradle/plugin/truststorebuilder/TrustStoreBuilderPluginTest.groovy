@@ -72,13 +72,49 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 		then:
 		result.task(":buildTrustStore").outcome == SUCCESS
-		Path keystore = Paths.get(testProjectDir.root.getPath(), "build/cacerts.jks")
-		Files.exists(keystore)
-		assertKeystoreContainsTestCerts(keystore)
+		Path trustStore = getDefaultTrustStore()
+		assertKeystoreContainsTestCerts(trustStore)
+		assertKeystoreContainsCertByAlias(trustStore, "Let's Encrypt Root CA", FINGERPRINT_LETSENCRYPT_ROOT_CA)
+		assertKeystoreContainsCertByAlias(trustStore, "CAcert Root CA", FINGERPRINT_CACERT_ROOT_CA)
 	}
 
-	private def void assertKeystoreContainsTestCerts(Path keystore) {
-		def keytoolCmd = "keytool -list -keystore $keystore -storepass changeit"
+	def "alias for certificate is filename if config file is missing"() {
+		given:
+		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
+		Files.delete(testProjectDir.getRoot().toPath().resolve(configfilepath))
+
+		when:
+		def result = buildGradleRunner("buildTrustStore")
+				.build()
+
+		then:
+		result.task(":buildTrustStore").outcome == SUCCESS
+		assertKeystoreContainsCertByAlias(getDefaultTrustStore(), "root.crt", FINGERPRINT_CACERT_ROOT_CA)
+	}
+
+	def "alias for certificate is filename if config file contains no alias"() {
+		given:
+		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
+		def configfile = testProjectDir.getRoot().toPath().resolve(configfilepath)
+		configfile.write("foobar")
+
+		when:
+		def result = buildGradleRunner("buildTrustStore")
+				.build()
+
+		then:
+		result.task(":buildTrustStore").outcome == SUCCESS
+		assertKeystoreContainsCertByAlias(getDefaultTrustStore(), "root.crt", FINGERPRINT_CACERT_ROOT_CA)
+	}
+	
+	private Path getDefaultTrustStore() {
+		Path keystore = Paths.get(testProjectDir.root.getPath(), "build/cacerts.jks")
+		assert Files.exists(keystore)
+		return keystore
+	}
+	
+	private void assertKeystoreContainsTestCerts(Path keystore) {
+		def keytoolCmd = ["keytool", "-list", "-keystore", keystore, "-storepass", "changeit"]
 		def process = keytoolCmd.execute()
 
 		assert process.waitFor() == 0
@@ -88,34 +124,18 @@ class TrustStoreBuilderPluginTest extends Specification {
 		assert output.contains(FINGERPRINT_CACERT_ROOT_CA)
 		assert output.contains(FINGERPRINT_LETSENCRYPT_ROOT_CA)
 	}
-
-	def "missing config file for certificate"() {
-		given:
-		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
-		Files.delete(testProjectDir.getRoot().toPath().resolve(configfilepath))
-
-		when:
-		def result = buildGradleRunner("buildTrustStore")
-				.buildAndFail()
-
-		then:
-		result.output.contains("Configuration of ImportCertTasks failed: \"$configfilepath\" missing")
+	
+	private void assertKeystoreContainsCertByAlias(Path keystore, String alias, String fingerprint) {
+		def keytoolCmd = ["keytool", "-list", "-keystore", keystore, "-storepass", "changeit", "-alias", alias]
+		def process = keytoolCmd.execute()
+		
+		assert process.waitFor() == 0
+		
+		def output = process.getText()
+		
+		assert output.contains(fingerprint)
 	}
-
-	def "missing entry in config file for certificate"() {
-		given:
-		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
-		def configfile = testProjectDir.getRoot().toPath().resolve(configfilepath)
-		configfile.write("foobar")
-
-		when:
-		def result = buildGradleRunner("buildTrustStore")
-				.buildAndFail()
-
-		then:
-		result.output.contains("Configuration of ImportCertTasks failed: \"alias\" missing in file \"$configfilepath\"")
-	}
-
+	
 	private def GradleRunner buildGradleRunner(String... tasks) {
 		GradleRunner.create()
 				.withProjectDir(testProjectDir.root)
