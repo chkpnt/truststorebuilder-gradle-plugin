@@ -25,7 +25,6 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 	private static final String TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder";
 	private static final String BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore";
-	private static final String IMPORT_CERTS_TASK_NAME = "importCerts";
 
 	private Path projectDir;
 
@@ -38,20 +37,13 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		TrustStoreBuilderConfiguration configuration = project.getExtensions().create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderConfiguration.class, project);
 
 		project.afterEvaluate(p -> {
-			BuildTrustStoreTask buildTruststoreTask = p.getTasks().create(BUILD_TRUSTSTORE_TASK_NAME, BuildTrustStoreTask.class);
-			buildTruststoreTask.setGroup(BasePlugin.BUILD_GROUP);
-			buildTruststoreTask.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", configuration.getInputDirName()));
-			buildTruststoreTask.setTruststore(configuration.getTrustStore().toFile());
-			buildTruststoreTask.setInputDir(configuration.getInputDir().toFile());
-
-			ImportCertsTask importCertsTask = project.getTasks().create(IMPORT_CERTS_TASK_NAME, ImportCertsTask.class);
+			ImportCertsTask importCertsTask = project.getTasks().create(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class);
 			importCertsTask.setGroup("TrustStore");
 			importCertsTask.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", configuration.getInputDirName()));
 			importCertsTask.setKeytool(configuration.getKeytool());
 			importCertsTask.setKeystore(configuration.getTrustStore());
 			importCertsTask.setPassword(configuration.getPassword());
-			
-			buildTruststoreTask.dependsOn(importCertsTask);
+			importCertsTask.setInputDir(configuration.getInputDir());
 			
 			try {
 				configureImportCertsTask(importCertsTask, configuration);

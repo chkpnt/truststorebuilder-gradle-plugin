@@ -1,10 +1,13 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.Path
+import java.io.File;
 import java.nio.file.Files
 import java.nio.file.Path
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.InputDirectory;
+import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
 
@@ -12,8 +15,20 @@ class ImportCertsTask extends DefaultTask {
 	Path keytool
 	Path keystore
 	String password
+	Path inputDir
 	List<ImportCertConfig> importCertConfigs = new ArrayList<>()
-
+	FileAdapter fileAdapter = new DefaultFileAdapter()
+	
+	@InputDirectory
+	File getInputDir() {
+		fileAdapter.toFile(inputDir)
+	}
+	
+	@OutputFile
+	File getOutputFile() {
+		fileAdapter.toFile(keystore)
+	}
+	
 	@TaskAction
 	def importCert() {
 		checkTaskConfiguration()

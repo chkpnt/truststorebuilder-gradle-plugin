@@ -1,7 +1,11 @@
+
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.FileSystem
 import java.nio.file.Files
+import java.nio.file.Path
+
+import com.google.common.jimfs.Configuration;
 
 import org.gradle.api.Project
 import org.gradle.api.internal.ClosureBackedAction
@@ -21,18 +25,31 @@ class ImportCertsTaskTest extends Specification {
 	private ImportCertsTask classUnderTest
 
 	private FileSystem fs
-
+	
 	private ProjectInternal projectMock = Mock()
 
 	private Project project
+	
+	private FileAdapter fileAdapter = new FileAdapter() {
+		@Override
+		File toFile(Path path) {
+			def temp = Files.isDirectory(path) ? Files.createTempDirectory(null)
+											   : Files.createTempFile(null, null)
+			def file = temp.toFile()
+			file.deleteOnExit()
+			return file
+		}
+	}
 
 	def setup() {
-		fs = Jimfs.newFileSystem()
+		fs = Jimfs.newFileSystem(Configuration.unix())
+		Files.createDirectory(fs.getPath("certs"))
 
 		project = ProjectBuilder.builder().build()
 		classUnderTest = project.task('importCert', type: ImportCertsTask)
 
-		classUnderTest.setProject(projectMock)
+		classUnderTest.project = projectMock
+		classUnderTest.fileAdapter = fileAdapter
 	}
 
 	def "ExecHandle is correctly build"() {
@@ -40,6 +57,7 @@ class ImportCertsTaskTest extends Specification {
 		classUnderTest.keytool = fs.getPath("keytool")
 		classUnderTest.keystore = fs.getPath("truststore.jks")
 		classUnderTest.password = "changeit"
+		classUnderTest.inputDir = fs.getPath("certs")
 		classUnderTest.importCert fs.getPath("letsencrypt.pem"), "Let's Encrypt Root CA"
 
 		and: 'mock for exec'
@@ -82,6 +100,7 @@ class ImportCertsTaskTest extends Specification {
 		and:
 		classUnderTest.keytool = fs.getPath("keytool")
 		classUnderTest.password = "changeit"
+		classUnderTest.inputDir = fs.getPath("certs")
 
 		when:
 		classUnderTest.execute()
@@ -90,19 +109,9 @@ class ImportCertsTaskTest extends Specification {
 		Files.exists(outputdir)
 	}
 
-	def "throwing exception when not configured at all"() {
-		when:
-		classUnderTest.execute()
-
-		then:
-		TaskExecutionException e = thrown()
-		IllegalArgumentException rootCause = e.cause.cause
-		rootCause.message == "The following properties has to be configured: keytool, keystore, password"
-	}
-
 	def "throwing exception some properties are not set"() {
 		given:
-		classUnderTest.keytool = fs.getPath("keytool")
+		classUnderTest.inputDir = fs.getPath("certs")
 		classUnderTest.keystore = fs.getPath("truststore.jks")
 
 		when:
@@ -111,6 +120,6 @@ class ImportCertsTaskTest extends Specification {
 		then:
 		TaskExecutionException e = thrown()
 		IllegalArgumentException rootCause = e.cause.cause
-		rootCause.message == "The following properties has to be configured: password"
+		rootCause.message == "The following properties has to be configured: keytool, password"
 	}
 }
