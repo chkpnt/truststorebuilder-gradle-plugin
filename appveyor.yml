@@ -13,6 +13,6 @@ test_script:
 after_test:
   - ps: |
       $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
-      (New-Object 'System.Net.WebClient').UploadFile($url, (Resolve-Path '.\build\test-results\TEST-de.chkpnt.gradle.plugin.truststorebuilder.ImportCertTaskTest.xml'))
-      (New-Object 'System.Net.WebClient').UploadFile($url, (Resolve-Path '.\build\test-results\TEST-de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfigurationTest.xml'))
-      (New-Object 'System.Net.WebClient').UploadFile($url, (Resolve-Path '.\build\test-results\TEST-de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPluginTest.xml'))
+      ForEach ($file in Get-ChildItem '.\build\test-results\*.xml') {
+        (New-Object 'System.Net.WebClient').UploadFile($url, $file)
+      }
