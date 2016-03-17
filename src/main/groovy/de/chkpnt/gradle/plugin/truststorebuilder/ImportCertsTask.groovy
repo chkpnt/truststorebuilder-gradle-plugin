@@ -4,6 +4,7 @@ import java.nio.file.Path
 import java.io.File;
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.cert.X509Certificate;
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputDirectory;
@@ -12,12 +13,18 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
 
 class ImportCertsTask extends DefaultTask {
-	Path keytool
+	
 	Path keystore
+	
 	String password
+	
 	Path inputDir
+	
 	List<ImportCertConfig> importCertConfigs = new ArrayList<>()
+	
 	FileAdapter fileAdapter = new DefaultFileAdapter()
+	
+	CertificateService certificateService = new CertificateService()
 	
 	@InputDirectory
 	File getInputDir() {
@@ -33,22 +40,17 @@ class ImportCertsTask extends DefaultTask {
 	def importCert() {
 		checkTaskConfiguration()
 		prepareOutputDir(keystore.getParent())
-
+		
+		def ks = certificateService.newKeystore()
 		for (def importCertConfig : importCertConfigs) {
-			project.exec {
-				executable keytool
-				args '-importcert'
-				args '-noprompt'
-				args '-alias', importCertConfig.alias
-				args '-file', importCertConfig.file
-				args '-keystore', keystore
-				args '-storepass', password
-			}
+			certificateService.addCertificateToKeystore(ks, importCertConfig.cert, importCertConfig.alias)
 		}
+		certificateService.storeKeystore(ks, keystore, password)
 	}
 	
 	def importCert(Path file, String alias) {
-		importCertConfigs.add(new ImportCertConfig(file, alias))
+		def cert = certificateService.loadCertificate(file)
+		importCertConfigs.add(new ImportCertConfig(cert, alias))
 	}
 
 	private def prepareOutputDir(Path outputDir) {
@@ -59,7 +61,6 @@ class ImportCertsTask extends DefaultTask {
 
 	private def checkTaskConfiguration() {
 		def listOfUnconfiguredProperties = []
-		if (!keytool) listOfUnconfiguredProperties << 'keytool'
 		if (!keystore) listOfUnconfiguredProperties << 'keystore'
 		if (!password) listOfUnconfiguredProperties << 'password'
 
@@ -71,12 +72,12 @@ class ImportCertsTask extends DefaultTask {
 	
 	private static class ImportCertConfig {
 		
-		final Path file
+		final X509Certificate cert
 		
 		final String alias
 	
-		ImportCertConfig(Path file, String alias) {
-			this.file = file
+		ImportCertConfig(X509Certificate cert, String alias) {
+			this.cert = cert
 			this.alias = alias
 		}
 	

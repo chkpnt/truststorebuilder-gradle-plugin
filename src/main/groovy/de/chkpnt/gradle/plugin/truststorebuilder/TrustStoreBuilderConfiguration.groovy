@@ -10,27 +10,15 @@ import org.gradle.api.Project
 import org.gradle.api.internal.file.FileLookup
 import org.gradle.api.internal.project.ProjectInternal
 
+import groovy.transform.PackageScope;
 
+@PackageScope
 class TrustStoreBuilderConfiguration {
 	
 	private ProjectInternal project
 	
 	TrustStoreBuilderConfiguration(Project project) {
 		this.project = project
-	}
-
-	/**
-	 * Path to the keytool binary. Defaults to 'keytool', which works as long as 'keytool' is available
-	 * through the PATH environment variable. <br />
-	 * A useful setting is {@code new File(environment['JAVA_HOME'], 'bin/keytool').canonicalPath}
-	 */
-	String keytool = 'keytool'
-	
-	/**
-	 * Returns a path pointing to the keytool binary used to build the TrustStore.
-	 */
-	Path getKeytool() {
-		Paths.get(keytool)
 	}
 
 	/**

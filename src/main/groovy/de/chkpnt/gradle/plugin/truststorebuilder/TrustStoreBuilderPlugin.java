@@ -11,6 +11,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.ProjectConfigurationException;
@@ -19,6 +20,7 @@ import org.gradle.api.plugins.BasePlugin;
 public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 	private static final String TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder";
+	
 	private static final String BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore";
 
 	@Override
@@ -34,7 +36,6 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		ImportCertsTask importCertsTask = project.getTasks().create(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class);
 		importCertsTask.setGroup(BasePlugin.BUILD_GROUP);
 		importCertsTask.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", configuration.getInputDirName()));
-		importCertsTask.setKeytool(configuration.getKeytool());
 		importCertsTask.setKeystore(configuration.getTrustStore());
 		importCertsTask.setPassword(configuration.getPassword());
 		importCertsTask.setInputDir(configuration.getInputDir());

@@ -22,21 +22,12 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 
 	def "check default values"() {
 		expect:
-		configuration.keytool == Paths.get('keytool')
 		configuration.password == 'changeit'
 		configuration.trustStoreFileName == 'cacerts.jks'
 		configuration.trustStore == project.file('build/cacerts.jks').toPath()
 		configuration.outputDir == project.file('build').toPath()
 		configuration.inputDir == project.file('certs').toPath()
 		that configuration.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
-	}
-
-	def "keytool is configurable"() {
-		when:
-		configuration.keytool = /c:\java\jdk1.8.0_31\bin\keytool/
-
-		then:
-		configuration.keytool == Paths.get(/c:\java\jdk1.8.0_31\bin\keytool/)
 	}
 
 	def "TrustStore relative to build dir"() {

@@ -1,5 +1,6 @@
 package de.chkpnt.gradle.plugin.truststorebuilder;
 
+import static KeystoreAssertions.*
 import static org.gradle.testkit.runner.TaskOutcome.*
 
 import java.nio.file.Files
@@ -21,10 +22,6 @@ class TrustStoreBuilderPluginTest extends Specification {
 	private File buildFile
 
 	private List<File> pluginClasspath
-
-	private static String FINGERPRINT_CACERT_ROOT_CA="13:5C:EC:36:F4:9C:B8:E9:3B:1A:B2:70:CD:80:88:46:76:CE:8F:33"
-
-	private static String FINGERPRINT_LETSENCRYPT_ROOT_CA="CA:BD:2A:79:A1:07:6A:31:F2:1D:25:36:35:CB:03:9D:43:29:A5:E8"
 
 	def setup() {
 		initProjectDir();
@@ -58,8 +55,7 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 	def "buildTrustStore task is included in task-list"() {
 		when:
-		def result = buildGradleRunner("tasks", "--all")
-				.build()
+		def result = buildGradleRunner("tasks", "--all").build()
 
 		then:
 		result.output.contains("buildTrustStore - Adds all certificates found")
@@ -67,73 +63,47 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 	def "buildTrustStore task builds a TrustStore"() {
 		when:
-		def result = buildGradleRunner("buildTrustStore")
-				.build()
+		def result = buildGradleRunner("buildTrustStore").build()
 
 		then:
 		result.task(":buildTrustStore").outcome == SUCCESS
 		Path trustStore = getDefaultTrustStore()
-		assertKeystoreContainsTestCerts(trustStore)
-		assertKeystoreContainsCertByAlias(trustStore, "Let's Encrypt Root CA", FINGERPRINT_LETSENCRYPT_ROOT_CA)
-		assertKeystoreContainsCertByAlias(trustStore, "CAcert Root CA", FINGERPRINT_CACERT_ROOT_CA)
+		
+		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+		assertFingerprintOfKeystoreEntry(trustStore, "changeit",  "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
 	}
 
 	def "alias for certificate is filename if config file is missing"() {
 		given:
-		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
-		Files.delete(testProjectDir.getRoot().toPath().resolve(configfilepath))
+		def configfile = Paths.get("certs", "CAcert", "root.crt.config")
+		Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
 
 		when:
-		def result = buildGradleRunner("buildTrustStore")
-				.build()
+		def result = buildGradleRunner("buildTrustStore").build()
 
 		then:
 		result.task(":buildTrustStore").outcome == SUCCESS
-		assertKeystoreContainsCertByAlias(getDefaultTrustStore(), "root.crt", FINGERPRINT_CACERT_ROOT_CA)
+		assertFingerprintOfKeystoreEntry(getDefaultTrustStore(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
 	}
 
 	def "alias for certificate is filename if config file contains no alias"() {
 		given:
-		def configfilepath = Paths.get("certs", "CAcert", "root.crt.config")
-		def configfile = testProjectDir.getRoot().toPath().resolve(configfilepath)
-		configfile.write("foobar")
+		def configfile = Paths.get("certs", "CAcert", "root.crt.config")
+		def file = testProjectDir.getRoot().toPath().resolve(configfile)
+		file.write("foobar")
 
 		when:
-		def result = buildGradleRunner("buildTrustStore")
-				.build()
+		def result = buildGradleRunner("buildTrustStore").build()
 
 		then:
 		result.task(":buildTrustStore").outcome == SUCCESS
-		assertKeystoreContainsCertByAlias(getDefaultTrustStore(), "root.crt", FINGERPRINT_CACERT_ROOT_CA)
+		assertFingerprintOfKeystoreEntry(getDefaultTrustStore(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
 	}
 	
 	private Path getDefaultTrustStore() {
 		Path keystore = Paths.get(testProjectDir.root.getPath(), "build/cacerts.jks")
 		assert Files.exists(keystore)
 		return keystore
-	}
-	
-	private void assertKeystoreContainsTestCerts(Path keystore) {
-		def keytoolCmd = ["keytool", "-list", "-keystore", keystore, "-storepass", "changeit"]
-		def process = keytoolCmd.execute()
-
-		assert process.waitFor() == 0
-
-		def output = process.getText()
-
-		assert output.contains(FINGERPRINT_CACERT_ROOT_CA)
-		assert output.contains(FINGERPRINT_LETSENCRYPT_ROOT_CA)
-	}
-	
-	private void assertKeystoreContainsCertByAlias(Path keystore, String alias, String fingerprint) {
-		def keytoolCmd = ["keytool", "-list", "-keystore", keystore, "-storepass", "changeit", "-alias", alias]
-		def process = keytoolCmd.execute()
-		
-		assert process.waitFor() == 0
-		
-		def output = process.getText()
-		
-		assert output.contains(fingerprint)
 	}
 	
 	private def GradleRunner buildGradleRunner(String... tasks) {

@@ -1,9 +1,11 @@
-
 package de.chkpnt.gradle.plugin.truststorebuilder
+
+import static KeystoreAssertions.*
 
 import java.nio.file.FileSystem
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.KeyStore
 
 import com.google.common.jimfs.Configuration;
 
@@ -30,6 +32,8 @@ class ImportCertsTaskTest extends Specification {
 
 	private Project project
 	
+	private CertificateService certificateService = new CertificateService()
+	
 	private FileAdapter fileAdapter = new FileAdapter() {
 		@Override
 		File toFile(Path path) {
@@ -44,6 +48,8 @@ class ImportCertsTaskTest extends Specification {
 	def setup() {
 		fs = Jimfs.newFileSystem(Configuration.unix())
 		Files.createDirectory(fs.getPath("certs"))
+		fs.getPath("certs/letsencrypt.pem").write(CertificateProvider.LETSENCRYPT_ROOT_CA)
+		fs.getPath("certs/cacert.pem").write(CertificateProvider.CACERT_ROOT_CA)
 
 		project = ProjectBuilder.builder().build()
 		classUnderTest = project.task('importCert', type: ImportCertsTask)
@@ -52,44 +58,23 @@ class ImportCertsTaskTest extends Specification {
 		classUnderTest.fileAdapter = fileAdapter
 	}
 
-	def "ExecHandle is correctly build"() {
+	def "ImportCertsTask works awesome"() {
 		given:
-		classUnderTest.keytool = fs.getPath("keytool")
 		classUnderTest.keystore = fs.getPath("truststore.jks")
 		classUnderTest.password = "changeit"
 		classUnderTest.inputDir = fs.getPath("certs")
-		classUnderTest.importCert fs.getPath("letsencrypt.pem"), "Let's Encrypt Root CA"
-
-		and: 'mock for exec'
-		ExecHandle expectedExecHandle
-		projectMock.exec(_ as Closure) >> { Closure closure ->
-			def action = new ClosureBackedAction<ExecSpec>(closure)
-			def actionExec = new DefaultExecAction(ProjectBuilder.builder().build().fileResolver)
-
-			action.execute(actionExec)
-			expectedExecHandle = actionExec.build()
-
-			return null
-		}
+		classUnderTest.importCert(fs.getPath("certs/letsencrypt.pem"), "Let's Encrypt Root CA")
+		classUnderTest.importCert(fs.getPath("certs/cacert.pem"), "CAcert Root CA")
 
 		when:
 		classUnderTest.execute()
 
 		then:
-		expectedExecHandle.command == "keytool"
-		expectedExecHandle.arguments.first() == '-importcert'
-		expectedExecHandle.arguments.contains('-noprompt')
-		assertArgumentFollowedByValue(expectedExecHandle.arguments, '-alias', "Let's Encrypt Root CA")
-		assertArgumentFollowedByValue(expectedExecHandle.arguments, '-file', 'letsencrypt.pem')
-		assertArgumentFollowedByValue(expectedExecHandle.arguments, '-keystore', 'truststore.jks')
-		assertArgumentFollowedByValue(expectedExecHandle.arguments, '-storepass', 'changeit')
+		def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
+		assertFingerprintOfKeystoreEntry(ks, "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+		assertFingerprintOfKeystoreEntry(ks, "cacert root ca", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
 	}
-
-	private void assertArgumentFollowedByValue(List<String> arguments, String arg, String value) {
-		def index = arguments.indexOf(arg)
-		assert index != -1 : "argument '${arg}' missing"
-		assert arguments.getAt(index + 1) == value : "argument '${arg}' is not followed by '${value}'"
-	}
+	
 
 	def "output folder is generated"() {
 		given:
@@ -98,7 +83,6 @@ class ImportCertsTaskTest extends Specification {
 		assert Files.notExists(outputdir)
 
 		and:
-		classUnderTest.keytool = fs.getPath("keytool")
 		classUnderTest.password = "changeit"
 		classUnderTest.inputDir = fs.getPath("certs")
 
@@ -120,6 +104,6 @@ class ImportCertsTaskTest extends Specification {
 		then:
 		TaskExecutionException e = thrown()
 		IllegalArgumentException rootCause = e.cause.cause
-		rootCause.message == "The following properties has to be configured: keytool, password"
+		rootCause.message == "The following properties has to be configured: password"
 	}
 }
