@@ -69,4 +69,3 @@ task wrapper(type: Wrapper) {
 }
 
 apply from: 'gradle/publish.gradle'
-apply from: 'gradle/eclipse.gradle'
