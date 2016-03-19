@@ -13,26 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package de.chkpnt.gradle.plugin.truststorebuilder
-
-import java.nio.file.Path
-
-import org.gradle.api.GradleException
-
-class TestCertValidationAssertionError extends GradleException {
-
-	Path file
-
-	String reason
-
-	TestCertValidationAssertionError(Path file, String reason) {
-		this.file = file
-		this.reason = reason
-	}
-
-	@Override
-	public String getMessage() {
-		return "${reason}: ${file}"
-	}
-}
+ 

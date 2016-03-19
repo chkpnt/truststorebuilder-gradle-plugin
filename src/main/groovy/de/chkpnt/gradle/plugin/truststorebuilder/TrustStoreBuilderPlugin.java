@@ -1,3 +1,19 @@
+/*
+* Copyright 2016 Gregor Dschung
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 package de.chkpnt.gradle.plugin.truststorebuilder;
 
 import java.io.IOException;
@@ -11,7 +27,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.ProjectConfigurationException;
@@ -20,18 +35,19 @@ import org.gradle.api.plugins.BasePlugin;
 public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 	private static final String TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder";
-	
+
 	private static final String BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore";
 
 	@Override
 	public void apply(Project project) {
 		project.getPluginManager().apply(BasePlugin.class);
 
-		TrustStoreBuilderConfiguration configuration = project.getExtensions().create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderConfiguration.class, project);
+		TrustStoreBuilderConfiguration configuration = project.getExtensions().create(TRUSTSTOREBUILDER_EXTENSION_NAME,
+				TrustStoreBuilderConfiguration.class, project);
 
 		configureImportCertsTask(project, configuration);
 	}
-	
+
 	private void configureImportCertsTask(Project project, TrustStoreBuilderConfiguration configuration) {
 		ImportCertsTask importCertsTask = project.getTasks().create(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class);
 		importCertsTask.setGroup(BasePlugin.BUILD_GROUP);
@@ -39,15 +55,16 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		importCertsTask.setKeystore(configuration.getTrustStore());
 		importCertsTask.setPassword(configuration.getPassword());
 		importCertsTask.setInputDir(configuration.getInputDir());
-		
+
 		try {
 			scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings(), importCertsTask);
 		} catch (IOException e) {
 			throw new ProjectConfigurationException("Configuration of ImportCertTasks failed", e);
 		}
 	}
-	
-	private void scanForCertsToImport(Path path, PathMatcher acceptedFileEndings, ImportCertsTask importCertsTask) throws IOException {
+
+	private void scanForCertsToImport(Path path, PathMatcher acceptedFileEndings, ImportCertsTask importCertsTask)
+			throws IOException {
 		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 
 			@Override
@@ -58,7 +75,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 				if (acceptedFileEndings.matches(filename)) {
 					Optional<Properties> certConfig = getCertConfig(file);
 					String alias = getAlias(certConfig, filename.toString());
-                    
+
 					importCertsTask.importCert(file, alias);
 				}
 
@@ -66,12 +83,12 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 			}
 		});
 	}
-	
+
 	private String getAlias(Optional<Properties> config, String defaultAlias) {
 		if (!config.isPresent()) {
 			return defaultAlias;
 		}
-		
+
 		return config.get().getProperty("alias", defaultAlias);
 	}
 
@@ -80,13 +97,13 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		if (!configFile.isPresent()) {
 			return Optional.empty();
 		}
-		
+
 		InputStream inputStream = Files.newInputStream(configFile.get());
 		Properties properties = new Properties();
 		properties.load(inputStream);
 		return Optional.of(properties);
 	}
-	
+
 	private Optional<Path> getConfigFileForCertificate(Path certFile) {
 		String certFilename = certFile.getFileName().toString();
 		Path configFile = certFile.resolveSibling(certFilename + ".config");

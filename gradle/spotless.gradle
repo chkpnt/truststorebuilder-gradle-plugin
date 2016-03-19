@@ -1,0 +1,26 @@
+spotless {
+	java {
+		target '**/*.java'
+		
+		licenseHeaderFile rootProject.file('gradle/spotless.license.txt')
+		
+		eclipseFormatFile rootProject.file('gradle/spotless.eclipseformatter.xml')
+		importOrder(['java', 'javax', 'org', 'com'])
+		
+		indentWithTabs()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+	format 'groovy', {
+	    target '**/*.groovy'
+		
+	    licenseHeaderFile rootProject.file('gradle/spotless.license.txt'), "package "
+		
+	    indentWithTabs()
+	    trimTrailingWhitespace()
+	    endWithNewline()
+		
+		customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
+		customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
+	}
+}
