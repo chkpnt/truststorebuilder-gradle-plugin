@@ -29,7 +29,7 @@ import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException
 
-class TestCertValidationTask extends DefaultTask {
+class CheckCertsValidationTask extends DefaultTask {
 
 	List<Path> files = new ArrayList<>()
 
@@ -52,7 +52,7 @@ class TestCertValidationTask extends DefaultTask {
 		def cert = loadX509Certificate file
 
 		if (! certificateService.isCertificateValidInFuture(cert, atLeastValidDays)) {
-			throw new TestCertValidationAssertionError(file, INVALID_REASON())
+			throw new CheckCertValidationError(file, INVALID_REASON())
 		}
 	}
 
@@ -62,7 +62,7 @@ class TestCertValidationTask extends DefaultTask {
 		try {
 			return certificateFactory.generateCertificate(certStream)
 		} catch (CertificateException e) {
-			throw new TestCertValidationAssertionError(file, "Could not load certificate")
+			throw new CheckCertValidationError(file, "Could not load certificate")
 		}
 	}
 

@@ -16,7 +16,7 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder;
 
-import static KeystoreAssertions.*
+import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.*
 import static org.gradle.testkit.runner.TaskOutcome.*
 
 import java.nio.file.Files
@@ -69,12 +69,13 @@ class TrustStoreBuilderPluginTest extends Specification {
 		new AntBuilder().copy(toDir: dest) { fileset(dir: source) }
 	}
 
-	def "buildTrustStore task is included in task-list"() {
+	def "buildTrustStore and checkCertificates tasks are included in task-list"() {
 		when:
 		def result = buildGradleRunner("tasks", "--all").build()
 
 		then:
 		result.output.contains("buildTrustStore - Adds all certificates found")
+		result.output.contains("checkCertificates - Checks the validation of the certificates")
 	}
 
 	def "buildTrustStore task builds a TrustStore"() {

@@ -21,7 +21,6 @@ import groovy.transform.PackageScope
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.PathMatcher
-import java.time.Duration
 
 import org.gradle.api.Project
 import org.gradle.api.internal.file.FileLookup
@@ -96,8 +95,4 @@ class TrustStoreBuilderConfiguration {
 	 * Number of days the certificates have to be at least valid.
 	 */
 	int atLeastValidDays = 90
-
-	Duration getAtLeastValidDays() {
-		Duration.ofDays(atLeastValidDays)
-	}
 }

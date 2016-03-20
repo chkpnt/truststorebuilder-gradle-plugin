@@ -26,9 +26,9 @@ import spock.lang.Specification
 
 import com.google.common.jimfs.Jimfs
 
-class TestCertValidationTaskTest extends Specification {
+class CheckCertsValidationTaskTest extends Specification {
 
-	private TestCertValidationTask classUnderTest
+	private CheckCertsValidationTask classUnderTest
 
 	private CertificateService certificateServiceMock = Mock()
 
@@ -44,7 +44,7 @@ class TestCertValidationTaskTest extends Specification {
 		fs.getPath("notACert.txt").write(CertificateProvider.NOT_A_CERT)
 
 		project = ProjectBuilder.builder().build()
-		classUnderTest = project.task('testCertValidation', type: TestCertValidationTask)
+		classUnderTest = project.task('testCertValidation', type: CheckCertsValidationTask)
 
 		classUnderTest.certificateService = certificateServiceMock
 	}
@@ -59,7 +59,7 @@ class TestCertValidationTaskTest extends Specification {
 
 		then:
 		def e = thrown(TaskExecutionException)
-		e.cause instanceof TestCertValidationAssertionError
+		e.cause instanceof CheckCertValidationError
 		e.cause.message == "Could not load certificate: corrupt.pem"
 	}
 
@@ -73,7 +73,7 @@ class TestCertValidationTaskTest extends Specification {
 
 		then:
 		def e = thrown(TaskExecutionException)
-		e.cause instanceof TestCertValidationAssertionError
+		e.cause instanceof CheckCertValidationError
 		e.cause.message == "Could not load certificate: notACert.txt"
 	}
 
@@ -91,7 +91,7 @@ class TestCertValidationTaskTest extends Specification {
 
 		then:
 		def e = thrown(TaskExecutionException)
-		e.cause instanceof TestCertValidationAssertionError
+		e.cause instanceof CheckCertValidationError
 		e.cause.message == "Certificate is already or becomes invalid within the next 30 days: letsencrypt.pem"
 	}
 

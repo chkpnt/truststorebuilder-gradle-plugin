@@ -20,13 +20,13 @@ import java.nio.file.Path
 
 import org.gradle.api.GradleException
 
-class TestCertValidationAssertionError extends GradleException {
+class CheckCertValidationError extends GradleException {
 
 	Path file
 
 	String reason
 
-	TestCertValidationAssertionError(Path file, String reason) {
+	CheckCertValidationError(Path file, String reason) {
 		this.file = file
 		this.reason = reason
 	}
