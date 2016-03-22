@@ -53,6 +53,8 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		TrustStoreBuilderConfiguration configuration = project.getExtensions()
 			.create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderConfiguration.class, project);
 
+		configuration.validate();
+
 		try {
 			configureTasks(project, configuration);
 		} catch (IOException e) {

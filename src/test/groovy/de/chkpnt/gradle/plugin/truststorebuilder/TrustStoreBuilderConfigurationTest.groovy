@@ -22,17 +22,20 @@ import static spock.util.matcher.HamcrestSupport.that
 import java.nio.file.Paths
 
 import org.gradle.api.Project
+import org.gradle.api.ProjectConfigurationException
 import org.gradle.testfixtures.ProjectBuilder
 
 import spock.lang.Specification
 
 class TrustStoreBuilderConfigurationTest extends Specification  {
+
 	Project project
 
 	TrustStoreBuilderConfiguration configuration
 
 	def setup() {
 		project = ProjectBuilder.builder().build()
+		project.file('certs').mkdir()
 		configuration = new TrustStoreBuilderConfiguration(project)
 	}
 
@@ -91,5 +94,64 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 		configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.crt'))
 		configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.pem'))
 		! configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.txt'))
+	}
+
+	def "validation check 1"() {
+		given:
+		project.file('certs').delete()
+
+		when:
+		configuration.validate()
+
+		then:
+		ProjectConfigurationException e = thrown()
+		e.message == "The directory 'certs', which is scanned for certificates, does not exist"
+	}
+
+	def "validation check 2"() {
+		given:
+		configuration.atLeastValidDays = -3
+
+		when:
+		configuration.validate()
+
+		then:
+		ProjectConfigurationException e = thrown()
+		e.message == "The setting 'atLeastValidDays' has to be positive (currently -3)"
+	}
+
+	def "validation check 3"(List<String> fileEndings) {
+		given:
+		configuration.acceptedFileEndings = fileEndings
+
+		when:
+		configuration.validate()
+
+		then:
+		ProjectConfigurationException e = thrown()
+		e.message == "The setting 'acceptedFileEndings' has to contain at least one entry"
+
+		where:
+		_ | fileEndings
+		_ | null
+		_ | []
+		_ | ["", " ", null]
+	}
+
+	def "validation check 4"(String filename) {
+		given:
+		configuration.trustStoreFileName = filename
+
+		when:
+		configuration.validate()
+
+		then:
+		ProjectConfigurationException e = thrown()
+		e.message == "The setting 'trustStoreFileName' is not set"
+
+		where:
+		filename | _
+		""       | _
+		null     | _
 	}
 }
