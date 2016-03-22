@@ -16,26 +16,19 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import static KeystoreAssertions.*
+import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.*
 
 import java.nio.file.FileSystem
 import java.nio.file.Files
-import java.nio.file.Path
-import java.security.KeyStore
-
-import com.google.common.jimfs.Configuration;
 
 import org.gradle.api.Project
-import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.tasks.TaskExecutionException
-import org.gradle.process.ExecSpec
-import org.gradle.process.internal.DefaultExecAction
-import org.gradle.process.internal.ExecHandle
 import org.gradle.testfixtures.ProjectBuilder
 
 import spock.lang.Specification
 
+import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 
 class ImportCertsTaskTest extends Specification {
@@ -50,17 +43,6 @@ class ImportCertsTaskTest extends Specification {
 
 	private CertificateService certificateService = new CertificateService()
 
-	private FileAdapter fileAdapter = new FileAdapter() {
-		@Override
-		File toFile(Path path) {
-			def temp = Files.isDirectory(path) ? Files.createTempDirectory(null)
-											: Files.createTempFile(null, null)
-			def file = temp.toFile()
-			file.deleteOnExit()
-			return file
-		}
-	}
-
 	def setup() {
 		fs = Jimfs.newFileSystem(Configuration.unix())
 		Files.createDirectory(fs.getPath("certs"))
@@ -71,7 +53,7 @@ class ImportCertsTaskTest extends Specification {
 		classUnderTest = project.task('importCert', type: ImportCertsTask)
 
 		classUnderTest.project = projectMock
-		classUnderTest.fileAdapter = fileAdapter
+		classUnderTest.fileAdapter = new TestFileAdapter()
 	}
 
 	def "ImportCertsTask works awesome"() {

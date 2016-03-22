@@ -18,16 +18,11 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.Path
 import java.security.cert.CertificateException
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate
-import java.time.Duration;
-import java.util.stream.Collectors;
+import java.security.cert.CertificateFactory
+import java.time.Duration
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.InvalidUserDataException
-import org.gradle.api.tasks.StopExecutionException
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.TaskExecutionException
+import org.gradle.api.tasks.TaskAction
 
 class CheckCertsValidationTask extends DefaultTask {
 
@@ -73,5 +68,4 @@ class CheckCertsValidationTask extends DefaultTask {
 	def setAtLeastValidDays(int days) {
 		atLeastValidDays = Duration.ofDays days
 	}
-
 }
