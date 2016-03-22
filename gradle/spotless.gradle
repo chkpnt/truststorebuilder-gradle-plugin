@@ -9,7 +9,6 @@ spotless {
 		
 		indentWithTabs()
 		trimTrailingWhitespace()
-		endWithNewline()
 	}
 	format 'groovy', {
 	    target '**/*.groovy'
@@ -18,7 +17,6 @@ spotless {
 		
 	    indentWithTabs()
 	    trimTrailingWhitespace()
-	    endWithNewline()
 		
 		customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
 		customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
