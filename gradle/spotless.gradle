@@ -11,12 +11,12 @@ spotless {
 		trimTrailingWhitespace()
 	}
 	format 'groovy', {
-	    target '**/*.groovy'
+		target '**/*.groovy'
 		
-	    licenseHeaderFile rootProject.file('gradle/spotless.license.txt'), "package "
+		licenseHeaderFile rootProject.file('gradle/spotless.license.txt'), "package "
 		
-	    indentWithTabs()
-	    trimTrailingWhitespace()
+		indentWithTabs()
+		trimTrailingWhitespace()
 		
 		customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
 		customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
