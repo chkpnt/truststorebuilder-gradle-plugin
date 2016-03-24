@@ -66,6 +66,9 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		CheckCertsValidationTask checkCertsValidationTask = createCheckCertsValidationTask(project, configuration);
 		ImportCertsTask importCertsTask = createImportCertsTask(project, configuration);
 
+		configureDependency(project, JavaBasePlugin.CHECK_TASK_NAME, checkCertsValidationTask);
+		configureDependency(project, JavaBasePlugin.BUILD_TASK_NAME, importCertsTask);
+
 		List<Path> certs = scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings(), importCertsTask);
 
 		certs.forEach(cert -> {
@@ -75,10 +78,12 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 			importCertsTask.importCert(cert, alias);
 			checkCertsValidationTask.file(cert);
 		});
+	}
 
-		Task checkTask = project.getTasks()
-			.getByName(JavaBasePlugin.CHECK_TASK_NAME);
-		checkTask.dependsOn(checkCertsValidationTask);
+	private static void configureDependency(Project project, String taskName, Task dependsOn) {
+		project.getTasks()
+			.getByName(taskName)
+			.dependsOn(dependsOn);
 	}
 
 	private static ImportCertsTask createImportCertsTask(Project project, TrustStoreBuilderConfiguration configuration) {
