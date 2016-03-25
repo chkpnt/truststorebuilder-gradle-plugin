@@ -13,7 +13,7 @@ cmd> gradlew build
 [![Linux Build Status](https://img.shields.io/travis/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Linux build)](https://travis-ci.org/chkpnt/truststorebuilder-gradle-plugin)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Windows build)](https://ci.appveyor.com/project/chkpnt/truststorebuilder-gradle-plugin/branch/master)
 [![Code Coverage](https://img.shields.io/codecov/c/github/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Code coverage)](https://codecov.io/github/chkpnt/truststorebuilder-gradle-plugin?branch=master)
-[![License](https://img.shields.io/badge/license-Apache-brightgreen.svg?label=License)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
+[![License](https://img.shields.io/github/license/chkpnt/truststorebuilder-gradle-plugin.svg?label=License)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
 
 
 ## Configuration
