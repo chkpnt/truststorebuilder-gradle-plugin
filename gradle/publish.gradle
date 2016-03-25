@@ -1,24 +1,84 @@
-apply plugin: 'maven'
-
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-        }
-    }
+buildscript {
+	repositories.maven { url 'https://plugins.gradle.org/m2/' }
+	dependencies.classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
 }
 
+apply plugin: 'maven-publish'
+apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
 
-def installer = install.repositories.mavenInstaller
-def deployer = uploadArchives.repositories.mavenDeployer
+task sourcesJar (type : Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
 
-[installer, deployer]*.pom*.whenConfigured {pom ->
-	pom.project {
-		licenses {
-			license {
-				name 'The Apache Software License, Version 2.0'
-				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-				distribution 'repo'
+publishing {
+	publications {
+		plugin(MavenPublication) {
+			from components.java
+			
+			pom.withXml {
+				asNode().children().last() + {
+					resolveStrategy = Closure.DELEGATE_FIRST
+					description "${project.description}\r\n\r\nRevision: ${project.revision}\r\nBuild-date: ${project.buildDate}"
+					url 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+					scm {
+						url 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+						connection 'scm:git:https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
+						developerConnection 'scm:git:ssh:git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
+					}
+					licenses {
+						license {
+							name 'The Apache Software License, Version 2.0'
+							url 'http://www.apache.org/license/LICENSE-2.0.txt'
+							distribution 'repo'
+						}
+					}
+					developers {
+						developer {
+							id 'chkpnt'
+							name 'Gregor Dschung'
+							email 'gregor@chkpnt.de'
+						}
+					}
+				}
+			}
+
+			
+			artifact sourcesJar
+		}
+	}
+}
+
+setToDefaultIfNotExists('bintrayUser', 'unspecified')
+setToDefaultIfNotExists('bintrayApiKey', 'unspecified')
+
+bintray {
+	user = project.bintrayUser //this usually comes from gradle.properties file in ~/.gradle
+	key = project.bintrayApiKey //this usually comes from gradle.properties file in ~/.gradle
+	publications = ['plugin'] //When uploading Maven-based publication files
+	dryRun = false
+	publish = false
+	pkg {
+		repo = 'maven'
+		name = project.name
+		desc = project.description
+		websiteUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+		issueTrackerUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin/issues'
+		vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
+		licenses = ['Apache-2.0']
+		labels = ['gradle', 'truststore', 'certificates', 'ca']
+		publicDownloadNumbers = false
+		version {
+			name = project.version //Bintray logical version name
+			vcsTag = project.revision
+			attributes = [
+				'Build-date': project.buildDate
+			]
+			mavenCentralSync {
+				sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
+				user = 'userToken' //OSS user token
+				password = 'paasword' //OSS user password
+				close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
 			}
 		}
 	}

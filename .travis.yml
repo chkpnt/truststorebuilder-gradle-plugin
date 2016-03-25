@@ -1,4 +1,6 @@
 language: groovy
+env:
+  - secure: "jm5WGqemJgxNtMeF53gN5fUeAR3/PgTG0770+7jUROP78pHQcvGMzkfeWDof+kegoMyHdHbq8MO9TIMQraqNCbpHPyB7ykWz1VIgEk8tlPXi2mkOHAnce94vb8VSPjWcLlXpJe2gltMuLjNlMHZGTCwAZidMel+8gRdgcR241qGXTOBP8EBDk/XYCU1foqm+6WC6jQdnoEF1mjvNE31YBd3fvhijLy/ItNuUb+mOYYSwEUphCWk4zZFvJMLJ9IAriLtHxveLvXTFKyK/QSnq1y3ZydHAlKYK1UQW67Si9HUL2zzkA3DYaV2cuij01r3UirGsamEB+rUDh6l0/WU2uBpV+YmZz8V5LiYQ+i7VJ52jkEyfTdHlpJhygEz3bWhTJ9343c25l7D6bUI6nykxhz71mnJzvDZzZfpH8qy5xfI6RMp+0+hZqHRderYElTXHBvO9Ovc1v4YRfrQxION1QNaCx7+6k1w0wILek+O2lA048tBoU+eXz/qHZzvIlDMDT3Wtn5ubxwokHnAoBptDYTySNYX0c2uFbmhyAIkls3mSaBBKBmZkVLXuMM2PoVdjGlFOg8iuRU/Ld00dJqdRub+pIO0kntujFloUTx9mgwP4AmPlp8sESrUvd+T5MnjvPEhNMDBsbJt9G5CwS1VI6yl+a4a/R2J+ZTAy+6oP5Gk="
 jdk:
   - oraclejdk8
 cache:
@@ -6,6 +8,7 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 before_install:
-  - pip install --user codecov
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then pip install --user codecov; fi
 after_success:
-  - codecov
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then codecov; fi
+  - if [[ $TRAVIS_BRANCH == 'release' ]]; then ./gradlew -PbintrayUser=chkpnt -PbintrayApiKey=$BINTRAY_API_KEY bintrayUpload; fi
