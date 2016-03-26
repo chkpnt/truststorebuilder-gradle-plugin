@@ -1,10 +1,12 @@
 buildscript {
 	repositories.maven { url 'https://plugins.gradle.org/m2/' }
 	dependencies.classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+	dependencies.classpath 'com.gradle.publish:plugin-publish-plugin:0.9.4'
 }
 
 apply plugin: 'maven-publish'
 apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
+apply plugin: com.gradle.publish.PublishPlugin
 
 task sourcesJar (type : Jar) {
 	classifier = 'sources'
@@ -80,6 +82,20 @@ bintray {
 				password = 'paasword' //OSS user password
 				close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
 			}
+		}
+	}
+}
+
+pluginBundle {
+	website = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+	vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
+	description = project.description
+	tags = ['truststore', 'certificates', 'ca']
+
+	plugins {
+		truststorebuilder {
+			id = 'de.chkpnt.truststorebuilder'
+			displayName = 'Gradle TrustStore-builder plugin'
 		}
 	}
 }
