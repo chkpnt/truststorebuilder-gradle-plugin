@@ -16,20 +16,18 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Path
-import java.security.KeyStore;
-import java.security.MessageDigest
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate
-import java.time.Clock;
-import java.time.Duration
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.stream.Collectors
+import groovy.transform.PackageScope
 
-import groovy.transform.PackageScope;;
+import java.nio.file.Path
+import java.security.KeyStore
+import java.security.MessageDigest
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.time.Clock
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.stream.Collectors
 
 @PackageScope
 class CertificateService {
@@ -75,9 +73,9 @@ class CertificateService {
 		messageDigest.update(cert.getEncoded())
 		byte[] sha1 = messageDigest.digest()
 		sha1.toList()
-			.stream()
-			.map { b -> ([b] as byte[]).encodeHex().toString().toUpperCase() }
-			.collect(Collectors.joining(":"))
+				.stream()
+				.map { b -> ([b] as byte[]).encodeHex().toString().toUpperCase() }
+				.collect(Collectors.joining(":"))
 	}
 
 	KeyStore newKeystore() {

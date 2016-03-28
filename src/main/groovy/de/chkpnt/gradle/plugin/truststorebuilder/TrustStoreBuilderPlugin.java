@@ -69,7 +69,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		configureDependency(project, JavaBasePlugin.CHECK_TASK_NAME, checkCertsValidationTask);
 		configureDependency(project, JavaBasePlugin.BUILD_TASK_NAME, importCertsTask);
 
-		List<Path> certs = scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings(), importCertsTask);
+		List<Path> certs = scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings());
 
 		certs.forEach(cert -> {
 			Path filename = cert.getFileName();
@@ -106,7 +106,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		return task;
 	}
 
-	private static List<Path> scanForCertsToImport(Path path, PathMatcher acceptedFileEndings, ImportCertsTask importCertsTask) throws IOException {
+	private static List<Path> scanForCertsToImport(Path path, PathMatcher acceptedFileEndings) throws IOException {
 		List<Path> certs = new ArrayList<>();
 
 		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -139,7 +139,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 			InputStream inputStream = Files.newInputStream(configFile.get());
 			properties.load(inputStream);
 		} catch (IOException e) {
-			new UncheckedIOException(e);
+			throw new UncheckedIOException(e);
 		}
 
 		return Optional.of(properties);

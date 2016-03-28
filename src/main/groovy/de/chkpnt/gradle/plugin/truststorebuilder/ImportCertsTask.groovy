@@ -17,14 +17,13 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.Path
-import java.io.File;
 import java.nio.file.Files
 import java.nio.file.Path
-import java.security.cert.X509Certificate;
+import java.security.cert.X509Certificate
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.InputDirectory;
-import org.gradle.api.tasks.OutputFile;
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
 
@@ -96,6 +95,5 @@ class ImportCertsTask extends DefaultTask {
 			this.cert = cert
 			this.alias = alias
 		}
-
 	}
 }
