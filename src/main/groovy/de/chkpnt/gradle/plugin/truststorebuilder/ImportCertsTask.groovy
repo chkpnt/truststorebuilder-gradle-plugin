@@ -16,7 +16,6 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Path
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.cert.X509Certificate
