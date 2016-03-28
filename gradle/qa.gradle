@@ -42,8 +42,11 @@ setToDefaultIfNotExists('sonarqubeToken', '')
 
 sonarqube {
 	properties {
-		// My certificate is issued by Let's Encrypt.
+		// The certificate used by sonar.chkpnt.de is issued by Let's Encrypt.
 		// Be aware: The corresponding Root CA is not trusted by default by Oracle's JRE
+		// Nevertheless, the CA is included in TrustStore used by the JVM under Debian,
+		// hence Travis-CI shouldn't throw any exceptions, see [1].
+		// [1] https://travis-ci.org/chkpnt/spielwiese-travis-ci/builds/118969521#L346-L347
 		property "sonar.host.url", "https://sonar.chkpnt.de"
 		property "sonar.login", project.sonarqubeToken
 		
