@@ -35,40 +35,37 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 
 	def setup() {
 		project = ProjectBuilder.builder().build()
-		project.file('certs').mkdir()
+		project.file('src/main/certs').mkdirs()
 		configuration = new TrustStoreBuilderConfiguration(project)
 	}
 
 	def "check default values"() {
 		expect:
 		configuration.password == 'changeit'
-		configuration.trustStoreFileName == 'cacerts.jks'
 		configuration.trustStore == project.file('build/cacerts.jks').toPath()
-		configuration.outputDir == project.file('build').toPath()
-		configuration.inputDir == project.file('certs').toPath()
+		configuration.inputDir == project.file('src/main/certs').toPath()
 		that configuration.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
 	}
 
-	def "TrustStore relative to build dir"() {
+	def "Default TrustStore is in build dir"() {
 		when:
 		project.buildDir = 'mybuild'
-		configuration.trustStoreFileName = 'truststore.jks'
 
 		then:
-		configuration.outputDir == project.file('mybuild').toPath()
-		configuration.trustStore == project.file('mybuild/truststore.jks').toPath()
+		configuration.trustStore == project.file('mybuild/cacerts.jks').toPath()
 	}
 
-	def "TrustStore with explicit input and output dir"() {
+	def "TrustStore with explicit input and output"() {
+		given:
+		project.file('src/x509/certs').mkdirs()
+
 		when:
-		configuration.trustStoreFileName = 'truststore.jks'
-		configuration.outputDirName = 'src/main/resources'
-		configuration.inputDirName = 'src/main/resources/certs'
+		configuration.trustStore = 'öäü/truststore.jks'
+		configuration.inputDir = 'src/x509/certs'
 
 		then:
-		configuration.outputDir == project.file('src/main/resources').toPath()
-		configuration.inputDir == project.file('src/main/resources/certs').toPath()
-		configuration.trustStore == project.file('src/main/resources/truststore.jks').toPath()
+		configuration.inputDir == project.file('src/x509/certs').toPath()
+		configuration.trustStore == project.file('öäü/truststore.jks').toPath()
 	}
 
 	def "accept additional file ending"() {
@@ -98,18 +95,6 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 
 	def "validation check 1"() {
 		given:
-		project.file('certs').delete()
-
-		when:
-		configuration.validate()
-
-		then:
-		ProjectConfigurationException e = thrown()
-		e.message == "The directory 'certs', which is scanned for certificates, does not exist"
-	}
-
-	def "validation check 2"() {
-		given:
 		configuration.atLeastValidDays = -3
 
 		when:
@@ -120,7 +105,7 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 		e.message == "The setting 'atLeastValidDays' has to be positive (currently -3)"
 	}
 
-	def "validation check 3"(List<String> fileEndings) {
+	def "validation check 2"(List<String> fileEndings) {
 		given:
 		configuration.acceptedFileEndings = fileEndings
 
@@ -136,22 +121,5 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 		_ | null
 		_ | []
 		_ | ["", " ", null]
-	}
-
-	def "validation check 4"(String filename) {
-		given:
-		configuration.trustStoreFileName = filename
-
-		when:
-		configuration.validate()
-
-		then:
-		ProjectConfigurationException e = thrown()
-		e.message == "The setting 'trustStoreFileName' is not set"
-
-		where:
-		filename | _
-		""       | _
-		null     | _
 	}
 }

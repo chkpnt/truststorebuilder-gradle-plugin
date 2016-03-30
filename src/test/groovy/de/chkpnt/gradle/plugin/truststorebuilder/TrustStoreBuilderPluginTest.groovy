@@ -61,7 +61,7 @@ class TrustStoreBuilderPluginTest extends Specification {
 	}
 
 	private def copyCertsToProjectDir() {
-		def dest = testProjectDir.newFolder('certs').toPath();
+		def dest = testProjectDir.newFolder('src', 'main', 'certs').toPath();
 
 		def certsFolder = getClass().getClassLoader().getResource("certs")
 		def source = Paths.get(certsFolder.toURI())
@@ -87,12 +87,12 @@ class TrustStoreBuilderPluginTest extends Specification {
 		Path trustStore = getDefaultTrustStore()
 
 		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-		assertFingerprintOfKeystoreEntry(trustStore, "changeit",  "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
 	}
 
 	def "alias for certificate is filename if config file is missing"() {
 		given:
-		def configfile = Paths.get("certs", "CAcert", "root.crt.config")
+		def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
 		Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
 
 		when:
@@ -105,7 +105,7 @@ class TrustStoreBuilderPluginTest extends Specification {
 
 	def "alias for certificate is filename if config file contains no alias"() {
 		given:
-		def configfile = Paths.get("certs", "CAcert", "root.crt.config")
+		def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
 		def file = testProjectDir.getRoot().toPath().resolve(configfile)
 		file.write("foobar")
 

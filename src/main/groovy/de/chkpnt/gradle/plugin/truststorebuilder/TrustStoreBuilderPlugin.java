@@ -87,10 +87,15 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 	}
 
 	private static ImportCertsTask createImportCertsTask(Project project, TrustStoreBuilderConfiguration configuration) {
+		String inputDirName = project.getProjectDir()
+			.toPath()
+			.relativize(configuration.getInputDir())
+			.toString();
+
 		ImportCertsTask task = project.getTasks()
 			.create(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class);
 		task.setGroup(BasePlugin.BUILD_GROUP);
-		task.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", configuration.getInputDirName()));
+		task.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", inputDirName));
 		task.setKeystore(configuration.getTrustStore());
 		task.setPassword(configuration.getPassword());
 		task.setInputDir(configuration.getInputDir());

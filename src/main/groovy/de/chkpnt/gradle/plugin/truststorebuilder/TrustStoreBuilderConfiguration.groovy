@@ -19,13 +19,12 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 import groovy.transform.PackageScope
 
 import java.nio.file.FileSystems
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.PathMatcher
 
+import org.gradle.api.PathValidation
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
-import org.gradle.api.internal.file.FileLookup
 import org.gradle.api.internal.project.ProjectInternal
 
 @PackageScope
@@ -43,44 +42,35 @@ class TrustStoreBuilderConfiguration {
 	String password = 'changeit'
 
 	/**
-	 * The directory where the TrustStore is built, relative to the project. If this property is not
-	 * set, the TrustStore is built in the project's build directory.
+	 * Path pointing to the TrustStore being built. Defaults to '$buildDir/cacerts.jks'.
 	 */
-	String outputDirName = null
+	Path trustStore
 
-	/**
-	 * Returns a path pointing to the directory where the TrustStore is built.
-	 */
-	Path getOutputDir() {
-		if (outputDirName != null) {
-			return project.file(outputDirName).toPath()
-		}
-
-		project.buildDir.toPath()
+	void setTrustStore(Object file) {
+		trustStore = project.file(file).toPath()
 	}
 
-	/**
-	 * The file name of the TrustStore to build. Defaults to 'cacerts.jks'.
-	 */
-	String trustStoreFileName = 'cacerts.jks'
-
-	/**
-	 * Returns a path pointing to the TrustStore being built.
-	 */
 	Path getTrustStore() {
-		project.services.get(FileLookup).getFileResolver(outputDir.toFile()).resolve(trustStoreFileName).toPath()
+		if (trustStore == null) {
+			return project.buildDir.toPath().resolve('cacerts.jks')
+		}
+		return trustStore
 	}
 
 	/**
-	 * The directory which is scanned for certificates. It is relative to the project and defaults to 'certs'.
+	 * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
 	 */
-	String inputDirName = 'certs'
+	Path inputDir
 
-	/**
-	 * Returns a path pointing to the directory which is scanned for certificates.
-	 */
+	void setInputDir(Object dir) {
+		inputDir = project.file(dir, PathValidation.DIRECTORY).toPath()
+	}
+
 	Path getInputDir() {
-		project.file(inputDirName).toPath()
+		if (inputDir == null) {
+			return project.file('src/main/certs', PathValidation.DIRECTORY).toPath()
+		}
+		return inputDir
 	}
 
 	/**
@@ -94,24 +84,18 @@ class TrustStoreBuilderConfiguration {
 	}
 
 	/**
-	 * Number of days the certificates have to be at least valid.
+	 * Number of days the certificates have to be at least valid. Defaults to 90 days.
 	 */
 	int atLeastValidDays = 90
 
 
 	void validate() {
-		if (Files.notExists(getInputDir()) || !Files.isDirectory(getInputDir())) {
-			throw new ProjectConfigurationException("The directory '$inputDirName', which is scanned for certificates, does not exist", null)
-		}
 		if (atLeastValidDays < 1) {
 			throw new ProjectConfigurationException("The setting 'atLeastValidDays' has to be positive (currently $atLeastValidDays)", null)
 		}
 		if (!acceptedFileEndings || acceptedFileEndings.empty
 		|| acceptedFileEndings.findAll { it?.trim() }.empty ) {
 			throw new ProjectConfigurationException("The setting 'acceptedFileEndings' has to contain at least one entry", null)
-		}
-		if (!trustStoreFileName) {
-			throw new ProjectConfigurationException("The setting 'trustStoreFileName' is not set", null)
 		}
 	}
 }
