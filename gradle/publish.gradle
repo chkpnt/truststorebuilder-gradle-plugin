@@ -7,6 +7,7 @@ buildscript {
 /*********************************
  * Configure Maven-Artifact
  *********************************/
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 task sourcesJar (type : Jar) {
@@ -105,4 +106,10 @@ pluginBundle {
 			displayName = 'Gradle TrustStore-builder plugin'
 		}
 	}
+}
+
+// groovydoc is included as a dependency for the PublishPlugin
+groovydoc {
+	// It seems to have issues with Lambdas in Java-Files.
+	exclude "**/TrustStoreBuilderPlugin.java"
 }
