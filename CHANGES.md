@@ -10,7 +10,7 @@ Currently, the BUILD number is equal to the number of commits referred to the co
 * Revised configuration:
   * Merging `outputDirName` and `trustStoreFileName` into `trustStore` with default value `$buildDir/cacerts.jks`
   * Renaming `inputDirName` to `inputDir` with new default value `src/main/certs/`
-* Builds: *unreleased yet*
+* Builds: 57
 
 # v0.1.x
 * Initial release for testing the CI setup:
