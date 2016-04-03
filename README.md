@@ -29,10 +29,11 @@ The plugin registers an extension `trustStoreBuilder` which allows to configure 
 | Setting             | Description                                                                       | Default                       | Type         |
 |---------------------|-----------------------------------------------------------------------------------|-------------------------------|--------------|
 | password            | The password used for the TrustStore.                                             | changeit                      | String       |
-| outputDirName       | The directory where the TrustStore is built, relative to the project.             | the project's build directory | String       |
-| trustStoreFileName  | The file name of the TrustStore to build.                                         | cacerts.jks                   | String       |
-| inputDirName        | The directory which is scanned for certificates, relative to the project.         | certs                         | String       |
+| trustStoreFileName  | The file of the TrustStore to build.                                              | $buildDir/cacerts.jks         | Object       |
+| inputDir            | The directory which is scanned for certificates.                                  | $projectDir/src/main/certs    | Object       |
 | acceptedFileEndings | A file being processed as a certificate has to have a file ending from this list. | ['crt', 'cer', 'pem']         | List<String> |
 | atLeastValidDays    | Number of days the certificates have to be at least valid.                        | 90                            | int          |
 
 ## Example
+
+A demonstration of this plugin can be found in [this repository](https://github.com/chkpnt/truststorebuilder-gradle-plugin-demo).
