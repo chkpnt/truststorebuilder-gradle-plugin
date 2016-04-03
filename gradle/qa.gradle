@@ -1,0 +1,89 @@
+buildscript {
+	repositories.maven { url 'https://plugins.gradle.org/m2/' }
+	repositories.maven { url 'http://maven.hello2morrow.com/repository' }
+	dependencies.classpath 'com.hello2morrow:sonargraph-gradle-plugin:8.8.0'
+	dependencies.classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:1.2'
+}
+
+/***************************
+ * JaCoCo
+ ***************************/
+apply plugin: 'jacoco'
+
+jacoco {
+	toolVersion = "0.7.6.201602180812"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+	
+	// Gradle's Test-Kit doesn't support JaCoCo right now.
+	// This feature is targeted in Milestone 4:
+	// https://github.com/gradle/gradle/blob/master/design-docs/testing-toolkit.md
+	// I'm excluding the corresponding test, until this feature is available.
+//	afterEvaluate {
+//		classDirectories = files(classDirectories.files.collect {
+//			fileTree(dir: it, exclude: '**/TrustStoreBuilderPlugin*.class')
+//		})
+//	}
+}
+
+check.dependsOn jacocoTestReport
+
+/*********************************
+ * SonarQube
+ *********************************/
+apply plugin: org.sonarqube.gradle.SonarQubePlugin
+
+setToDefaultIfNotExists('sonarqubeToken', '')
+
+sonarqube {
+	properties {
+		// The certificate used by sonar.chkpnt.de is issued by Let's Encrypt.
+		// Be aware: The corresponding Root CA is not trusted by default by Oracle's JRE
+		// Nevertheless, the CA is included in TrustStore used by the JVM under Debian,
+		// hence Travis-CI shouldn't throw any exceptions, see [1].
+		// [1] https://travis-ci.org/chkpnt/spielwiese-travis-ci/builds/118969521#L346-L347
+		property "sonar.host.url", "https://sonar.chkpnt.de"
+		property "sonar.login", project.sonarqubeToken
+		
+		// Default is project.compileJava.options.encoding, which I'm not setting,
+		// as this is a Groovy project
+		property "sonar.sourceEncoding", "UTF-8"
+		property "sonar.scm.disabled", "true"
+		
+		// property "sonar.analysis.mode", "preview"
+		
+		// SonarQube is currently not compatible with Sonargraph 8.8 (2016-03-28)
+		// see https://github.com/SonarQubeCommunity/sonar-sonargraph/pull/7
+		// property "sonar.sonargraph.report.path", "${project.buildDir}/sonargraph/sonargraph-sonarqube-report.xml"
+	}
+}
+
+/*********************************
+ * Sonargraph
+ *********************************/
+apply plugin: com.hello2morrow.sonargraph.build.client.gradle.SonargraphGradlePlugin
+
+setToDefaultIfNotExists('sonargraphActivationCode', '')
+
+sonargraphDynamicReport
+{
+	activationCode = project.sonargraphActivationCode
+	prepareForSonarQube = true
+	reportType = "full"
+	reportFormat = "xml, html"
+	qualityModelFile = "Sonargraph:Java.sgqm" //default Java quality model
+	failSet
+	{
+		failOnEmptyWorkspace = true
+		include(issueType: "any", severity: "error", resolution: "none")
+		include(issueType: "ArchitectureViolation")
+		include(issueType: "any", severity: "warning")
+		exclude(issueType: "ScriptCompilationError", resolution: "none")
+		exclude(issueType: "ThresholdViolation")
+	}
+}

@@ -11,6 +11,12 @@ env:
     # GRADLE_PUBLISH_SECRET
     - secure: "mxcPZT6I5Lko5JSaJtb6UamqMA1RGo6M6wE4MdqQWiToGSL6lvxt3eHP7P3j0n5mg1hEhcvkTHtmgu62YBtHzOxJ23YY82vd+ncqZ4FP0A2GOg1hlFjXkTNo8vKb3b8dCrSB+ntK4FDj2fWtSTegAn0WBBsPc862gbGLeD3XG6GjtoTE9kWgNZL3lQo3oefbWdOveWlEp1ZC3Te/ihxCbaKqPhWyCDoXVNdVrL3aWLSlPDBU8JxMceXd971hvIeQ248mf7uNwEVx24W6qoxAYTKgeG8J7OKO3yZIRzLImugpTXilmNSCS3+3xJYQcqUSWDvkefRY6PFkk6RbiaQchl4/O7OzlurKlaX0VFuiJvXJ9XU/r8v8DEno2El48tm9RVKk01K/jc4kSkxjJLCHpx4M25TGA4ypKOh7ALJv2Fh1et3CzR/F4IF2WIPNN/wwpnk9J8kZoBU6rjZUL2Ze+yVkO7eq2Xl5yfACN5sA2Gc8RPzL3i7NCx23G+WxsplxvPT3pOdXV01mCn18CkBoPpJa5Wp5MON84gzxHQH3xLLNrrG9AD2ooyPu+c3mB08h4X14lWu+ceLVIBXohfqPM6qq4325giDiQCCs9dN5Hh3jL9ouE5ct1s4lViDLBWjQJRgrI4lj4jUf2w7js82MITz/FkQjfboTv3vdb7mF5Ms="
 
+    # SONARQUBE_TOKEN
+    - secure: "t3g2xQUQEik+xIDBV6RzUtXUFAzRrgBhJRAZoRTmVcJe5Uq1Pbo4Xc/0UR6NEZXa1spNf/oeweaKKyJEwGTOII3/rbBGz114rMnhVQR7IENF4U1IPOHsvVRqLsHai7yhItqOaSJksxLnJ17k6oi4C/aSWum3aKxaR2LLSm4w/hsPjDo6W1ihOoOHdRyceAhDShRlM3/wghIvA31aO9+yvWi3RiqeTuQ3P87wnhAyHdF2thwH/2bSlSvC5bbMJcVOj229XR0e5mGPc9ZPHzNdUzx4dxNTEXoUoTsRPKPFGOwJ4hbJnzQXaD07hEXLZcDW6bRauqfhJ8ddNXU38LflZtqCDyHB7pQs/0Rk09/7KVUJxUPwaZzYHwkkz49jpx4fDO7NvaXMS7Z3PvH9RS7rAe2tvt/IOdY8V7lTyvmlANmjzpcs4ZdHy36S1C/diC44xH44FVbCr2nJH2sznv7VheX8HHu+b6EU+zUSbfPiTer6KlrsZYL37H0h5vKU/Crs1DfIZ1U/YWyMPYcCxSjbJS14t8rQC8Sb44mEXjHhy6MpQFJcAvW7jYb+kaT2t6yjzJiNAjrH9QfOYwKK5Bi6T4Ke8Zfv7zd2O0dcUYzpu0YB57wg8cmNic89vKjYOVeL9A4UCfX7Sh1mk0xIlF9yEYyKMRWjRUgBoG5nbDzBO9Q="
+
+    # SONARGRAPH_ACTIVATION_CODE
+    - secure: "D8dZnWDhpHVxuYXN87c79sDZ55kL1ZmWcsRrk6L/9mm3HWJcl4NyiPfe2XpMGHDyWVIrxDzKm9NnsiCjuY1vlM3Ygk6CuJj94mG3l2Fx6bv7BEIT1eVvYKCjsKqoflVTgKnkjChdJsDKVeDXPqEEYkaiyJ8Oev9AP6ruIp4/VvwB+2OuISGMk0a46PjzbM9HrGH+s5IMBrHF/rXD9ucHMIWOMgy+sQb5z0SAgZv4VPiEuL1jAQuojR5+0xLfqypBTQr7CuJVl3fycSEikzIa7VPpq6WbKYp5lcegIhk7ClAshTCsMuDhznbCdAQL6cPRfgkwbM2TjMi8kNuHuwTMjQDXQizmv8RG25m5RpdBFnAnOYY3SeN683kHOjRo75k5AtLt6szDxukGGxU+AIOLZ1b3nAgsoKbCciInX4f7mOEWBhGeUp/0HGYIxeeVeehXBGVYgBhN3wQvQ1a7SVHS/zfrmMx4drLFvdI6G0jPKjpqiAay0gwohaZM0jaHLFm3h9qnOalgRNv9oO/B5OYW+cP1YfjVa1aopvtxvBhk1bh9V5J0hqvEcWqHuCO63Y3WcnBhjDcpD3aYJXpVUzKB08G+THjQ4+hMbZXfLRtnZJRSdhQSRBijBBdbtpTuWdmZp65CK1cLdNtS6P3yp/mc2zDCiQ3GyduYNl+mE6Y8urY="
+
 jdk:
   - oraclejdk8
 
@@ -25,4 +31,10 @@ before_install:
 
 after_success:
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then codecov; fi
-  - if [[ $TRAVIS_BRANCH == 'release' ]]; then ./gradlew -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET -PbintrayUser=chkpnt -PbintrayApiKey=$BINTRAY_API_KEY bintrayUpload publishPlugins; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonar.sh; fi
+
+deploy:
+  provider: script
+  script: scripts/deploy.sh
+  on:
+    branch: release

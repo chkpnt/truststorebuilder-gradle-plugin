@@ -69,7 +69,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		configureDependency(project, JavaBasePlugin.CHECK_TASK_NAME, checkCertsValidationTask);
 		configureDependency(project, JavaBasePlugin.BUILD_TASK_NAME, importCertsTask);
 
-		List<Path> certs = scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings(), importCertsTask);
+		List<Path> certs = scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings());
 
 		certs.forEach(cert -> {
 			Path filename = cert.getFileName();
@@ -87,10 +87,15 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 	}
 
 	private static ImportCertsTask createImportCertsTask(Project project, TrustStoreBuilderConfiguration configuration) {
+		String inputDirName = project.getProjectDir()
+			.toPath()
+			.relativize(configuration.getInputDir())
+			.toString();
+
 		ImportCertsTask task = project.getTasks()
 			.create(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class);
 		task.setGroup(BasePlugin.BUILD_GROUP);
-		task.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", configuration.getInputDirName()));
+		task.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", inputDirName));
 		task.setKeystore(configuration.getTrustStore());
 		task.setPassword(configuration.getPassword());
 		task.setInputDir(configuration.getInputDir());
@@ -106,7 +111,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		return task;
 	}
 
-	private static List<Path> scanForCertsToImport(Path path, PathMatcher acceptedFileEndings, ImportCertsTask importCertsTask) throws IOException {
+	private static List<Path> scanForCertsToImport(Path path, PathMatcher acceptedFileEndings) throws IOException {
 		List<Path> certs = new ArrayList<>();
 
 		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -139,7 +144,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 			InputStream inputStream = Files.newInputStream(configFile.get());
 			properties.load(inputStream);
 		} catch (IOException e) {
-			new UncheckedIOException(e);
+			throw new UncheckedIOException(e);
 		}
 
 		return Optional.of(properties);

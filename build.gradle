@@ -54,5 +54,5 @@ task wrapper(type: Wrapper) {
 
 apply from: 'gradle/versioning.gradle'
 apply from: 'gradle/publish.gradle'
-apply from: 'gradle/jacoco.gradle'
 apply from: 'gradle/spotless.gradle'
+apply from: 'gradle/qa.gradle'

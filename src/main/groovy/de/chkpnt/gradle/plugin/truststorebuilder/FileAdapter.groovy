@@ -16,7 +16,6 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.io.File;
 import java.nio.file.Path
 
 interface FileAdapter {
@@ -29,5 +28,4 @@ class DefaultFileAdapter implements FileAdapter {
 	public File toFile(Path path) {
 		return path.toFile();
 	}
-
 }

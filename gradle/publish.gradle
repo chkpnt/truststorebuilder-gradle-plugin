@@ -4,9 +4,11 @@ buildscript {
 	dependencies.classpath 'com.gradle.publish:plugin-publish-plugin:0.9.4'
 }
 
+/*********************************
+ * Configure Maven-Artifact
+ *********************************/
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
-apply plugin: com.gradle.publish.PublishPlugin
 
 task sourcesJar (type : Jar) {
 	classifier = 'sources'
@@ -45,21 +47,25 @@ publishing {
 				}
 			}
 
-			
 			artifact sourcesJar
 		}
 	}
 }
 
+/*********************************
+ * Publish to Bintray / JCenter
+ *********************************/
+apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
+
 setToDefaultIfNotExists('bintrayUser', 'unspecified')
 setToDefaultIfNotExists('bintrayApiKey', 'unspecified')
 
 bintray {
-	user = project.bintrayUser //this usually comes from gradle.properties file in ~/.gradle
-	key = project.bintrayApiKey //this usually comes from gradle.properties file in ~/.gradle
-	publications = ['plugin'] //When uploading Maven-based publication files
+	user = project.bintrayUser
+	key = project.bintrayApiKey
+	publications = ['plugin'] // This refers to the Maven-based publication files above
 	dryRun = false
-	publish = false
+	publish = true
 	pkg {
 		repo = 'maven'
 		name = project.name
@@ -77,14 +83,16 @@ bintray {
 				'Build-date': project.buildDate
 			]
 			mavenCentralSync {
-				sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
-				user = 'userToken' //OSS user token
-				password = 'paasword' //OSS user password
-				close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+				sync = false
 			}
 		}
 	}
 }
+
+/*********************************
+ * Publish to plugins.gradle.org
+ *********************************/
+apply plugin: com.gradle.publish.PublishPlugin
 
 pluginBundle {
 	website = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
@@ -98,4 +106,10 @@ pluginBundle {
 			displayName = 'Gradle TrustStore-builder plugin'
 		}
 	}
+}
+
+// groovydoc is included as a dependency for the PublishPlugin
+groovydoc {
+	// It seems to have issues with Lambdas in Java-Files.
+	exclude "**/TrustStoreBuilderPlugin.java"
 }
