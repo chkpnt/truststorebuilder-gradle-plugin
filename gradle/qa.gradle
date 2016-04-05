@@ -56,10 +56,6 @@ sonarqube {
 		property "sonar.scm.disabled", "true"
 		
 		// property "sonar.analysis.mode", "preview"
-		
-		// SonarQube is currently not compatible with Sonargraph 8.8 (2016-03-28)
-		// see https://github.com/SonarQubeCommunity/sonar-sonargraph/pull/7
-		// property "sonar.sonargraph.report.path", "${project.buildDir}/sonargraph/sonargraph-sonarqube-report.xml"
 	}
 }
 
@@ -70,8 +66,7 @@ apply plugin: com.hello2morrow.sonargraph.build.client.gradle.SonargraphGradlePl
 
 setToDefaultIfNotExists('sonargraphActivationCode', '')
 
-sonargraphDynamicReport
-{
+sonargraphDynamicReport {
 	activationCode = project.sonargraphActivationCode
 	prepareForSonarQube = true
 	reportType = "full"
@@ -80,10 +75,5 @@ sonargraphDynamicReport
 	failSet
 	{
 		failOnEmptyWorkspace = true
-		include(issueType: "any", severity: "error", resolution: "none")
-		include(issueType: "ArchitectureViolation")
-		include(issueType: "any", severity: "warning")
-		exclude(issueType: "ScriptCompilationError", resolution: "none")
-		exclude(issueType: "ThresholdViolation")
 	}
 }
