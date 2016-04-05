@@ -39,3 +39,7 @@ _\* Anything, that can be handled by [project.file(...)](https://docs.gradle.org
 ## Example
 
 A demonstration of this plugin can be found in [this repository](https://github.com/chkpnt/truststorebuilder-gradle-plugin-demo).
+
+## Development
+
+I'm using _Eclipse Neon_ with the plugin _[GroovyEclipse](https://github.com/groovy/groovy-eclipse/wiki)_. This project requires the _Groovy Compiler 2.4 Feature_.
