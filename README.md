@@ -12,15 +12,19 @@ cmd> gradlew build
 
 [![Gradle plugin](https://img.shields.io/badge/plugins.gradle.org-de.chkpnt.truststorebuilder-blue.svg)](https://plugins.gradle.org/plugin/de.chkpnt.truststorebuilder)
 [![JCenter artifact](https://img.shields.io/badge/JCenter-de.chkpnt%3Atrust%E2%80%A6--plugin-blue.svg)](https://bintray.com/chkpnt/maven/truststorebuilder-gradle-plugin/view)
-[![SonarQube](https://img.shields.io/badge/SonarQube-sonar.chkpnt.de-blue.svg)](https://sonar.chkpnt.de/dashboard?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&did=1)
 [![License](https://img.shields.io/github/license/chkpnt/truststorebuilder-gradle-plugin.svg?label=License)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))  
 [![Linux Build Status](https://img.shields.io/travis/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Linux build)](https://travis-ci.org/chkpnt/truststorebuilder-gradle-plugin)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Windows build)](https://ci.appveyor.com/project/chkpnt/truststorebuilder-gradle-plugin/branch/master)  
-[![Tests](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tests.svg?label=SonarQube: tests)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)
-[![Tech dept by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tech_debt.svg?label=SonarQube: tech dept)](https://sonar.chkpnt.de/overview/debt?id=de.chkpnt%3Atruststorebuilder-gradle-plugin)
-[![Test coverage by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/coverage.svg?label=SonarQube: coverage)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=lines_to_cover)
-[![Test coverage by codecov.io](https://img.shields.io/codecov/c/github/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Codecov: coverage)](https://codecov.io/github/chkpnt/truststorebuilder-gradle-plugin?branch=master)
-
+[![SonarQube](https://img.shields.io/badge/SonarQube-sonar.chkpnt.de-blue.svg)](https://sonar.chkpnt.de/dashboard?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&did=1)
+[![Tests](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tests.svg?label=Tests)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)
+[![Tech dept by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tech_debt.svg?label=Tech dept)](https://sonar.chkpnt.de/overview/debt?id=de.chkpnt%3Atruststorebuilder-gradle-plugin)
+[![Test coverage by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/coverage.svg?label=Code coverage)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=lines_to_cover)      
+[![Sonargraph by hello2morrow](https://img.shields.io/badge/Static%20code%20analyzer-Sonargraph-blue.svg)](https://www.hello2morrow.com/products/sonargraph)
+[![Average component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_ACD.svg?label=ACD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
+[![Cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_CCD.svg?label=CCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
+[![Normalized cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_NCCD.svg?label=NCCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
+[![Codecov](https://img.shields.io/badge/Other%20CI%20tool-codecov.io-blue.svg)](https://codecov.io/)
+[![Test coverage by codecov.io](https://img.shields.io/codecov/c/github/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Code coverage)](https://codecov.io/github/chkpnt/truststorebuilder-gradle-plugin?branch=master)
 
 ## Configuration
 
