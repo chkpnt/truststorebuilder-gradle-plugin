@@ -1,0 +1,5053 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <style type="text/css" MEDIA="all">@import url("hello2morrow.css");</style>
+        <title>Sonargraph Architect Report</title>
+    </head>
+
+    <body>
+        <a name="top"></a>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="200" bgcolor="#333333"><img src="spacer.gif" alt="" width="200" height="65" border="0"></td>
+                <td width="23" bgcolor="E3E4E5"><img src="spacer.gif" width="23" height="1"></td>
+                <td width="100%" bgcolor="E3E4E5">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="7" bgcolor="e3e4e5"><img src="spacer.gif" width="7" height="1"></td>
+                            <td><img src="hello2morrow.gif" alt="hello2morrow" width="227" height="23" border="0"></td>
+                            <td width="100%" align="right" bgcolor="e3e4e5"><img src="header.gif" alt="hello2morrow" width="543" height="65" border="0"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" bgcolor="#000000"></td>
+            </tr>
+            <tr>
+<!-- start of navigation -->            
+                <td bgcolor="#A7A9AC" valign="top">
+                    <div class="leftNav">
+                        <ul>
+                            <li><a href="#system">System</a></li>
+                            <li><a href="#automatedScripts">Automated Scripts </a></li>
+                            <li><a href="#workspace">Workspace</a></li>
+                            <li><a href="#openIssues">Unresolved Issues (0)</a></li>
+                            <li><a href="#cycleGroups">Cycle Groups (0)</a></li>
+                            <li><a href="#duplicateBlocks">Duplicate Blocks </a></li>
+                            <li><a href="#resolutions">Resolutions </a></li>
+                            <li><a href="#elementMetrics">Element Level Metrics</a>
+                                <ul>
+                                    
+                                    <li><a class="secondLevel" href="#elementMetrics_Module">Module Level Metrics</a></li>
+                                    
+                                    <li><a class="secondLevel" href="#elementMetrics_Package">Java Package Level Metrics</a></li>
+                                    
+                                    <li><a class="secondLevel" href="#elementMetrics_Component">Component Level Metrics</a></li>
+                                    
+                                    <li><a class="secondLevel" href="#elementMetrics_SourceFile">Source File Level Metrics</a></li>
+                                    
+                                    <li><a class="secondLevel" href="#elementMetrics_Type">Type Level Metrics</a></li>
+                                    
+                                    <li><a class="secondLevel" href="#elementMetrics_Routine">Routine Level Metrics</a></li>
+                                    
+                                </ul>
+                            </li>
+                            <li><a href="#metricInfos">Metric Infos</a></li>
+                        </ul>
+                    </div>
+                </td>
+<!-- end of navigation -->
+                <!-- start of spacer -->
+                <td width="23"><img src="spacer.gif" width="23" height="1"></td><!-- end of spacer -->
+                
+                <!-- real content -->
+                <td width="100%">
+                    <table width="100%" border="0">
+                        <tr>
+                            <td width="1%" height="80" valign="center">
+                                <image src="logo.gif" width="350"></image>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h1><a name="system"></a>System: truststorebuilder-gradle-plugin</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Path: </strong>E:\OneDrive\Aktuelle Projekte\truststorebuilder-gradle-plugin\build\truststorebuilder-gradle-plugin.sonargraph<br/>
+                                <strong>System Description:Building Java TrustStores with Gradle.</strong><br/>
+                                <strong>Sonargraph Version: </strong>8.8.0.364<br/>
+                                <strong>Report Creation: </strong>2016-04-05 23:21:40<br/>
+                                <strong>Current Virtual Model: </strong>Parser <br/>
+                                
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h2>Licensed Features</h2>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="450">Feature</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+Platform
+</td>
+</tr>
+<tr class="b">
+<td>
+Reporting
+</td>
+</tr>
+<tr class="a">
+<td>
+Systems
+</td>
+</tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                         
+                        <tr>
+                            <td>
+                                <h2>Not Licensed Features</h2>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="450">Feature</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+Architecture
+</td>
+</tr>
+<tr class="b">
+<td>
+Cohesion And Coupling Metrics
+</td>
+</tr>
+<tr class="a">
+<td>
+Cycle Break Up
+</td>
+</tr>
+<tr class="b">
+<td>
+Duplicate Code
+</td>
+</tr>
+<tr class="a">
+<td>
+Refactorings
+</td>
+</tr>
+<tr class="b">
+<td>
+Scripts
+</td>
+</tr>
+<tr class="a">
+<td>
+Scripts Automated
+</td>
+</tr>
+<tr class="b">
+<td>
+Snapshots
+</td>
+</tr>
+<tr class="a">
+<td>
+Virtual Models
+</td>
+</tr>
+
+                                </table>    
+                            </td>
+                        </tr>
+                        
+<!-- System Metrics -->                        
+                        <tr class="a">
+                            <td><h2>System Metrics</h2></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>Metric Category: Code Analysis</strong><br/>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="450">Name</th>
+                                        <th width="150">Value</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+Parser Dependencies to Remove (Components) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Component Dependencies to Remove (Components) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Structural Debt Index (Components) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Parser Dependencies to Remove (Packages) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Component Dependencies to Remove (Packages) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Structural Debt Index (Packages) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+
+                                </table>
+                                <br/>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>Metric Category: Cycle</strong><br/>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="450">Name</th>
+                                        <th width="150">Value</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+Number of Cyclic Components (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Component Cycle Groups (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Biggest Component Cycle Group (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Ignored Cyclic Components (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Cyclicity (Components) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Relative Cyclicity (Components) (System)
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Package Cycle Groups (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Cyclic Packages (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Ignored Cyclic Packages (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Biggest Package Cycle Group (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Cyclicity (Packages) (System)
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Relative Cyclicity (Packages) (System)
+</td>
+<td>
+0,00
+</td>
+</tr>
+
+                                </table>
+                                <br/>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>Metric Category: John Lakos</strong><br/>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="450">Name</th>
+                                        <th width="150">Value</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+ACD (System)
+</td>
+<td>
+2,43
+</td>
+</tr>
+<tr class="b">
+<td>
+CCD (System)
+</td>
+<td>
+17
+</td>
+</tr>
+<tr class="a">
+<td>
+RACD (System)
+</td>
+<td>
+34,69
+</td>
+</tr>
+<tr class="b">
+<td>
+NCCD (System)
+</td>
+<td>
+1,00
+</td>
+</tr>
+<tr class="a">
+<td>
+Highest ACD (System)
+</td>
+<td>
+2,43
+</td>
+</tr>
+
+                                </table>
+                                <br/>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>Metric Category: Size</strong><br/>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="450">Name</th>
+                                        <th width="150">Value</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+Lines of Code (System)
+</td>
+<td>
+363
+</td>
+</tr>
+<tr class="b">
+<td>
+Total Lines (System)
+</td>
+<td>
+603
+</td>
+</tr>
+<tr class="a">
+<td>
+Comment Lines (System)
+</td>
+<td>
+75
+</td>
+</tr>
+<tr class="b">
+<td>
+Code Comment Lines (System)
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Statements (System)
+</td>
+<td>
+49
+</td>
+</tr>
+<tr class="b">
+<td>
+Source Element Count (System)
+</td>
+<td>
+189
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Components (System)
+</td>
+<td>
+7
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Packages (System)
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+Byte Code Instructions (System)
+</td>
+<td>
+2494
+</td>
+</tr>
+
+                                </table>
+                                <br/>
+                            </td>
+                        </tr>
+                        
+                        <tr class="a">
+                            <td><h2><a name="workspace"></a>Workspace <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><strong>Modules:</strong><br/>
+                                <table class="techTable">
+                                    <tr>
+                                        <th width="150">Module</th>
+                                        <th>Root Path</th>
+                                        <th width="250">Info</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+./classes/main
+</td>
+<td>
+15 java class file(s) found
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+../src/main/groovy
+</td>
+<td>
+7 java source file(s) found
+</td>
+</tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="a">
+                            <td><h2><a name="automatedScripts"></a>Automated Scripts  <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="techTable" width="50%">
+                                    <tr>
+                                        <th width="450">Script</th>
+                                        <th width="250">Run Configuration</th>
+                                    </tr>
+                                    <tr class="a">
+<td><font color="red">Script runner not licensed</font></td><td></td>
+
+                                </table>
+                            </td>
+                        </tr>
+<!-- All Unresolved Issues -->
+                        <tr class="a">
+                            <td><h2><a name="openIssues"></a>Unresolved Issues (0) <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="techTable" width="100%">
+                                    <tr>
+                                        <th width="100">Type</th>
+                                        <th width="350">Description</th>
+                                        <th width="70">Severity</th>
+                                        <th width="80">Category</th>
+                                        <th width="350">Element</th>
+                                        <th width="350">To Element</th>
+                                        <th width="100">Provider</th>
+                                    </tr>
+                                    <tr class="a">
+<td>No open issues</td><td></td><td></td><td></td><td></td><td></td><td></td>
+
+                                </table>
+                            </td>
+                        </tr>
+<!-- Unresolved Cycle Groups -->
+                        <tr class="a">
+                            <td><h2><a name="cycleGroups"></a>Unresolved Cycle Groups (0) <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br/>No cycle groups detected<br/>
+
+                            </td>
+                        </tr>
+<!-- Unresolved Duplicate Blocks -->                        
+                        <tr class="a">
+                            <td><h2><a name="duplicateBlocks"></a>Unresolved Duplicate Blocks  <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="techTable" width="80%">
+                                    <tr>
+                                        <th width="80">Name</th>
+                                        <th width="250">File</th>
+                                        <th width="50">Line Range</th>
+                                        <th width="50">Block Length (Lines)</th>
+                                        <th width="50">Tolerance (Lines)</th>
+                                    </tr>
+                                    <tr class="a">
+<td><font color="red">Duplicate code not licensed</font></td><td></td><td></td><td></td><td></td>
+
+                                </table>
+                            </td>
+                        </tr>
+<!-- Resolutions -->    
+                     
+                    <tr class="a">
+                        <td><h2><a name="resolutions"></a>Resolutions  <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                    </tr>
+                                                        
+                        <tr>
+                            <td>
+                                <table class="techTable" width="100%">
+                                    <tr>
+                                        <th width="80">Resolution Type</th>
+                                        <th width="120">Issue Type</th>
+                                        <th width="250">Description</th>
+                                        <th width="250">Information</th>
+                                        <th width="70">Date</th>
+                                        <th width="70">Matched</th>
+                                        <th width="70">Priority</th>
+                                        <th width="70">Assignee</th>
+                                        <!-- th width="80">Issues</th -->
+                                    </tr>
+                                    <tr class="a">
+<td><font color="red">Virtual models not licensed</font></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+                                </table>
+                            </td>
+                        </tr>              
+<!-- Element Metrics -->                                        
+                        <tr class="a">
+                            <td><h2><a name="elementMetrics"></a>Element Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        
+                            <tr class="a">
+                                <td>
+                                    <h3><a name="elementMetrics_Module"></a>Module Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h3>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Code Analysis</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Module</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Component Dependencies to Remove (Components)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Component Dependencies to Remove (Packages)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Parser Dependencies to Remove (Components)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Parser Dependencies to Remove (Packages)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Structural Debt Index (Components)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Structural Debt Index (Packages)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Cycle</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Module</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Biggest Component Cycle Group
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Biggest Package Cycle Group
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Cyclicity (Components)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Cyclicity (Packages)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Component Cycle Groups
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Cyclic Components
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Cyclic Packages
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Ignored Cyclic Components
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Ignored Cyclic Packages
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Package Cycle Groups
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Relative Cyclicity (Components)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="b">
+<td>
+Relative Cyclicity (Packages)
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+0,00
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: John Lakos</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Module</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+ACD
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+2,43
+</td>
+</tr>
+<tr class="b">
+<td>
+CCD
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+17
+</td>
+</tr>
+<tr class="a">
+<td>
+NCCD
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+1,00
+</td>
+</tr>
+<tr class="b">
+<td>
+RACD
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+34,69
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Size</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Module</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Code Comment Lines
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="b">
+<td>
+Comment Lines
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+75
+</td>
+</tr>
+<tr class="a">
+<td>
+Lines of Code
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+363
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Components
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+7
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Packages
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Statements
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+49
+</td>
+</tr>
+<tr class="a">
+<td>
+Source Element Count
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+189
+</td>
+</tr>
+<tr class="b">
+<td>
+Total Lines
+</td>
+<td>
+truststorebuilder-gradle-plugin
+</td>
+<td>
+603
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="a">
+                                <td>
+                                    <h3><a name="elementMetrics_Package"></a>Java Package Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h3>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Robert C. Martin</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Java Package</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Abstractness (Module)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0,07
+</td>
+</tr>
+<tr class="b">
+<td>
+Abstractness (System)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0,07
+</td>
+</tr>
+<tr class="a">
+<td>
+Distance (Module)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0,07
+</td>
+</tr>
+<tr class="b">
+<td>
+Distance (System)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0,07
+</td>
+</tr>
+<tr class="a">
+<td>
+Instability (Module)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+1,00
+</td>
+</tr>
+<tr class="b">
+<td>
+Instability (System)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+1,00
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Incoming Dependencies (Module)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Incoming Dependencies (System)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Outgoing Dependencies (Module)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Outgoing Dependencies (System)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+0
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Size</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Java Package</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Number of Types (Module)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+14
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Types (System)
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder
+</td>
+<td>
+14
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="a">
+                                <td>
+                                    <h3><a name="elementMetrics_Component"></a>Component Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h3>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: John Lakos</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Component</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Depends Upon (Module)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+7
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+Depends Upon (System)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+7
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+Used From (Module)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+Used From (System)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+1
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Robert C. Martin</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Component</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Instability (Module)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+1,00
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+0,67
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+0,67
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="b">
+<td>
+Instability (System)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+1,00
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+0,67
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+0,67
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+0,00
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Incoming Dependencies (Module)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Incoming Dependencies (System)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Outgoing Dependencies (Module)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Outgoing Dependencies (System)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Size</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Component</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Number of Types (Module)
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+1
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="a">
+                                <td>
+                                    <h3><a name="elementMetrics_SourceFile"></a>Source File Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h3>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Size</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Source File</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Code Comment Lines
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+Comment Lines
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+15
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="a">
+<td>
+Lines of Code
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+117
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+67
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+61
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+52
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+40
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+15
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+11
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Statements
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+49
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Source Element Count
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+69
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+31
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+29
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+24
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+22
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+9
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="b">
+<td>
+Total Lines
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderPlugin.java
+</td>
+<td>
+164
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/TrustStoreBuilderConfiguration.groovy
+</td>
+<td>
+101
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CertificateService.groovy
+</td>
+<td>
+100
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/ImportCertsTask.groovy
+</td>
+<td>
+98
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertsValidationTask.groovy
+</td>
+<td>
+71
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/CheckCertValidationError.groovy
+</td>
+<td>
+38
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+./de/chkpnt/gradle/plugin/truststorebuilder/FileAdapter.groovy
+</td>
+<td>
+31
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="a">
+                                <td>
+                                    <h3><a name="elementMetrics_Type"></a>Type Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h3>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Size</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Type</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Number of Methods
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask
+</td>
+<td>
+20
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask
+</td>
+<td>
+15
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService
+</td>
+<td>
+13
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration
+</td>
+<td>
+13
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin
+</td>
+<td>
+9
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError
+</td>
+<td>
+6
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask$ImportCertConfig
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration$_validate_closure1
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_fingerprintSha1_closure1
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask$_closure1
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.DefaultFileAdapter
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.FileAdapter
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Statements
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin
+</td>
+<td>
+49
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_fingerprintSha1_closure1
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask$_closure1
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.DefaultFileAdapter
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.FileAdapter
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask$ImportCertConfig
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration$_validate_closure1
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Source Element Count
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin
+</td>
+<td>
+69
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask
+</td>
+<td>
+31
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService
+</td>
+<td>
+29
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration
+</td>
+<td>
+24
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask
+</td>
+<td>
+22
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError
+</td>
+<td>
+9
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask$ImportCertConfig
+</td>
+<td>
+6
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration$_validate_closure1
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_fingerprintSha1_closure1
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask$_closure1
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.DefaultFileAdapter
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.FileAdapter
+</td>
+<td>
+2
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="a">
+                                <td>
+                                    <h3><a name="elementMetrics_Routine"></a>Routine Level Metrics <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h3>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Size</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Routine</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Number of Parameters
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2._loadKeystore_closure2(Object,Object,Reference,Reference)
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3._storeKeystore_closure3(Object,Object,Reference,Reference)
+</td>
+<td>
+4
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.addCertificateToKeystore(KeyStore,X509Certificate,String) : void
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.storeKeystore(KeyStore,Path,String) : void
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureDependency(Project,String,Task) : void
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_fingerprintSha1_closure1._fingerprintSha1_closure1(Object,Object)
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.getCertificateFromKeystore(KeyStore,String) : X509Certificate
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.isCertificateValidInFuture(X509Certificate,Duration) : boolean
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.loadKeystore(Path,String) : KeyStore
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError.CheckCertValidationError(Path,String)
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask$_closure1._closure1(Object,Object)
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask$ImportCertConfig.ImportCertConfig(X509Certificate,String)
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.importCert(Path,String) : Object
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration$_validate_closure1._validate_closure1(Object,Object)
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureTasks(Project,TrustStoreBuilderConfiguration) : void
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createCheckCertsValidationTask(Project,TrustStoreBuilderConfiguration) : CheckCertsValidationTask
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createImportCertsTask(Project,TrustStoreBuilderConfiguration) : ImportCertsTask
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.scanForCertsToImport(Path, PathMatcher) : List<Path>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_fingerprintSha1_closure1.doCall(Object) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2.doCall(Object) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3.doCall(Object) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.fingerprintSha1(X509Certificate) : String
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.loadCertificate(Path) : X509Certificate
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.setCf(CertificateFactory) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.setClock(Clock) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError.setFile(Path) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError.setReason(String) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.checkValidation(Path) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.file(Path) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.loadX509Certificate(Path) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.setAtLeastValidDays(int) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.setCertificateFactory(CertificateFactory) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.setCertificateService(CertificateService) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.setFiles(List<Path>) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.DefaultFileAdapter.toFile(Path) : File
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.FileAdapter.toFile(Path) : File
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.prepareOutputDir(Path) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.setCertificateService(CertificateService) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.setFileAdapter(FileAdapter) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.setImportCertConfigs(List<ImportCertConfig>) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.setInputDir(Path) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.setKeystore(Path) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.setPassword(String) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration$_validate_closure1.doCall(Object) : Object
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.TrustStoreBuilderConfiguration(Project)
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.setAcceptedFileEndings(List<String>) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.setAtLeastValidDays(int) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.setInputDir(Object) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.setPassword(String) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.setTrustStore(Object) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.apply(Project) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getCertConfig(Path) : Optional<Properties>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getConfigFileForCertificate(Path) : Optional<Path>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2.getKeystore() : Object
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_loadKeystore_closure2.getPassword() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3.getKs() : KeyStore
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService$_storeKeystore_closure3.getPassword() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.CertificateService()
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.getCf() : CertificateFactory
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.getClock() : Clock
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CertificateService.newKeystore() : KeyStore
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError.getFile() : Path
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError.getMessage() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertValidationError.getReason() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask$_closure1.doCall() : Object
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.CheckCertsValidationTask()
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.getAtLeastValidDays() : Duration
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.getCertificateFactory() : CertificateFactory
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.getCertificateService() : CertificateService
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.getFiles() : List<Path>
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.CheckCertsValidationTask.testValidation() : Object
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.DefaultFileAdapter.DefaultFileAdapter()
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask$ImportCertConfig.getAlias() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask$ImportCertConfig.getCert() : X509Certificate
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.ImportCertsTask()
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.checkTaskConfiguration() : Object
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getCertificateService() : CertificateService
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getFileAdapter() : FileAdapter
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getImportCertConfigs() : List<ImportCertConfig>
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getInputDir() : File
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getKeystore() : Path
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getOutputFile() : File
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.getPassword() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.ImportCertsTask.importCert() : Object
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration$_validate_closure1.doCall() : Object
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.getAcceptedFileEndings() : List<String>
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.getAtLeastValidDays() : int
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.getInputDir() : Path
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.getPassword() : String
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.getPathMatcherForAcceptedFileEndings() : PathMatcher
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.getTrustStore() : Path
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderConfiguration.validate() : void
+</td>
+<td>
+0
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Statements
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureTasks(Project,TrustStoreBuilderConfiguration) : void
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getCertConfig(Path) : Optional<Properties>
+</td>
+<td>
+10
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createImportCertsTask(Project,TrustStoreBuilderConfiguration) : ImportCertsTask
+</td>
+<td>
+8
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.apply(Project) : void
+</td>
+<td>
+6
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getConfigFileForCertificate(Path) : Optional<Path>
+</td>
+<td>
+6
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createCheckCertsValidationTask(Project,TrustStoreBuilderConfiguration) : CheckCertsValidationTask
+</td>
+<td>
+5
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.scanForCertsToImport(Path, PathMatcher) : List<Path>
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureDependency(Project,String,Task) : void
+</td>
+<td>
+1
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td>        
+                                    <strong>Metric Category: Thomas J. McCabe</strong><br/>
+                                    <table class="techTable">
+                                        <tr>
+                                            <th width="150">Metric</th>
+                                            <th>Routine</th>
+                                            <th width="50">Value</th>
+                                        </tr>
+                                        <tr class="a">
+<td>
+Cyclomatic Complexity
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getCertConfig(Path) : Optional<Properties>
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.apply(Project) : void
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getConfigFileForCertificate(Path) : Optional<Path>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureDependency(Project,String,Task) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureTasks(Project,TrustStoreBuilderConfiguration) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createCheckCertsValidationTask(Project,TrustStoreBuilderConfiguration) : CheckCertsValidationTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createImportCertsTask(Project,TrustStoreBuilderConfiguration) : ImportCertsTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.scanForCertsToImport(Path, PathMatcher) : List<Path>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+Extended Cyclomatic Complexity
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getCertConfig(Path) : Optional<Properties>
+</td>
+<td>
+3
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.apply(Project) : void
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getConfigFileForCertificate(Path) : Optional<Path>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureDependency(Project,String,Task) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureTasks(Project,TrustStoreBuilderConfiguration) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createCheckCertsValidationTask(Project,TrustStoreBuilderConfiguration) : CheckCertsValidationTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createImportCertsTask(Project,TrustStoreBuilderConfiguration) : ImportCertsTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.scanForCertsToImport(Path, PathMatcher) : List<Path>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+Modified Cyclomatic Complexity
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getCertConfig(Path) : Optional<Properties>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getConfigFileForCertificate(Path) : Optional<Path>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.apply(Project) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureDependency(Project,String,Task) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureTasks(Project,TrustStoreBuilderConfiguration) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createCheckCertsValidationTask(Project,TrustStoreBuilderConfiguration) : CheckCertsValidationTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createImportCertsTask(Project,TrustStoreBuilderConfiguration) : ImportCertsTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.scanForCertsToImport(Path, PathMatcher) : List<Path>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+Modified Extended Cyclomatic Complexity
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getCertConfig(Path) : Optional<Properties>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.getConfigFileForCertificate(Path) : Optional<Path>
+</td>
+<td>
+2
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.apply(Project) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureDependency(Project,String,Task) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.configureTasks(Project,TrustStoreBuilderConfiguration) : void
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createCheckCertsValidationTask(Project,TrustStoreBuilderConfiguration) : CheckCertsValidationTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="a">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.createImportCertsTask(Project,TrustStoreBuilderConfiguration) : ImportCertsTask
+</td>
+<td>
+1
+</td>
+</tr>
+<tr class="b">
+<td>
+</td>
+<td>
+de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin.scanForCertsToImport(Path, PathMatcher) : List<Path>
+</td>
+<td>
+1
+</td>
+</tr>
+
+                                    </table>
+                                    <br/>
+                                </td>
+                            </tr>
+                        
+<!-- Metric Information -->     
+                        <tr class="a">
+                            <td><h2><a name="metricInfos"></a>Metric Info <a href="#top"><font size="1" color="#9999ff">[Top]</font></a></h2></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="techTable" width="100%">
+                                    <tr>
+                                        <th width="180">Name</th>
+                                        <th>Description</th>
+                                        <th width="180">Category</th>
+                                        <th width="150">Provider</th>
+                                    </tr>
+                                    <tr class="a">
+<td>
+ACD
+</td>
+<td>
+Average component dependency according to John Lakos. Average number of components a component depends on directly and indirectly. This metric can be used to characterize the overall average coupling of internal components.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Abstractness (Module)
+</td>
+<td>
+Abstractness according to Robert C. Martin based on module level dependencies. Total number of abstract types divided by the total number of concrete types. The metric has a range of [0,1]. 0 means that the container contains no abstract types. 1 means that the container contains nothing but abstract types.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Abstractness (System)
+</td>
+<td>
+Abstractness according to Robert C. Martin based on system level dependencies. Total number of abstract types divided by the total number of concrete types. The metric has a range of [0,1]. 0 means that the container contains no abstract types. 1 means that the container contains nothing but abstract types.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Biggest Component Cycle Group
+</td>
+<td>
+Number of components in biggest cycle.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Biggest Package Cycle Group
+</td>
+<td>
+Biggest package cycle.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="b">
+<td>
+Byte Code Instructions
+</td>
+<td>
+Number of Java byte code instructions.
+</td>
+<td>
+Size
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="a">
+<td>
+CCD
+</td>
+<td>
+Cumulative component dependency according to John Lakos. Cumulated depends upon values.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Code Comment Lines
+</td>
+<td>
+Counts all comment lines excluding header comments.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Comment Lines
+</td>
+<td>
+Counts all comment lines.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Component Dependencies to Remove (Components)
+</td>
+<td>
+Number of component dependencies to remove to break up all non-ignored component cycles
+</td>
+<td>
+Code Analysis, Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Component Dependencies to Remove (Packages)
+</td>
+<td>
+Number of component dependencies to remove to break up all non-ignored package cycles.
+</td>
+<td>
+Code Analysis, Dependency
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="b">
+<td>
+Cyclicity (Components)
+</td>
+<td>
+Cummulated cyclicity of component cycles.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Cyclicity (Packages)
+</td>
+<td>
+Cummulated cyclicity of package cycles.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="b">
+<td>
+Cyclomatic Complexity
+</td>
+<td>
+Cyclomatic complexity according to Thomas J. McCabe. Number of decision points in a method plus one for the method entry.
+</td>
+<td>
+Thomas J. McCabe
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Depends Upon (Module)
+</td>
+<td>
+Depends upon module level according to DependsOn by John Lakos. Total number of components that a component directly and indirectly depends upon in containing module.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Depends Upon (System)
+</td>
+<td>
+Depends upon system level according to DependsOn by John Lakos. Total number of components that a component directly and indirectly depends upon in system.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Distance (Module)
+</td>
+<td>
+Distance according to Robert C. Martin based on module level dependencies. Abstractness + Instability - 1. The metric has a range of [-1,1]. This is a variation of the original metric definition. A negative sign means 'in the zone of pain' and a positive sign means 'in the zone of uselessness'. A 'good' value should be around 0.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Distance (System)
+</td>
+<td>
+Distance according to Robert C. Martin based on system level dependencies. Abstractness + Instability - 1. The metric has a range of [-1,1]. This is a variation of the original metric definition. A negative sign means 'in the zone of pain' and a positive sign means 'in the zone of uselessness'. A 'good' value should be around 0.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Extended Cyclomatic Complexity
+</td>
+<td>
+As cyclomatic complexity adding the number of logical '&&' and '||' operations.
+</td>
+<td>
+Thomas J. McCabe
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Highest ACD
+</td>
+<td>
+Highest ACD value among same elements.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Instability (Module)
+</td>
+<td>
+Instability according to Robert C. Martin based on module level dependencies. The metric has a range of [0,1]. If there are no outgoing dependencies, then the Instability will be 0 and the measured element is stable. If there are no incoming dependencies, then the Instability will be 1 and the measured element is instable. Stable means that the element is not so easy to be changed. Instable means that it is easier to be changed.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Instability (System)
+</td>
+<td>
+Instability according to Robert C. Martin based on system level dependencies. The metric has a range of [0,1]. If there are no outgoing dependencies, then I will be 0 and the measured element is stable. If there are no incoming dependencies, then I will be 1 and the measured element is instable. Stable means that the element is not so easy to be changed. Instable means that it is easier to be changed. 
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Lines of Code
+</td>
+<td>
+Lines of code excluding blank and comment lines.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Modified Cyclomatic Complexity
+</td>
+<td>
+As cyclomatic complexity but switch statements only add 1 independent from the number of cases.
+</td>
+<td>
+Thomas J. McCabe
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Modified Extended Cyclomatic Complexity
+</td>
+<td>
+As cyclomatic complexity but switch statements only add 1 independent from the number of cases and adding the number of logical '&&' and '||' operations.
+</td>
+<td>
+Thomas J. McCabe
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+NCCD
+</td>
+<td>
+Normalized cumulative component dependency  according to John Lakos. The ratio between the cumulative component dependency and the cumulative component dependency of a balanced binary tree of the same size. A value greater than 1 indicates a more vertical design. A value less than 1 indicates a more horizontal design.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Component Cycle Groups
+</td>
+<td>
+Number of component cycles.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Components
+</td>
+<td>
+Number of components.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Cyclic Components
+</td>
+<td>
+Number of components involved in cycles.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Cyclic Packages
+</td>
+<td>
+Number of cyclic packages.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Ignored Cyclic Components
+</td>
+<td>
+Number of components involved in ignored cycles.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Ignored Cyclic Packages
+</td>
+<td>
+Number of ignored cyclic packages.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Incoming Dependencies (Module)
+</td>
+<td>
+Number of incoming dependencies on module level.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Incoming Dependencies (System)
+</td>
+<td>
+Number of incoming dependencies on system level.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Methods
+</td>
+<td>
+Number of member functions.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Outgoing Dependencies (Module)
+</td>
+<td>
+Number of outgoing dependencies on module level.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Outgoing Dependencies (System)
+</td>
+<td>
+Number of outgoing dependencies on system level.
+</td>
+<td>
+Robert C. Martin
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Package Cycle Groups
+</td>
+<td>
+Number of package cycle groups.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Packages
+</td>
+<td>
+Number of packages containing types.
+</td>
+<td>
+Size
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Parameters
+</td>
+<td>
+Number of parameters.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Statements
+</td>
+<td>
+Counts all statements.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Number of Types (Module)
+</td>
+<td>
+Number of types (classes, enums or similar, excluding anonymous types) in container on module level.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Number of Types (System)
+</td>
+<td>
+Number of types (classes, enums or similar, excluding anonymous types) in container on system level.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Parser Dependencies to Remove (Components)
+</td>
+<td>
+Number of code lines to change to break up all non-ignored component cycles.
+</td>
+<td>
+Code Analysis, Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Parser Dependencies to Remove (Packages)
+</td>
+<td>
+Number of code lines to change to break up all non-ignored package cycles.
+</td>
+<td>
+Code Analysis, Dependency
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="b">
+<td>
+RACD
+</td>
+<td>
+Relative average component dependency. Average component dependency divided by the number of internal components multiplied by 100 (in percent).
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Relative Cyclicity (Components)
+</td>
+<td>
+Relative component cyclicity in percent.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Relative Cyclicity (Packages)
+</td>
+<td>
+Relative package cyclicity in percent.
+</td>
+<td>
+Cycle
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="a">
+<td>
+Source Element Count
+</td>
+<td>
+Number of programming elements (i.e. types, fields, methods, functions, ...) plus number of statements.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Structural Debt Index (Components)
+</td>
+<td>
+Cummulative structural debt index of non-ignored component cycles.
+</td>
+<td>
+Code Analysis
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Structural Debt Index (Packages)
+</td>
+<td>
+Cummulative structural debt index of non-ignored package cycles.
+</td>
+<td>
+Code Analysis
+</td>
+<td>
+Java
+</td>
+</tr>
+<tr class="b">
+<td>
+Total Lines
+</td>
+<td>
+Counts all lines including empty and comment lines.
+</td>
+<td>
+Size
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="a">
+<td>
+Used From (Module)
+</td>
+<td>
+Number of all depending elements (direct and indirect) + 1 (including self) in containing module.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+<tr class="b">
+<td>
+Used From (System)
+</td>
+<td>
+Number of all depending elements (direct and indirect) + 1 (including self) in system.
+</td>
+<td>
+John Lakos
+</td>
+<td>
+Core
+</td>
+</tr>
+
+                                </table>
+                            </td>
+                        </tr>                                                                                                                        
+                    </table>
+                </td>
+                
+    <!-- end of real content -->
+            </tr>
+        </table>
+    </body>
+</html>
