@@ -1,3 +1,3 @@
 #!/bin/bash -evu
 
-./gradlew -PsonargraphActivationCode=$SONARGRAPH_ACTIVATION_CODE sonargraphDynamicReport
+./gradlew -PsonargraphActivationCode=$SONARGRAPH_ACTIVATION_CODE sonargraphDynamicReport --info
