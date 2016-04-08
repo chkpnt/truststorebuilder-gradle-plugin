@@ -1,3 +1,4 @@
 #!/bin/bash -evu
 
-pip install --user codecov
+# Token isn't required on Travis-CI
+codecov
