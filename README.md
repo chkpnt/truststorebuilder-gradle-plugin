@@ -20,6 +20,7 @@ cmd> gradlew build
 [![Tech dept by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tech_debt.svg?label=Tech dept)](https://sonar.chkpnt.de/overview/debt?id=de.chkpnt%3Atruststorebuilder-gradle-plugin)
 [![Test coverage by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/coverage.svg?label=Code coverage)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=lines_to_cover)      
 [![Sonargraph by hello2morrow](https://img.shields.io/badge/Static%20code%20analyzer-Sonargraph-blue.svg)](https://www.hello2morrow.com/products/sonargraph)
+[![Sonargraph report](https://img.shields.io/badge/Report-chkpnt.github.io-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/reports/sonargraph.html)
 [![Average component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_ACD.svg?label=ACD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
 [![Cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_CCD.svg?label=CCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
 [![Normalized cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_NCCD.svg?label=NCCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
