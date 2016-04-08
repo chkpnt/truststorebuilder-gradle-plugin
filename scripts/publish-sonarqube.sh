@@ -1,3 +1,3 @@
 #!/bin/bash -evu
 
-./gradlew -PsonarqubeToken=$SONARQUBE_TOKEN sonarqube --debug
+./gradlew -PsonarqubeToken=$SONARQUBE_TOKEN sonarqube
