@@ -3,6 +3,7 @@ buildscript {
 	repositories.maven { url 'http://maven.hello2morrow.com/repository' }
 	dependencies.classpath 'com.hello2morrow:sonargraph-gradle-plugin:8.8.0'
 	dependencies.classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:1.2'
+	dependencies.classpath 'org.ajoberstar:gradle-git:1.4.2'
 }
 
 /***************************
@@ -72,8 +73,18 @@ sonargraphDynamicReport {
 	reportType = "full"
 	reportFormat = "xml, html"
 	qualityModelFile = "Sonargraph:Java.sgqm" //default Java quality model
-	failSet
-	{
+	reportFileName = "sonargraph"
+	failSet	{
 		failOnEmptyWorkspace = true
 	}
 }
+
+// Unfortunately, sonargraphDynamicReport.reportDirectory returns
+// not the default value but null if not set explicitly :-/
+task prepareSonargraphReportForGhPages(type: Copy) {
+	from "$buildDir/sonargraph"
+	into "${githubPages.groomingDir}/reports"
+	exclude '*.xml'
+}
+
+tasks["sonargraphDynamicReport"].finalizedBy(prepareSonargraphReportForGhPages)

@@ -17,6 +17,9 @@ env:
     # SONARGRAPH_ACTIVATION_CODE
     - secure: "D8dZnWDhpHVxuYXN87c79sDZ55kL1ZmWcsRrk6L/9mm3HWJcl4NyiPfe2XpMGHDyWVIrxDzKm9NnsiCjuY1vlM3Ygk6CuJj94mG3l2Fx6bv7BEIT1eVvYKCjsKqoflVTgKnkjChdJsDKVeDXPqEEYkaiyJ8Oev9AP6ruIp4/VvwB+2OuISGMk0a46PjzbM9HrGH+s5IMBrHF/rXD9ucHMIWOMgy+sQb5z0SAgZv4VPiEuL1jAQuojR5+0xLfqypBTQr7CuJVl3fycSEikzIa7VPpq6WbKYp5lcegIhk7ClAshTCsMuDhznbCdAQL6cPRfgkwbM2TjMi8kNuHuwTMjQDXQizmv8RG25m5RpdBFnAnOYY3SeN683kHOjRo75k5AtLt6szDxukGGxU+AIOLZ1b3nAgsoKbCciInX4f7mOEWBhGeUp/0HGYIxeeVeehXBGVYgBhN3wQvQ1a7SVHS/zfrmMx4drLFvdI6G0jPKjpqiAay0gwohaZM0jaHLFm3h9qnOalgRNv9oO/B5OYW+cP1YfjVa1aopvtxvBhk1bh9V5J0hqvEcWqHuCO63Y3WcnBhjDcpD3aYJXpVUzKB08G+THjQ4+hMbZXfLRtnZJRSdhQSRBijBBdbtpTuWdmZp65CK1cLdNtS6P3yp/mc2zDCiQ3GyduYNl+mE6Y8urY="
 
+    # SSH_KEY_GITHUB_PASSPHRASE
+    - secure: "nFBJHiHROPqaLtAGLnQ1UPPoNyQW7fPbIpyYVlBmNQ14Rk5Bh3YEsk1BP5dHmzDeU2s8TbYf2U2KRo93WFh1x1B6uR/XA7s0VMd9fTunEvr4uQ/Pbdg/kZzutY/D9bygc+X8n8eY9Z95SQMIgcJs4WcLGZJehlQSNpATlBfGnpjhecC7gX++KUK7o1H0UwuD1mvOeos080i1Wi0USoI4yRbGi2ml/t2s+GVLtiG0iFyGFpOJb9ZYlBbt6qIBGL2azQC9hHZWOMFVqVMAaKQlb5auPusKjNSG7ueYujnzIkUd1YbmHKU7xmWc2m46tP6NYx1cfhh/iToWpd5Un9s75aDkCFWbrTqgodVqmZhmrw0OpOXQ5j7DYuPoC/u0eBdnCfcwaykP526CTXViRlaPIuY+t39LOhgMEDPRDmAY+hdtSTQf/0fLhnOYjkjrOb8brdIuUmxmdteGqMNYCDrOVaBKnn6EtsutmajTdJjneNX8YQYDFj8E8FYZ4yaJqixyDgo72MOeH5WvwfN9ORH4xpy8X0q//HOCAJY94ansKtXI0kLR7YFRGxG6QUDsSCnAD59H89Qc9S01mMKupA5ErktUp2Wl3mphs5Ut53u4JggBIBiSw3aSyqzkFdM7Syd+uyvvnTo9G0v4MkcUzXv0dmOuuZSG4wj/i7PeTRnEh8k="
+
 jdk:
   - oraclejdk8
 
@@ -27,14 +30,25 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then pip install --user codecov; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/install-codecov; fi
 
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then codecov; fi
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonar.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonargraph.sh; fi
 
 deploy:
-  provider: script
-  script: scripts/deploy.sh
-  on:
-    branch: release
+  - provider: script
+    script: script/publish-ghpages.sh
+    on:
+      branch: master
+  - provider: script
+    script: script/publish-sonarqube.sh
+    on:
+      branch: master
+  - provider: script
+    script: script/publish-codecov.sh
+    on:
+      branch: master
+  - provider: script
+    script: scripts/deploy.sh
+    on:
+      branch: release
