@@ -30,7 +30,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/install-codecov; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/install-codecov.sh; fi
 
 after_success:
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonargraph.sh; fi
