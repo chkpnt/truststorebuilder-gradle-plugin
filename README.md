@@ -23,7 +23,7 @@ cmd> gradlew build
 [![Sonargraph report](https://img.shields.io/badge/Report-chkpnt.github.io-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/reports/sonargraph.html)
 [![Average component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_ACD.svg?label=ACD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
 [![Cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_CCD.svg?label=CCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
-[![Normalized cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_NCCD.svg?label=NCCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)
+[![Normalized cumulative component dependency according to John Lakos](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/sg_i.CORE_NCCD.svg?label=NCCD)](https://sonar.chkpnt.de/dashboard/index/19?did=5)  
 [![Codecov](https://img.shields.io/badge/Other%20CI%20tool-codecov.io-blue.svg)](https://codecov.io/)
 [![Test coverage by codecov.io](https://img.shields.io/codecov/c/github/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Code coverage)](https://codecov.io/github/chkpnt/truststorebuilder-gradle-plugin?branch=master)
 
