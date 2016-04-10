@@ -27,24 +27,24 @@ import org.gradle.testfixtures.ProjectBuilder
 
 import spock.lang.Specification
 
-class TrustStoreBuilderConfigurationTest extends Specification  {
+class TrustStoreBuilderExtensionTest extends Specification  {
 
 	Project project
 
-	TrustStoreBuilderConfiguration configuration
+	TrustStoreBuilderExtension classUnderTest
 
 	def setup() {
 		project = ProjectBuilder.builder().build()
 		project.file('src/main/certs').mkdirs()
-		configuration = new TrustStoreBuilderConfiguration(project)
+		classUnderTest = new TrustStoreBuilderExtension(project)
 	}
 
 	def "check default values"() {
 		expect:
-		configuration.password == 'changeit'
-		configuration.trustStore == project.file('build/cacerts.jks').toPath()
-		configuration.inputDir == project.file('src/main/certs').toPath()
-		that configuration.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
+		classUnderTest.password == 'changeit'
+		classUnderTest.trustStore == project.file('build/cacerts.jks').toPath()
+		classUnderTest.inputDir == project.file('src/main/certs').toPath()
+		that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
 	}
 
 	def "Default TrustStore is in build dir"() {
@@ -52,7 +52,7 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 		project.buildDir = 'mybuild'
 
 		then:
-		configuration.trustStore == project.file('mybuild/cacerts.jks').toPath()
+		classUnderTest.trustStore == project.file('mybuild/cacerts.jks').toPath()
 	}
 
 	def "TrustStore with explicit input and output"() {
@@ -60,45 +60,45 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 		project.file('src/x509/certs').mkdirs()
 
 		when:
-		configuration.trustStore = 'öäü/truststore.jks'
-		configuration.inputDir = 'src/x509/certs'
+		classUnderTest.trustStore = 'öäü/truststore.jks'
+		classUnderTest.inputDir = 'src/x509/certs'
 
 		then:
-		configuration.inputDir == project.file('src/x509/certs').toPath()
-		configuration.trustStore == project.file('öäü/truststore.jks').toPath()
+		classUnderTest.inputDir == project.file('src/x509/certs').toPath()
+		classUnderTest.trustStore == project.file('öäü/truststore.jks').toPath()
 	}
 
 	def "accept additional file ending"() {
 		when:
-		configuration.acceptedFileEndings << 'der'
+		classUnderTest.acceptedFileEndings << 'der'
 
 		then:
-		that configuration.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem', 'der'])
+		that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem', 'der'])
 	}
 
 	def "change accepted file endings"() {
 		when:
-		configuration.acceptedFileEndings = ['txt']
+		classUnderTest.acceptedFileEndings = ['txt']
 
 		then:
-		configuration.acceptedFileEndings.size() == 1
-		configuration.acceptedFileEndings.first() == 'txt'
+		classUnderTest.acceptedFileEndings.size() == 1
+		classUnderTest.acceptedFileEndings.first() == 'txt'
 	}
 
 	def "test PathMatcher for accepted file endings"() {
 		expect:
-		configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.cer'))
-		configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.crt'))
-		configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.pem'))
-		! configuration.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.txt'))
+		classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.cer'))
+		classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.crt'))
+		classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.pem'))
+		! classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.txt'))
 	}
 
 	def "validation check 1"() {
 		given:
-		configuration.atLeastValidDays = -3
+		classUnderTest.atLeastValidDays = -3
 
 		when:
-		configuration.validate()
+		classUnderTest.validate()
 
 		then:
 		ProjectConfigurationException e = thrown()
@@ -107,10 +107,10 @@ class TrustStoreBuilderConfigurationTest extends Specification  {
 
 	def "validation check 2"(List<String> fileEndings) {
 		given:
-		configuration.acceptedFileEndings = fileEndings
+		classUnderTest.acceptedFileEndings = fileEndings
 
 		when:
-		configuration.validate()
+		classUnderTest.validate()
 
 		then:
 		ProjectConfigurationException e = thrown()

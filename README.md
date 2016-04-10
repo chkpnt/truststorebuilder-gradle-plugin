@@ -52,13 +52,13 @@ Total time: 4.62 secs
 
 The plugin registers an extension `trustStoreBuilder` which allows to configure the following settings:
 
-| Setting             | Description                                                                       | Default                       | Type         |
-|---------------------|-----------------------------------------------------------------------------------|-------------------------------|--------------|
-| password            | The password used for the TrustStore.                                             | changeit                      | String       |
-| trustStore          | The file of the TrustStore to build.                                              | $buildDir/cacerts.jks         | Object*      |
-| inputDir            | The directory which is scanned for certificates.                                  | $projectDir/src/main/certs    | Object*      |
-| acceptedFileEndings | A file being processed as a certificate has to have a file ending from this list. | ['crt', 'cer', 'pem']         | List<String> |
-| atLeastValidDays    | Number of days the certificates have to be at least valid.                        | 90                            | int          |
+| Setting             | Description                                                                       | Default                       | Type         --|
+|---------------------|-----------------------------------------------------------------------------------|-------------------------------|----------------|
+| password            | The password used for the TrustStore.                                             | changeit                      | String         |
+| trustStore          | The file of the TrustStore to build.                                              | $buildDir/cacerts.jks         | Object*        |
+| inputDir            | The directory which is scanned for certificates.                                  | $projectDir/src/main/certs    | Object*        |
+| acceptedFileEndings | A file being processed as a certificate has to have a file ending from this list. | ['crt', 'cer', 'pem']         | List\<String\> |
+| atLeastValidDays    | Number of days the certificates have to be at least valid.                        | 90                            | int            |
 
 _\* Anything, that can be handled by [project.file(...)](https://docs.gradle.org/current/dsl/org.gradle.api.Project.html#org.gradle.api.Project:file%28java.lang.Object%29)._
 

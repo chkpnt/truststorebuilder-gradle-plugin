@@ -28,11 +28,11 @@ import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.internal.project.ProjectInternal
 
 @PackageScope
-class TrustStoreBuilderConfiguration {
+class TrustStoreBuilderExtension {
 
 	private ProjectInternal project
 
-	TrustStoreBuilderConfiguration(Project project) {
+	TrustStoreBuilderExtension(Project project) {
 		this.project = project
 	}
 

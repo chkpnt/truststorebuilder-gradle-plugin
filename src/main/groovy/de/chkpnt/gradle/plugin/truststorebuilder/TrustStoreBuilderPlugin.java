@@ -50,8 +50,8 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		project.getPluginManager()
 			.apply(BasePlugin.class);
 
-		TrustStoreBuilderConfiguration configuration = project.getExtensions()
-			.create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderConfiguration.class, project);
+		TrustStoreBuilderExtension configuration = project.getExtensions()
+			.create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderExtension.class, project);
 
 		configuration.validate();
 
@@ -62,7 +62,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		}
 	}
 
-	private static void configureTasks(Project project, TrustStoreBuilderConfiguration configuration) throws IOException {
+	private static void configureTasks(Project project, TrustStoreBuilderExtension configuration) throws IOException {
 		CheckCertsValidationTask checkCertsValidationTask = createCheckCertsValidationTask(project, configuration);
 		ImportCertsTask importCertsTask = createImportCertsTask(project, configuration);
 
@@ -86,7 +86,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 			.dependsOn(dependsOn);
 	}
 
-	private static ImportCertsTask createImportCertsTask(Project project, TrustStoreBuilderConfiguration configuration) {
+	private static ImportCertsTask createImportCertsTask(Project project, TrustStoreBuilderExtension configuration) {
 		String inputDirName = project.getProjectDir()
 			.toPath()
 			.relativize(configuration.getInputDir())
@@ -102,7 +102,7 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		return task;
 	}
 
-	private static CheckCertsValidationTask createCheckCertsValidationTask(Project project, TrustStoreBuilderConfiguration configuration) {
+	private static CheckCertsValidationTask createCheckCertsValidationTask(Project project, TrustStoreBuilderExtension configuration) {
 		CheckCertsValidationTask task = project.getTasks()
 			.create(CHECK_CERTS_TASK_NAME, CheckCertsValidationTask.class);
 		task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
