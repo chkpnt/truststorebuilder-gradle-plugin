@@ -10,7 +10,7 @@ githubPages {
 		groomingDir = "$buildDir/ghpages-grooming"
 	}
 	repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
-	deleteExistingFiles = true
+	deleteExistingFiles = false // until sonargraph's report can be built again
 	pages {
 		from groomingDir
 	}

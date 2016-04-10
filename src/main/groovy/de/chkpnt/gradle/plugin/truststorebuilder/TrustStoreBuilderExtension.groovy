@@ -16,8 +16,6 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import groovy.transform.PackageScope
-
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.PathMatcher
@@ -27,7 +25,6 @@ import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.internal.project.ProjectInternal
 
-@PackageScope
 class TrustStoreBuilderExtension {
 
 	private ProjectInternal project

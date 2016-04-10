@@ -35,7 +35,9 @@ Total time: 4.62 secs
 [![JCenter artifact](https://img.shields.io/badge/JCenter-de.chkpnt%3Atrust%E2%80%A6--plugin-blue.svg)](https://bintray.com/chkpnt/maven/truststorebuilder-gradle-plugin/view)
 [![License](https://img.shields.io/github/license/chkpnt/truststorebuilder-gradle-plugin.svg?label=License)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))  
 [![Linux Build Status](https://img.shields.io/travis/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Linux build)](https://travis-ci.org/chkpnt/truststorebuilder-gradle-plugin)
-[![Windows Build Status](https://img.shields.io/appveyor/ci/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Windows build)](https://ci.appveyor.com/project/chkpnt/truststorebuilder-gradle-plugin/branch/master)  
+[![Windows Build Status](https://img.shields.io/appveyor/ci/chkpnt/truststorebuilder-gradle-plugin/master.svg?label=Windows build)](https://ci.appveyor.com/project/chkpnt/truststorebuilder-gradle-plugin/branch/master)
+[![Groovydoc](https://img.shields.io/badge/Docs-Groovydoc-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/groovydoc/index.html)
+[![Javadoc](https://img.shields.io/badge/Docs-Javadoc-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/javadoc/index.html)  
 [![SonarQube](https://img.shields.io/badge/SonarQube-sonar.chkpnt.de-blue.svg)](https://sonar.chkpnt.de/dashboard?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&did=1)
 [![Tests](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tests.svg?label=Tests)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)
 [![Tech dept by SonarQube](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tech_debt.svg?label=Tech dept)](https://sonar.chkpnt.de/overview/debt?id=de.chkpnt%3Atruststorebuilder-gradle-plugin)
@@ -52,7 +54,7 @@ Total time: 4.62 secs
 
 The plugin registers an extension `trustStoreBuilder` which allows to configure the following settings:
 
-| Setting             | Description                                                                       | Default                       | Type         --|
+| Setting             | Description                                                                       | Default                       | Type           |
 |---------------------|-----------------------------------------------------------------------------------|-------------------------------|----------------|
 | password            | The password used for the TrustStore.                                             | changeit                      | String         |
 | trustStore          | The file of the TrustStore to build.                                              | $buildDir/cacerts.jks         | Object*        |
