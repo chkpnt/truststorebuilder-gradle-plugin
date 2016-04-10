@@ -4,7 +4,8 @@ This Gradle plugin can build a Java TrustStore from existing certificates. The g
 
 For example, _DST Root CA X3_ expires on September 30, 2021. So when this date draws near in relation to the system's local date, something like this happens: 
 ```
-cmd> # On a system with the locale set to de_DE:
+cmd> # Windows, with the locale set to de_DE:
+
 cmd> date /T
 10.07.2021
 
@@ -17,7 +18,8 @@ FAILURE: Build failed with an exception.
 
 * What went wrong:
 Execution failed for task ':checkCertificates'.
-> Certificate is already or becomes invalid within the next 90 days: D:\truststorebuilder-gradle-plugin-demo\src\main\certs\Let's Encrypt\dstrootx3.pem
+> Certificate is already or becomes invalid within the next 90 days:
+D:\truststorebuilder-gradle-plugin-demo\src\main\certs\Let's Encrypt\dstrootx3.pem
 
 * Try:
 Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
