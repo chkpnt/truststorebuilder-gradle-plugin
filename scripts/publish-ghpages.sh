@@ -6,6 +6,6 @@ eval $(ssh-agent -s)
 ssh-add .travis/github-deploy.key
 
 export GIT_AUTHOR_NAME=chkpnt CI
-export GIT_AUTHOR_EMAIL=chkpnt-ci@chkpnt.de"
+export GIT_AUTHOR_EMAIL=chkpnt-ci@chkpnt.de
 
 ./gradlew docs publishGhPages
