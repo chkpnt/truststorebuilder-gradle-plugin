@@ -1,4 +1,6 @@
 language: groovy
+dist: trusty
+sudo: false
 
 env:
   global:
