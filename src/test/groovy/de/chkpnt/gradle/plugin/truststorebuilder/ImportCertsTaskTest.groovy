@@ -22,22 +22,19 @@ import java.nio.file.FileSystem
 import java.nio.file.Files
 
 import org.gradle.api.Project
-import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
 
-import spock.lang.Specification
-
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
+
+import spock.lang.Specification
 
 class ImportCertsTaskTest extends Specification {
 
 	private ImportCertsTask classUnderTest
 
 	private FileSystem fs
-
-	private ProjectInternal projectMock = Mock()
 
 	private Project project
 
@@ -51,8 +48,6 @@ class ImportCertsTaskTest extends Specification {
 
 		project = ProjectBuilder.builder().build()
 		classUnderTest = project.task('importCert', type: ImportCertsTask)
-
-		classUnderTest.project = projectMock
 		classUnderTest.fileAdapter = new TestFileAdapter()
 	}
 

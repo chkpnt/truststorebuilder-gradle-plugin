@@ -40,6 +40,7 @@ dependencies {
 	
 	testCompile gradleTestKit()
 	testRuntime files(createClasspathManifest)
+	testCompile 'commons-io:commons-io:2.2'
 	testCompile 'com.google.jimfs:jimfs:1.0'      // In-Memory Filesystem
 	testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
 		exclude group: 'org.codehaus.groovy' }
@@ -48,8 +49,8 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.12'
-	distributionUrl = 'https://services.gradle.org/distributions/gradle-2.12-all.zip'
+	gradleVersion = '3.0'
+	distributionUrl = 'https://services.gradle.org/distributions/gradle-3.0-all.zip'
 }
 
 apply from: 'gradle/versioning.gradle'
