@@ -39,7 +39,7 @@ Total time: 4.62 secs
 [![Groovydoc](https://img.shields.io/badge/Docs-Groovydoc-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/groovydoc/index.html)
 [![Javadoc](https://img.shields.io/badge/Docs-Javadoc-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/javadoc/index.html)  
 [![SonarQube](https://img.shields.io/badge/SonarQube-sonar.chkpnt.de-blue.svg)](https://sonar.chkpnt.de/dashboard?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&did=1)
-[![Tests](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tests.svg?label=Tests)](https://sonar.chkpnt.de/drilldown/measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)
+[![Tests](https://img.shields.io/sonar/https/sonar.chkpnt.de/de.chkpnt:truststorebuilder-gradle-plugin/tests.svg?label=Tests)](https://sonar.chkpnt.de/component_measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)
 [![Sonargraph by hello2morrow](https://img.shields.io/badge/Static%20code%20analyzer-Sonargraph-blue.svg)](https://www.hello2morrow.com/products/sonargraph)
 [![Sonargraph report](https://img.shields.io/badge/Report-chkpnt.github.io-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/reports/sonargraph.html)  
 [![Codecov](https://img.shields.io/badge/Other%20CI%20tool-codecov.io-blue.svg)](https://codecov.io/)
