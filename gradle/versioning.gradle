@@ -16,8 +16,10 @@ task initBuildMetadata {
 	project.ext.buildDate = new Date().toString()
 }
 
-task printBuildMetadata << {
-	println "Version: ${project.version}"
-	println "Revision: ${project.revision}"
-	println "Build-date: ${project.buildDate}"
+task printBuildMetadata {
+	doLast {
+		println "Version: ${project.version}"
+		println "Revision: ${project.revision}"
+		println "Build-date: ${project.buildDate}"
+	}
 }
