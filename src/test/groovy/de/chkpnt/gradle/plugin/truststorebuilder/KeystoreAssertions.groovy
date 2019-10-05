@@ -17,7 +17,7 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.Path
-import java.security.KeyStore;
+import java.security.KeyStore
 
 class KeystoreAssertions {
 

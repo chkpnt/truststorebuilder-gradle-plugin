@@ -64,7 +64,7 @@ class ImportCertsTask extends DefaultTask {
         def inputDirName = getProject().getProjectDir()
                 .toPath()
                 .relativize(inputDir.get())
-                .toString();
+                .toString()
         return "Adds all certificates found under '$inputDirName' to the TrustStore."
     }
 

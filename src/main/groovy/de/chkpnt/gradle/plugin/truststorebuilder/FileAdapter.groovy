@@ -26,6 +26,6 @@ class DefaultFileAdapter implements FileAdapter {
 
     @Override
     public File toFile(Path path) {
-        return path.toFile();
+        return path.toFile()
     }
 }

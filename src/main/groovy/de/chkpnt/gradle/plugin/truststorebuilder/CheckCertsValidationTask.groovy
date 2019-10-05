@@ -33,7 +33,7 @@ class CheckCertsValidationTask extends DefaultTask {
     final Property<Integer> atLeastValidDays
 
     CertificateService certificateService = new CertificateService()
-    CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+    CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509")
 
     private def INVALID_REASON = { -> "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days" }
 

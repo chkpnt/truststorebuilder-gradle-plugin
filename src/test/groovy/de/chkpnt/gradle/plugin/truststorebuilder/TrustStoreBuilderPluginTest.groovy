@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.chkpnt.gradle.plugin.truststorebuilder;
+package de.chkpnt.gradle.plugin.truststorebuilder
 
 import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.*
 import static org.gradle.testkit.runner.TaskOutcome.*
@@ -32,14 +32,14 @@ import spock.lang.Specification
 class TrustStoreBuilderPluginTest extends Specification {
 
     @Rule
-    final TemporaryFolder testProjectDir = new TemporaryFolder();
+    final TemporaryFolder testProjectDir = new TemporaryFolder()
 
     private File buildFile
 
     private List<File> pluginClasspath
 
     def setup() {
-        initProjectDir();
+        initProjectDir()
 
         // Was needed when I wrote the tests with Gradle 2. Still needed?
         def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
@@ -65,7 +65,7 @@ class TrustStoreBuilderPluginTest extends Specification {
     }
 
     private def copyCertsToProjectDir() {
-        def dest = testProjectDir.newFolder('src', 'main', 'certs').toPath();
+        def dest = testProjectDir.newFolder('src', 'main', 'certs').toPath()
 
         def certsFolder = getClass().getClassLoader().getResource("certs")
         def source = Paths.get(certsFolder.toURI())

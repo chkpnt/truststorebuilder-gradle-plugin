@@ -9,25 +9,20 @@ spotless {
     java {
         target '**/*.java'
         
-        licenseHeaderFile 'gradle/spotless.license.txt'
+        licenseHeaderFile 'gradle/formatter/spotless.license.txt'
         
-        eclipse().configFile 'gradle/spotless.eclipseformatter.xml'
+        eclipse().configFile 'gradle/formatter/spotless.eclipseformatter.xml'
         importOrder 'java', 'javax', 'org', 'com'
         
         indentWithSpaces()
         trimTrailingWhitespace()
     }
     
-    // TODO #4: Migrate to 'groovy { ... }'
-    format 'groovy', {
-        target '**/*.groovy'
+    groovy {
+        excludeJava()
+        licenseHeaderFile 'gradle/formatter/spotless.license.txt'
         
-        licenseHeaderFile 'gradle/spotless.license.txt', "package "
-        
-        indentWithSpaces()
-        trimTrailingWhitespace()
-        
-       // customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
-       // customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
+        greclipse('4.12.0').configFile 'gradle/formatter/greclipse.properties'
     }
+
 }

@@ -22,14 +22,14 @@ import java.security.KeyStore
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.time.Clock
-import java.time.Duration;
-import java.time.Instant;
+import java.time.Duration
+import java.time.Instant
 import java.time.ZoneOffset
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils
 import org.apache.tools.ant.filters.StringInputStream
 
-import com.google.common.jimfs.Jimfs;
+import com.google.common.jimfs.Jimfs
 
 import spock.lang.Specification
 
@@ -39,14 +39,14 @@ class CertificateServiceTest extends Specification {
 
     private X509Certificate caCertCertificate
 
-    private FileSystem fs;
+    private FileSystem fs
 
     def setup() {
         classUnderTest = new CertificateService()
 
         fs = Jimfs.newFileSystem()
 
-        def cf = CertificateFactory.getInstance("X.509");
+        def cf = CertificateFactory.getInstance("X.509")
         caCertCertificate = cf.generateCertificate(new StringInputStream(CertificateProvider.CACERT_ROOT_CA))
     }
 
