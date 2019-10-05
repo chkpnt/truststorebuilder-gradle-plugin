@@ -9,7 +9,7 @@ apply plugin: org.ajoberstar.gradle.git.base.GrgitPlugin
 
 task initBuildMetadata {
 	def major = 0
-	def minor = 2
+	def minor = 3
 	def repo = Grgit.open(project.file('.'))
 	project.version = "${major}.${minor}.${repo.log().size()}"
 	project.ext.revision = repo.head().id
