@@ -18,7 +18,6 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.Path
 
-import org.gradle.api.PathValidation
 import org.gradle.api.Project
 import org.gradle.api.internal.project.ProjectInternal
 
@@ -57,12 +56,12 @@ class TrustStoreBuilderExtension {
 	Path inputDir
 
 	void setInputDir(Object dir) {
-		inputDir = project.file(dir, PathValidation.DIRECTORY).toPath()
+		inputDir = project.file(dir).toPath()
 	}
 
 	Path getInputDir() {
 		if (inputDir == null) {
-			return project.file('src/main/certs', PathValidation.DIRECTORY).toPath()
+			return project.file('src/main/certs').toPath()
 		}
 		return inputDir
 	}
