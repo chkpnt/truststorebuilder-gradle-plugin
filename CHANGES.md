@@ -6,6 +6,13 @@ The version number consists of 3 parts: MAJOR.MINOR.BUILD
 
 Currently, the BUILD number is equal to the number of commits referred to the commit to build. 
 
+# v0.3.x
+* Refactored the plugin to use the [Task Configuration Avoidance API](https://github.com/gradle/gradle/blob/v5.6.2/subprojects/docs/src/docs/userguide/task_configuration_avoidance.adoc)
+* Plugin requires users to use Gradle 4.9 or later
+* Fixes #1
+  * Plugin now respects the user's configuration
+* Builds: 94
+
 # v0.2.x
 * Revised configuration:
   * Merging `outputDirName` and `trustStoreFileName` into `trustStore` with default value `$buildDir/cacerts.jks`
@@ -20,4 +27,4 @@ Currently, the BUILD number is equal to the number of commits referred to the co
   * Showing code coverage on [Codecov](https://codecov.io/github/chkpnt/truststorebuilder-gradle-plugin)
   * Setup of [SonarQube](https://sonar.chkpnt.de/dashboard?id=de.chkpnt%3Atruststorebuilder-gradle-plugin)
   * Automation powered by [Gradle](build.gradle) 
-* Builds: 34, 41
+* Builds: 34, 37, 41

@@ -37,4 +37,4 @@ after_success:
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-ghpages.sh; fi
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-sonarqube.sh; fi
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-codecov.sh; fi
-  - if [[ $TRAVIS_BRANCH == 'release' ]]; then ./scripts/publish-deploy.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'release' ]]; then ./scripts/deploy.sh; fi
