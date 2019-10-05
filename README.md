@@ -70,4 +70,4 @@ A demonstration of this plugin can be found in [this repository](https://github.
 
 ## Development
 
-I'm using _Eclipse Neon_ with the plugin _[GroovyEclipse](https://github.com/groovy/groovy-eclipse/wiki)_. This project requires the _Groovy Compiler 2.4 Feature_.
+I'm using _Eclipse 2019-06 (4.12)_ with the plugin _[GroovyEclipse](https://github.com/groovy/groovy-eclipse/wiki)_. This project requires the _Groovy Compiler 2.4 Feature_.
