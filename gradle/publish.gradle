@@ -108,8 +108,3 @@ pluginBundle {
 	}
 }
 
-// groovydoc is included as a dependency for the PublishPlugin
-groovydoc {
-	// It seems to have issues with Lambdas in Java-Files.
-	exclude "**/TrustStoreBuilderPlugin.java"
-}

@@ -18,9 +18,12 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.KeyStore
 import java.security.cert.X509Certificate
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -28,43 +31,58 @@ import org.gradle.api.tasks.TaskExecutionException
 
 class ImportCertsTask extends DefaultTask {
 
-	Path keystore
-
-	String password
-
-	Path inputDir
-
-	List<ImportCertConfig> importCertConfigs = new ArrayList<>()
+	final Property<Path> keystore
+	final Property<String> password
+	final Property<Path> inputDir
+	final ListProperty<String> acceptedFileEndings
 
 	FileAdapter fileAdapter = new DefaultFileAdapter()
-
 	CertificateService certificateService = new CertificateService()
 
+	public ImportCertsTask() {
+		keystore = getProject().getObjects().property(Path)
+		password = getProject().getObjects().property(String)
+		inputDir = getProject().getObjects().property(Path)
+		acceptedFileEndings = getProject().getObjects().listProperty(String)
+
+		// After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
+		acceptedFileEndings.set([])
+	}
+
 	@InputDirectory
-	File getInputDir() {
-		fileAdapter.toFile(inputDir)
+	File getInput() {
+		fileAdapter.toFile(inputDir.get())
 	}
 
 	@OutputFile
-	File getOutputFile() {
-		fileAdapter.toFile(keystore)
+	File getOutput() {
+		fileAdapter.toFile(keystore.get())
+	}
+
+	@Override
+	public String getDescription() {
+		def inputDirName = getProject().getProjectDir()
+				.toPath()
+				.relativize(inputDir.get())
+				.toString();
+		return "Adds all certificates found under '$inputDirName' to the TrustStore."
 	}
 
 	@TaskAction
-	def importCert() {
+	def importCerts() {
 		checkTaskConfiguration()
-		prepareOutputDir(keystore.getParent())
+		prepareOutputDir(keystore.get().getParent())
 
-		def ks = certificateService.newKeystore()
-		for (def importCertConfig : importCertConfigs) {
-			certificateService.addCertificateToKeystore(ks, importCertConfig.cert, importCertConfig.alias)
+		KeyStore jks = certificateService.newKeystore()
+
+		List<Path> certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
+		for (certFile in certFiles) {
+			String alias = getCertAlias(certFile)
+			X509Certificate cert = certificateService.loadCertificate(certFile)
+			certificateService.addCertificateToKeystore(jks, cert, alias)
 		}
-		certificateService.storeKeystore(ks, keystore, password)
-	}
 
-	def importCert(Path file, String alias) {
-		def cert = certificateService.loadCertificate(file)
-		importCertConfigs.add(new ImportCertConfig(cert, alias))
+		certificateService.storeKeystore(jks, keystore.get(), password.get())
 	}
 
 	private def prepareOutputDir(Path outputDir) {
@@ -74,25 +92,34 @@ class ImportCertsTask extends DefaultTask {
 	}
 
 	private def checkTaskConfiguration() {
-		def listOfUnconfiguredProperties = []
-		if (!keystore) listOfUnconfiguredProperties << 'keystore'
-		if (!password) listOfUnconfiguredProperties << 'password'
+		def listOfImproperConfiguredProperties = []
+		if (!keystore.getOrNull()) listOfImproperConfiguredProperties << 'keystore'
+		if (!password.getOrNull()) listOfImproperConfiguredProperties << 'password'
+		if (acceptedFileEndings.getOrElse([]).findAll { it?.trim() }.empty ) listOfImproperConfiguredProperties << 'acceptedFileEndings'
 
-		if (listOfUnconfiguredProperties.any()) {
-			def unconfiguredProperties = String.join(", ", listOfUnconfiguredProperties)
-			throw new TaskExecutionException(this, new IllegalArgumentException("The following properties has to be configured: ${unconfiguredProperties}"))
+		if (listOfImproperConfiguredProperties.any()) {
+			def improperConfiguredProperties = String.join(", ", listOfImproperConfiguredProperties)
+			throw new TaskExecutionException(this, new IllegalArgumentException("The following properties have to be configured appropriately: ${improperConfiguredProperties}"))
 		}
 	}
 
-	private static class ImportCertConfig {
+	private static String getCertAlias(Path certFile) {
+		def filename = certFile.fileName.toString()
+		def configFile = certFile.resolveSibling("${filename}.config")
 
-		final X509Certificate cert
-
-		final String alias
-
-		ImportCertConfig(X509Certificate cert, String alias) {
-			this.cert = cert
-			this.alias = alias
+		if (!Files.exists(configFile)) {
+			return filename
 		}
+
+		Properties properties = new Properties()
+		try {
+			InputStream inputStream = Files.newInputStream(configFile)
+			properties.load(inputStream)
+		} catch (IOException e) {
+			throw new UncheckedIOException(e)
+		}
+
+		def alias = properties.getProperty("alias")
+		return alias ?: filename.toString()
 	}
 }

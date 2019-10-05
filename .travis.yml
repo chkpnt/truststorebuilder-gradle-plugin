@@ -1,24 +1,27 @@
 language: groovy
+dist: trusty
+sudo: false
 
 env:
   global:
     # BINTRAY_API_KEY
     - secure: "jm5WGqemJgxNtMeF53gN5fUeAR3/PgTG0770+7jUROP78pHQcvGMzkfeWDof+kegoMyHdHbq8MO9TIMQraqNCbpHPyB7ykWz1VIgEk8tlPXi2mkOHAnce94vb8VSPjWcLlXpJe2gltMuLjNlMHZGTCwAZidMel+8gRdgcR241qGXTOBP8EBDk/XYCU1foqm+6WC6jQdnoEF1mjvNE31YBd3fvhijLy/ItNuUb+mOYYSwEUphCWk4zZFvJMLJ9IAriLtHxveLvXTFKyK/QSnq1y3ZydHAlKYK1UQW67Si9HUL2zzkA3DYaV2cuij01r3UirGsamEB+rUDh6l0/WU2uBpV+YmZz8V5LiYQ+i7VJ52jkEyfTdHlpJhygEz3bWhTJ9343c25l7D6bUI6nykxhz71mnJzvDZzZfpH8qy5xfI6RMp+0+hZqHRderYElTXHBvO9Ovc1v4YRfrQxION1QNaCx7+6k1w0wILek+O2lA048tBoU+eXz/qHZzvIlDMDT3Wtn5ubxwokHnAoBptDYTySNYX0c2uFbmhyAIkls3mSaBBKBmZkVLXuMM2PoVdjGlFOg8iuRU/Ld00dJqdRub+pIO0kntujFloUTx9mgwP4AmPlp8sESrUvd+T5MnjvPEhNMDBsbJt9G5CwS1VI6yl+a4a/R2J+ZTAy+6oP5Gk="
-
     # GRADLE_PUBLISH_KEY
     - secure: "bwiCeDPos7Bk4khvoc1wV8u/zlRqDwhY7b9VuIlf/zZ53ps28/Ji2KWt2qfWe1MhFJH0tE34JgKs7RIqFM+SsnrwAMvZFHtknngm2kW0JlYJK4IIi7GUttCpw3ZW9PSfcVOwt7Tklh4M3EolAhiYj2Ry01gVsNSXis6Jmg19eJYHcM978eWBFCclSou7OrQDv8BgwzyRfxQ1gMqmjRlgILTZY0QQpOWmQQBS0VzGfJg1CVklRkd0mdGiHkauLySBdDD7pwLUO8XCFtt00IQGgxnVA1VtJUa5xrjwXwmGMmT+qmHT6cqVyZQ967H1Oq2mBV7nRK4Zz8gQqyO/vMp3M29XVehSdlcxt2lYoUOoM5k26vfNeOADEGxy50gJiAT6ajuv++6ileWpyD4HmoWyFibW3vch/qv835xmOs8LBgtXfOs+ilsgGJCtTr4z7q9qOrvE6QUCsdgwLCXIguH8vzUkr84Woo7+3UGIAsn8tFQQuFfETJiH+KBOtPXktTw52MYkdoOj9fcegSpEuJtPoNJVkJO8fE3yVHpeiPIhSHs3cRFNw/jPULOyZXI42BDZeCjGJ1ZtgXzaLMsFKwo6lcpVoEutOoOvY9GlQAOYTMnS4Dvz+xz4Z6USkE+oX5AptKXpHiprelbP2hmSJVkXlYU0k5WPIL90yPrB2Dv6O3g="
-
     # GRADLE_PUBLISH_SECRET
     - secure: "mxcPZT6I5Lko5JSaJtb6UamqMA1RGo6M6wE4MdqQWiToGSL6lvxt3eHP7P3j0n5mg1hEhcvkTHtmgu62YBtHzOxJ23YY82vd+ncqZ4FP0A2GOg1hlFjXkTNo8vKb3b8dCrSB+ntK4FDj2fWtSTegAn0WBBsPc862gbGLeD3XG6GjtoTE9kWgNZL3lQo3oefbWdOveWlEp1ZC3Te/ihxCbaKqPhWyCDoXVNdVrL3aWLSlPDBU8JxMceXd971hvIeQ248mf7uNwEVx24W6qoxAYTKgeG8J7OKO3yZIRzLImugpTXilmNSCS3+3xJYQcqUSWDvkefRY6PFkk6RbiaQchl4/O7OzlurKlaX0VFuiJvXJ9XU/r8v8DEno2El48tm9RVKk01K/jc4kSkxjJLCHpx4M25TGA4ypKOh7ALJv2Fh1et3CzR/F4IF2WIPNN/wwpnk9J8kZoBU6rjZUL2Ze+yVkO7eq2Xl5yfACN5sA2Gc8RPzL3i7NCx23G+WxsplxvPT3pOdXV01mCn18CkBoPpJa5Wp5MON84gzxHQH3xLLNrrG9AD2ooyPu+c3mB08h4X14lWu+ceLVIBXohfqPM6qq4325giDiQCCs9dN5Hh3jL9ouE5ct1s4lViDLBWjQJRgrI4lj4jUf2w7js82MITz/FkQjfboTv3vdb7mF5Ms="
-
     # SONARQUBE_TOKEN
     - secure: "t3g2xQUQEik+xIDBV6RzUtXUFAzRrgBhJRAZoRTmVcJe5Uq1Pbo4Xc/0UR6NEZXa1spNf/oeweaKKyJEwGTOII3/rbBGz114rMnhVQR7IENF4U1IPOHsvVRqLsHai7yhItqOaSJksxLnJ17k6oi4C/aSWum3aKxaR2LLSm4w/hsPjDo6W1ihOoOHdRyceAhDShRlM3/wghIvA31aO9+yvWi3RiqeTuQ3P87wnhAyHdF2thwH/2bSlSvC5bbMJcVOj229XR0e5mGPc9ZPHzNdUzx4dxNTEXoUoTsRPKPFGOwJ4hbJnzQXaD07hEXLZcDW6bRauqfhJ8ddNXU38LflZtqCDyHB7pQs/0Rk09/7KVUJxUPwaZzYHwkkz49jpx4fDO7NvaXMS7Z3PvH9RS7rAe2tvt/IOdY8V7lTyvmlANmjzpcs4ZdHy36S1C/diC44xH44FVbCr2nJH2sznv7VheX8HHu+b6EU+zUSbfPiTer6KlrsZYL37H0h5vKU/Crs1DfIZ1U/YWyMPYcCxSjbJS14t8rQC8Sb44mEXjHhy6MpQFJcAvW7jYb+kaT2t6yjzJiNAjrH9QfOYwKK5Bi6T4Ke8Zfv7zd2O0dcUYzpu0YB57wg8cmNic89vKjYOVeL9A4UCfX7Sh1mk0xIlF9yEYyKMRWjRUgBoG5nbDzBO9Q="
-
     # SONARGRAPH_ACTIVATION_CODE
     - secure: "D8dZnWDhpHVxuYXN87c79sDZ55kL1ZmWcsRrk6L/9mm3HWJcl4NyiPfe2XpMGHDyWVIrxDzKm9NnsiCjuY1vlM3Ygk6CuJj94mG3l2Fx6bv7BEIT1eVvYKCjsKqoflVTgKnkjChdJsDKVeDXPqEEYkaiyJ8Oev9AP6ruIp4/VvwB+2OuISGMk0a46PjzbM9HrGH+s5IMBrHF/rXD9ucHMIWOMgy+sQb5z0SAgZv4VPiEuL1jAQuojR5+0xLfqypBTQr7CuJVl3fycSEikzIa7VPpq6WbKYp5lcegIhk7ClAshTCsMuDhznbCdAQL6cPRfgkwbM2TjMi8kNuHuwTMjQDXQizmv8RG25m5RpdBFnAnOYY3SeN683kHOjRo75k5AtLt6szDxukGGxU+AIOLZ1b3nAgsoKbCciInX4f7mOEWBhGeUp/0HGYIxeeVeehXBGVYgBhN3wQvQ1a7SVHS/zfrmMx4drLFvdI6G0jPKjpqiAay0gwohaZM0jaHLFm3h9qnOalgRNv9oO/B5OYW+cP1YfjVa1aopvtxvBhk1bh9V5J0hqvEcWqHuCO63Y3WcnBhjDcpD3aYJXpVUzKB08G+THjQ4+hMbZXfLRtnZJRSdhQSRBijBBdbtpTuWdmZp65CK1cLdNtS6P3yp/mc2zDCiQ3GyduYNl+mE6Y8urY="
+    # SSH_KEY_GITHUB_PASSPHRASE
+    - secure: "nFBJHiHROPqaLtAGLnQ1UPPoNyQW7fPbIpyYVlBmNQ14Rk5Bh3YEsk1BP5dHmzDeU2s8TbYf2U2KRo93WFh1x1B6uR/XA7s0VMd9fTunEvr4uQ/Pbdg/kZzutY/D9bygc+X8n8eY9Z95SQMIgcJs4WcLGZJehlQSNpATlBfGnpjhecC7gX++KUK7o1H0UwuD1mvOeos080i1Wi0USoI4yRbGi2ml/t2s+GVLtiG0iFyGFpOJb9ZYlBbt6qIBGL2azQC9hHZWOMFVqVMAaKQlb5auPusKjNSG7ueYujnzIkUd1YbmHKU7xmWc2m46tP6NYx1cfhh/iToWpd5Un9s75aDkCFWbrTqgodVqmZhmrw0OpOXQ5j7DYuPoC/u0eBdnCfcwaykP526CTXViRlaPIuY+t39LOhgMEDPRDmAY+hdtSTQf/0fLhnOYjkjrOb8brdIuUmxmdteGqMNYCDrOVaBKnn6EtsutmajTdJjneNX8YQYDFj8E8FYZ4yaJqixyDgo72MOeH5WvwfN9ORH4xpy8X0q//HOCAJY94ansKtXI0kLR7YFRGxG6QUDsSCnAD59H89Qc9S01mMKupA5ErktUp2Wl3mphs5Ut53u4JggBIBiSw3aSyqzkFdM7Syd+uyvvnTo9G0v4MkcUzXv0dmOuuZSG4wj/i7PeTRnEh8k="
 
 jdk:
   - oraclejdk8
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
 cache:
   directories:
@@ -27,14 +30,11 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then pip install --user codecov; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/install-codecov.sh; fi
 
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then codecov; fi
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonar.sh; fi
-
-deploy:
-  provider: script
-  script: scripts/deploy.sh
-  on:
-    branch: release
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonargraph.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-ghpages.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-sonarqube.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-codecov.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'release' ]]; then ./scripts/publish-deploy.sh; fi

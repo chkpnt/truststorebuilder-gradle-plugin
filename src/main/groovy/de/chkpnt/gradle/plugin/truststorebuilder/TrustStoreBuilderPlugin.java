@@ -16,33 +16,15 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.ProjectConfigurationException;
-import org.gradle.api.Task;
 import org.gradle.api.plugins.BasePlugin;
-import org.gradle.api.plugins.JavaBasePlugin;
+import org.gradle.language.base.plugins.LifecycleBasePlugin;
 
 public class TrustStoreBuilderPlugin implements Plugin<Project> {
 
 	private static final String TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder";
-
 	private static final String BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore";
-
 	private static final String CHECK_CERTS_TASK_NAME = "checkCertificates";
 
 	@Override
@@ -50,115 +32,50 @@ public class TrustStoreBuilderPlugin implements Plugin<Project> {
 		project.getPluginManager()
 			.apply(BasePlugin.class);
 
-		TrustStoreBuilderConfiguration configuration = project.getExtensions()
-			.create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderConfiguration.class, project);
+		TrustStoreBuilderExtension extension = project.getExtensions()
+			.create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderExtension.class, project);
 
-		configuration.validate();
-
-		try {
-			configureTasks(project, configuration);
-		} catch (IOException e) {
-			throw new ProjectConfigurationException("Configuration of ImportCertTasks failed", e);
-		}
-	}
-
-	private static void configureTasks(Project project, TrustStoreBuilderConfiguration configuration) throws IOException {
-		CheckCertsValidationTask checkCertsValidationTask = createCheckCertsValidationTask(project, configuration);
-		ImportCertsTask importCertsTask = createImportCertsTask(project, configuration);
-
-		configureDependency(project, JavaBasePlugin.CHECK_TASK_NAME, checkCertsValidationTask);
-		configureDependency(project, JavaBasePlugin.BUILD_TASK_NAME, importCertsTask);
-
-		List<Path> certs = scanForCertsToImport(configuration.getInputDir(), configuration.getPathMatcherForAcceptedFileEndings());
-
-		certs.forEach(cert -> {
-			Path filename = cert.getFileName();
-			String alias = getCertConfig(cert).map(config -> config.getProperty("alias"))
-				.orElseGet(() -> filename.toString());
-			importCertsTask.importCert(cert, alias);
-			checkCertsValidationTask.file(cert);
-		});
-	}
-
-	private static void configureDependency(Project project, String taskName, Task dependsOn) {
 		project.getTasks()
-			.getByName(taskName)
-			.dependsOn(dependsOn);
+			.register(CHECK_CERTS_TASK_NAME, CheckCertsValidationTask.class, task -> {
+				task.setGroup(LifecycleBasePlugin.VERIFICATION_GROUP);
+				task.setDescription("Checks the validation of the certificates to import.");
+
+				task.getInputDir()
+					.set(extension.getInputDir());
+				task.getAcceptedFileEndings()
+					.set(extension.getAcceptedFileEndings());
+				task.getAtLeastValidDays()
+					.set(extension.getAtLeastValidDays());
+			});
+		project.getTasks()
+			.getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
+			.dependsOn(CHECK_CERTS_TASK_NAME);
+
+		project.getTasks()
+			.register(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class, task -> {
+				task.setGroup(BasePlugin.BUILD_GROUP);
+
+				task.getKeystore()
+					.set(extension.getTrustStore());
+				task.getPassword()
+					.set(extension.getPassword());
+				task.getInputDir()
+					.set(extension.getInputDir());
+				task.getAcceptedFileEndings()
+					.set(extension.getAcceptedFileEndings());
+			});
+
+		configureTaskDependencies(project);
 	}
 
-	private static ImportCertsTask createImportCertsTask(Project project, TrustStoreBuilderConfiguration configuration) {
-		String inputDirName = project.getProjectDir()
-			.toPath()
-			.relativize(configuration.getInputDir())
-			.toString();
+	private void configureTaskDependencies(Project project) {
+		project.getTasks()
+			.getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
+			.dependsOn(CHECK_CERTS_TASK_NAME);
 
-		ImportCertsTask task = project.getTasks()
-			.create(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask.class);
-		task.setGroup(BasePlugin.BUILD_GROUP);
-		task.setDescription(String.format("Adds all certificates found under '%s' to the TrustStore.", inputDirName));
-		task.setKeystore(configuration.getTrustStore());
-		task.setPassword(configuration.getPassword());
-		task.setInputDir(configuration.getInputDir());
-		return task;
+		project.getTasks()
+			.getByName(LifecycleBasePlugin.BUILD_TASK_NAME)
+			.dependsOn(BUILD_TRUSTSTORE_TASK_NAME);
 	}
 
-	private static CheckCertsValidationTask createCheckCertsValidationTask(Project project, TrustStoreBuilderConfiguration configuration) {
-		CheckCertsValidationTask task = project.getTasks()
-			.create(CHECK_CERTS_TASK_NAME, CheckCertsValidationTask.class);
-		task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
-		task.setDescription("Checks the validation of the certificates to import.");
-		task.setAtLeastValidDays(configuration.getAtLeastValidDays());
-		return task;
-	}
-
-	private static List<Path> scanForCertsToImport(Path path, PathMatcher acceptedFileEndings) throws IOException {
-		List<Path> certs = new ArrayList<>();
-
-		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				super.visitFile(file, attrs);
-
-				Path filename = file.getFileName();
-				if (acceptedFileEndings.matches(filename)) {
-					certs.add(file);
-				}
-
-				return FileVisitResult.CONTINUE;
-			}
-		});
-
-		return certs;
-	}
-
-	private static Optional<Properties> getCertConfig(Path certFile) {
-		Optional<Path> configFile = getConfigFileForCertificate(certFile);
-		if (!configFile.isPresent()) {
-			return Optional.empty();
-		}
-
-		Properties properties = new Properties();
-
-		try {
-			InputStream inputStream = Files.newInputStream(configFile.get());
-			properties.load(inputStream);
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
-		}
-
-		return Optional.of(properties);
-	}
-
-	private static Optional<Path> getConfigFileForCertificate(Path certFile) {
-		String certFilename = certFile.getFileName()
-			.toString();
-		Path configFile = certFile.resolveSibling(certFilename + ".config");
-
-		if (!Files.exists(configFile)) {
-			return Optional.empty();
-		}
-
-		return Optional.of(configFile);
-	}
 }
