@@ -1,6 +1,6 @@
 # Build your Java TrustStore with Gradle
 
-This Gradle plugin can build a Java TrustStore from existing certificates. The generated TrustStore uses the JKS format as the database format for the certificates. Additionally, the certificates are checked for validity.
+This Gradle plugin for Gradle 4.9 and newer can build a Java TrustStore from existing certificates. The generated TrustStore uses the JKS format as the database format for the certificates. Additionally, the certificates are checked for validity.
 
 For example, _DST Root CA X3_ expires on September 30, 2021. So when this date draws near in relation to the system's local date, something like this happens: 
 ```
