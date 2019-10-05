@@ -31,95 +31,95 @@ import org.gradle.api.tasks.TaskExecutionException
 
 class ImportCertsTask extends DefaultTask {
 
-	final Property<Path> keystore
-	final Property<String> password
-	final Property<Path> inputDir
-	final ListProperty<String> acceptedFileEndings
+    final Property<Path> keystore
+    final Property<String> password
+    final Property<Path> inputDir
+    final ListProperty<String> acceptedFileEndings
 
-	FileAdapter fileAdapter = new DefaultFileAdapter()
-	CertificateService certificateService = new CertificateService()
+    FileAdapter fileAdapter = new DefaultFileAdapter()
+    CertificateService certificateService = new CertificateService()
 
-	public ImportCertsTask() {
-		keystore = getProject().getObjects().property(Path)
-		password = getProject().getObjects().property(String)
-		inputDir = getProject().getObjects().property(Path)
-		acceptedFileEndings = getProject().getObjects().listProperty(String)
+    public ImportCertsTask() {
+        keystore = getProject().getObjects().property(Path)
+        password = getProject().getObjects().property(String)
+        inputDir = getProject().getObjects().property(Path)
+        acceptedFileEndings = getProject().getObjects().listProperty(String)
 
-		// After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
-		acceptedFileEndings.set([])
-	}
+        // After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
+        acceptedFileEndings.set([])
+    }
 
-	@InputDirectory
-	File getInput() {
-		fileAdapter.toFile(inputDir.get())
-	}
+    @InputDirectory
+    File getInput() {
+        fileAdapter.toFile(inputDir.get())
+    }
 
-	@OutputFile
-	File getOutput() {
-		fileAdapter.toFile(keystore.get())
-	}
+    @OutputFile
+    File getOutput() {
+        fileAdapter.toFile(keystore.get())
+    }
 
-	@Override
-	public String getDescription() {
-		def inputDirName = getProject().getProjectDir()
-				.toPath()
-				.relativize(inputDir.get())
-				.toString();
-		return "Adds all certificates found under '$inputDirName' to the TrustStore."
-	}
+    @Override
+    public String getDescription() {
+        def inputDirName = getProject().getProjectDir()
+                .toPath()
+                .relativize(inputDir.get())
+                .toString();
+        return "Adds all certificates found under '$inputDirName' to the TrustStore."
+    }
 
-	@TaskAction
-	def importCerts() {
-		checkTaskConfiguration()
-		prepareOutputDir(keystore.get().getParent())
+    @TaskAction
+    def importCerts() {
+        checkTaskConfiguration()
+        prepareOutputDir(keystore.get().getParent())
 
-		KeyStore jks = certificateService.newKeystore()
+        KeyStore jks = certificateService.newKeystore()
 
-		List<Path> certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
-		for (certFile in certFiles) {
-			String alias = getCertAlias(certFile)
-			X509Certificate cert = certificateService.loadCertificate(certFile)
-			certificateService.addCertificateToKeystore(jks, cert, alias)
-		}
+        List<Path> certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
+        for (certFile in certFiles) {
+            String alias = getCertAlias(certFile)
+            X509Certificate cert = certificateService.loadCertificate(certFile)
+            certificateService.addCertificateToKeystore(jks, cert, alias)
+        }
 
-		certificateService.storeKeystore(jks, keystore.get(), password.get())
-	}
+        certificateService.storeKeystore(jks, keystore.get(), password.get())
+    }
 
-	private def prepareOutputDir(Path outputDir) {
-		if (outputDir && Files.notExists(outputDir)) {
-			Files.createDirectories(outputDir)
-		}
-	}
+    private def prepareOutputDir(Path outputDir) {
+        if (outputDir && Files.notExists(outputDir)) {
+            Files.createDirectories(outputDir)
+        }
+    }
 
-	private def checkTaskConfiguration() {
-		def listOfImproperConfiguredProperties = []
-		if (!keystore.getOrNull()) listOfImproperConfiguredProperties << 'keystore'
-		if (!password.getOrNull()) listOfImproperConfiguredProperties << 'password'
-		if (acceptedFileEndings.getOrElse([]).findAll { it?.trim() }.empty ) listOfImproperConfiguredProperties << 'acceptedFileEndings'
+    private def checkTaskConfiguration() {
+        def listOfImproperConfiguredProperties = []
+        if (!keystore.getOrNull()) listOfImproperConfiguredProperties << 'keystore'
+        if (!password.getOrNull()) listOfImproperConfiguredProperties << 'password'
+        if (acceptedFileEndings.getOrElse([]).findAll { it?.trim() }.empty ) listOfImproperConfiguredProperties << 'acceptedFileEndings'
 
-		if (listOfImproperConfiguredProperties.any()) {
-			def improperConfiguredProperties = String.join(", ", listOfImproperConfiguredProperties)
-			throw new TaskExecutionException(this, new IllegalArgumentException("The following properties have to be configured appropriately: ${improperConfiguredProperties}"))
-		}
-	}
+        if (listOfImproperConfiguredProperties.any()) {
+            def improperConfiguredProperties = String.join(", ", listOfImproperConfiguredProperties)
+            throw new TaskExecutionException(this, new IllegalArgumentException("The following properties have to be configured appropriately: ${improperConfiguredProperties}"))
+        }
+    }
 
-	private static String getCertAlias(Path certFile) {
-		def filename = certFile.fileName.toString()
-		def configFile = certFile.resolveSibling("${filename}.config")
+    private static String getCertAlias(Path certFile) {
+        def filename = certFile.fileName.toString()
+        def configFile = certFile.resolveSibling("${filename}.config")
 
-		if (!Files.exists(configFile)) {
-			return filename
-		}
+        if (!Files.exists(configFile)) {
+            return filename
+        }
 
-		Properties properties = new Properties()
-		try {
-			InputStream inputStream = Files.newInputStream(configFile)
-			properties.load(inputStream)
-		} catch (IOException e) {
-			throw new UncheckedIOException(e)
-		}
+        Properties properties = new Properties()
+        try {
+            InputStream inputStream = Files.newInputStream(configFile)
+            properties.load(inputStream)
+        } catch (IOException e) {
+            throw new UncheckedIOException(e)
+        }
 
-		def alias = properties.getProperty("alias")
-		return alias ?: filename.toString()
-	}
+        def alias = properties.getProperty("alias")
+        return alias ?: filename.toString()
+    }
 }

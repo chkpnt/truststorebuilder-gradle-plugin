@@ -29,82 +29,82 @@ import spock.lang.Specification
 
 class CheckCertsValidationTaskTest extends Specification {
 
-	private CheckCertsValidationTask classUnderTest
-	private CertificateService certificateServiceMock = Mock()
-	private FileSystem fs
-	private Project project
+    private CheckCertsValidationTask classUnderTest
+    private CertificateService certificateServiceMock = Mock()
+    private FileSystem fs
+    private Project project
 
-	def setup() {
-		fs = Jimfs.newFileSystem()
-		Files.createDirectory(fs.getPath("certs"))
+    def setup() {
+        fs = Jimfs.newFileSystem()
+        Files.createDirectory(fs.getPath("certs"))
 
-		project = ProjectBuilder.builder().build()
-		classUnderTest = project.task('testCertValidation', type: CheckCertsValidationTask)
+        project = ProjectBuilder.builder().build()
+        classUnderTest = project.task('testCertValidation', type: CheckCertsValidationTask)
 
-		classUnderTest.certificateService = certificateServiceMock
-		classUnderTest.atLeastValidDays = 30
-		classUnderTest.inputDir = fs.getPath("certs")
-		classUnderTest.acceptedFileEndings = ["pem"]
-	}
+        classUnderTest.certificateService = certificateServiceMock
+        classUnderTest.atLeastValidDays = 30
+        classUnderTest.inputDir = fs.getPath("certs")
+        classUnderTest.acceptedFileEndings = ["pem"]
+    }
 
-	def "loading a corrupt certificate"() {
-		given:
-		fs.getPath("certs/corrupt.pem").text = CertificateProvider.CORRUPT
+    def "loading a corrupt certificate"() {
+        given:
+        fs.getPath("certs/corrupt.pem").text = CertificateProvider.CORRUPT
 
-		when:
-		classUnderTest.execute()
+        when:
+        classUnderTest.execute()
 
-		then:
-		def e = thrown(TaskExecutionException)
-		e.cause instanceof CheckCertValidationError
-		e.cause.message == "Could not load certificate: certs/corrupt.pem"
-	}
+        then:
+        def e = thrown(TaskExecutionException)
+        e.cause instanceof CheckCertValidationError
+        e.cause.message == "Could not load certificate: certs/corrupt.pem"
+    }
 
-	def "loading a non-certificate"() {
-		given:
-		fs.getPath("certs/notACert.txt").text = CertificateProvider.NOT_A_CERT
+    def "loading a non-certificate"() {
+        given:
+        fs.getPath("certs/notACert.txt").text = CertificateProvider.NOT_A_CERT
 
-		and:
-		classUnderTest.acceptedFileEndings = ["txt"]
+        and:
+        classUnderTest.acceptedFileEndings = ["txt"]
 
-		when:
-		classUnderTest.execute()
+        when:
+        classUnderTest.execute()
 
-		then:
-		def e = thrown(TaskExecutionException)
-		e.cause instanceof CheckCertValidationError
-		e.cause.message == "Could not load certificate: certs/notACert.txt"
-	}
+        then:
+        def e = thrown(TaskExecutionException)
+        e.cause instanceof CheckCertValidationError
+        e.cause.message == "Could not load certificate: certs/notACert.txt"
+    }
 
-	def "certificate letsencrypt.pem is invalid"() {
-		given:
-		fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
-		fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+    def "certificate letsencrypt.pem is invalid"() {
+        given:
+        fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+        fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
 
-		and:
-		certificateServiceMock.isCertificateValidInFuture(_, _) >>> [true, false]
+        and:
+        certificateServiceMock.isCertificateValidInFuture(_, _) >>> [true, false]
 
-		when:
-		classUnderTest.execute()
+        when:
+        classUnderTest.execute()
 
-		then:
-		def e = thrown(TaskExecutionException)
-		e.cause instanceof CheckCertValidationError
-		e.cause.message == "Certificate is already or becomes invalid within the next 30 days: certs/letsencrypt.pem"
-	}
+        then:
+        def e = thrown(TaskExecutionException)
+        e.cause instanceof CheckCertValidationError
+        e.cause.message == "Certificate is already or becomes invalid within the next 30 days: certs/letsencrypt.pem"
+    }
 
-	def "when all certificates are valid nothing happens"() {
-		given:
-		fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
-		fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+    def "when all certificates are valid nothing happens"() {
+        given:
+        fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+        fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
 
-		and:
-		certificateServiceMock.isCertificateValidInFuture(_, _) >> true
+        and:
+        certificateServiceMock.isCertificateValidInFuture(_, _) >> true
 
-		when:
-		classUnderTest.execute()
+        when:
+        classUnderTest.execute()
 
-		then:
-		true
-	}
+        then:
+        true
+    }
 }

@@ -1,31 +1,32 @@
 buildscript {
-	repositories.maven { url 'https://plugins.gradle.org/m2/' }
-	dependencies.classpath 'com.diffplug.gradle.spotless:spotless:1.3.3'
+    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+    dependencies.classpath 'com.diffplug.gradle.spotless:spotless:1.3.3'
 }
 
 apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
 
 spotless {
-	java {
-		target '**/*.java'
-		
-		licenseHeaderFile rootProject.file('gradle/spotless.license.txt')
-		
-		eclipseFormatFile rootProject.file('gradle/spotless.eclipseformatter.xml')
-		importOrder(['java', 'javax', 'org', 'com'])
-		
-		indentWithTabs()
-		trimTrailingWhitespace()
-	}
-	format 'groovy', {
-		target '**/*.groovy'
-		
-		licenseHeaderFile rootProject.file('gradle/spotless.license.txt'), "package "
-		
-		indentWithTabs()
-		trimTrailingWhitespace()
-		
-		customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
-		customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
-	}
+    java {
+        target '**/*.java'
+        
+        licenseHeaderFile rootProject.file('gradle/spotless.license.txt')
+        
+        eclipseFormatFile rootProject.file('gradle/spotless.eclipseformatter.xml')
+        importOrder(['java', 'javax', 'org', 'com'])
+        
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+    
+    format 'groovy', {
+        target '**/*.groovy'
+        
+        licenseHeaderFile rootProject.file('gradle/spotless.license.txt'), "package "
+        
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        
+        customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
+        customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
+    }
 }

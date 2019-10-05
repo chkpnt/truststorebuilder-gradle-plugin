@@ -31,158 +31,158 @@ import spock.lang.Specification
 
 class TrustStoreBuilderPluginTest extends Specification {
 
-	@Rule
-	final TemporaryFolder testProjectDir = new TemporaryFolder();
+    @Rule
+    final TemporaryFolder testProjectDir = new TemporaryFolder();
 
-	private File buildFile
+    private File buildFile
 
-	private List<File> pluginClasspath
+    private List<File> pluginClasspath
 
-	def setup() {
-		initProjectDir();
+    def setup() {
+        initProjectDir();
 
-		// Was needed when I wrote the tests with Gradle 2. Still needed?
-		def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
-		if (pluginClasspathResource == null) {
-			throw new IllegalStateException("Did not find plugin classpath resource, run `testClasses` build task.")
-		}
+        // Was needed when I wrote the tests with Gradle 2. Still needed?
+        def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
+        if (pluginClasspathResource == null) {
+            throw new IllegalStateException("Did not find plugin classpath resource, run `testClasses` build task.")
+        }
 
-		pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
-	}
+        pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
+    }
 
-	private def initProjectDir() {
-		copyCertsToProjectDir()
-		buildFile = testProjectDir.newFile('build.gradle')
-		buildFile << """
-			plugins {
-				id 'de.chkpnt.truststorebuilder'
-			}
+    private def initProjectDir() {
+        copyCertsToProjectDir()
+        buildFile = testProjectDir.newFile('build.gradle')
+        buildFile << """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
 
-			trustStoreBuilder {
-				//acceptedFileEndings = ['bla']
-			}
-		"""
-	}
+            trustStoreBuilder {
+                //acceptedFileEndings = ['bla']
+            }
+        """
+    }
 
-	private def copyCertsToProjectDir() {
-		def dest = testProjectDir.newFolder('src', 'main', 'certs').toPath();
+    private def copyCertsToProjectDir() {
+        def dest = testProjectDir.newFolder('src', 'main', 'certs').toPath();
 
-		def certsFolder = getClass().getClassLoader().getResource("certs")
-		def source = Paths.get(certsFolder.toURI())
+        def certsFolder = getClass().getClassLoader().getResource("certs")
+        def source = Paths.get(certsFolder.toURI())
 
-		new AntBuilder().copy(toDir: dest) { fileset(dir: source) }
-	}
+        new AntBuilder().copy(toDir: dest) { fileset(dir: source) }
+    }
 
-	def "buildTrustStore and checkCertificates tasks are included in task-list"() {
-		when:
-		def result = buildGradleRunner("tasks", "--all").build()
+    def "buildTrustStore and checkCertificates tasks are included in task-list"() {
+        when:
+        def result = buildGradleRunner("tasks", "--all").build()
 
-		then:
-		result.output.contains("buildTrustStore - Adds all certificates found")
-		result.output.contains("checkCertificates - Checks the validation of the certificates")
-	}
+        then:
+        result.output.contains("buildTrustStore - Adds all certificates found")
+        result.output.contains("checkCertificates - Checks the validation of the certificates")
+    }
 
-	def "buildTrustStore task builds a TrustStore"() {
-		when:
-		def result = buildGradleRunner("buildTrustStore").build()
+    def "buildTrustStore task builds a TrustStore"() {
+        when:
+        def result = buildGradleRunner("buildTrustStore").build()
 
-		then:
-		result.task(":buildTrustStore").outcome == SUCCESS
-		Path trustStore = getDefaultTrustStorePath()
+        then:
+        result.task(":buildTrustStore").outcome == SUCCESS
+        Path trustStore = getDefaultTrustStorePath()
 
-		assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
-		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
-	}
+        assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+    }
 
-	def "buildTrustStore task respects configuration (inputDir)"() {
-		given:
-		def origPath = Paths.get(testProjectDir.getRoot().getPath(), "src/main/certs")
-		def newPath = Paths.get(testProjectDir.getRoot().getPath(), "src/main/x509")
-		Files.move(origPath, newPath)
+    def "buildTrustStore task respects configuration (inputDir)"() {
+        given:
+        def origPath = Paths.get(testProjectDir.getRoot().getPath(), "src/main/certs")
+        def newPath = Paths.get(testProjectDir.getRoot().getPath(), "src/main/x509")
+        Files.move(origPath, newPath)
 
-		and:
-		buildFile.text = """
-			plugins {
-				id 'de.chkpnt.truststorebuilder'
-			}
+        and:
+        buildFile.text = """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
 
-			trustStoreBuilder {
-				inputDir = 'src/main/x509'
-			}
-		"""
+            trustStoreBuilder {
+                inputDir = 'src/main/x509'
+            }
+        """
 
-		when:
-		def result = buildGradleRunner("buildTrustStore").build()
+        when:
+        def result = buildGradleRunner("buildTrustStore").build()
 
-		then:
-		result.task(":buildTrustStore").outcome == SUCCESS
-		Path trustStore = getDefaultTrustStorePath()
+        then:
+        result.task(":buildTrustStore").outcome == SUCCESS
+        Path trustStore = getDefaultTrustStorePath()
 
-		assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
-		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-		assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
-	}
+        assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+    }
 
-	def "buildTrustStore task respects configuration (acceptedFileEndings)"() {
-		// Textfixtures contains 'isrgrootx1.pem' and 'root.crt'
-		given:
-		buildFile.text = """
-			plugins {
-				id 'de.chkpnt.truststorebuilder'
-			}
+    def "buildTrustStore task respects configuration (acceptedFileEndings)"() {
+        // Textfixtures contains 'isrgrootx1.pem' and 'root.crt'
+        given:
+        buildFile.text = """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
 
-			trustStoreBuilder {
-				acceptedFileEndings = ['crt']
-			}
-		"""
+            trustStoreBuilder {
+                acceptedFileEndings = ['crt']
+            }
+        """
 
-		when:
-		def result = buildGradleRunner("buildTrustStore").build()
+        when:
+        def result = buildGradleRunner("buildTrustStore").build()
 
-		then:
-		result.task(":buildTrustStore").outcome == SUCCESS
-		assertNumberOfEntriesInKeystore(getDefaultTrustStorePath(), "changeit", 1)
-	}
+        then:
+        result.task(":buildTrustStore").outcome == SUCCESS
+        assertNumberOfEntriesInKeystore(getDefaultTrustStorePath(), "changeit", 1)
+    }
 
-	def "alias for certificate is filename if config file is missing"() {
-		given:
-		def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
-		Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
+    def "alias for certificate is filename if config file is missing"() {
+        given:
+        def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
+        Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
 
-		when:
-		def result = buildGradleRunner("buildTrustStore").build()
+        when:
+        def result = buildGradleRunner("buildTrustStore").build()
 
-		then:
-		result.task(":buildTrustStore").outcome == SUCCESS
-		assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
-	}
+        then:
+        result.task(":buildTrustStore").outcome == SUCCESS
+        assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+    }
 
-	def "alias for certificate is filename if config file contains no alias"() {
-		given:
-		def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
-		def file = testProjectDir.getRoot().toPath().resolve(configfile)
-		file.write("foobar")
+    def "alias for certificate is filename if config file contains no alias"() {
+        given:
+        def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
+        def file = testProjectDir.getRoot().toPath().resolve(configfile)
+        file.write("foobar")
 
-		when:
-		def result = buildGradleRunner("buildTrustStore").build()
+        when:
+        def result = buildGradleRunner("buildTrustStore").build()
 
-		then:
-		result.task(":buildTrustStore").outcome == SUCCESS
-		assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
-	}
+        then:
+        result.task(":buildTrustStore").outcome == SUCCESS
+        assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+    }
 
-	private Path getDefaultTrustStorePath() {
-		Path keystore = Paths.get(testProjectDir.root.getPath(), "build/cacerts.jks")
-		assert Files.exists(keystore)
-		return keystore
-	}
+    private Path getDefaultTrustStorePath() {
+        Path keystore = Paths.get(testProjectDir.root.getPath(), "build/cacerts.jks")
+        assert Files.exists(keystore)
+        return keystore
+    }
 
-	private def GradleRunner buildGradleRunner(String... tasks) {
-		GradleRunner.create()
-				.withDebug(true)
-				.withProjectDir(testProjectDir.root)
-				.withArguments(tasks)
-				.withPluginClasspath(pluginClasspath)
-	}
+    private def GradleRunner buildGradleRunner(String... tasks) {
+        GradleRunner.create()
+                .withDebug(true)
+                .withProjectDir(testProjectDir.root)
+                .withArguments(tasks)
+                .withPluginClasspath(pluginClasspath)
+    }
 }

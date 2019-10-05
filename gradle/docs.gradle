@@ -1,23 +1,23 @@
 groovydoc {
-	// It seems to have issues with Lambdas in Java-Files.
-	exclude "**/TrustStoreBuilderPlugin.java"
+    // It seems to have issues with Lambdas in Java-Files.
+    exclude "**/TrustStoreBuilderPlugin.java"
 }
 
 task prepareGroovydocForGhPages(type: Copy) {
-	from groovydoc.destinationDir
-	into "${githubPages.groomingDir}/groovydoc"
+    from groovydoc.destinationDir
+    into "${githubPages.groomingDir}/groovydoc"
 }
 
 groovydoc.finalizedBy(prepareGroovydocForGhPages)
 
 task prepareJavadocForGhPages(type: Copy) {
-	from javadoc.destinationDir
-	into "${githubPages.groomingDir}/javadoc"
+    from javadoc.destinationDir
+    into "${githubPages.groomingDir}/javadoc"
 }
 
 javadoc.finalizedBy(prepareJavadocForGhPages)
 
 task docs {
-	dependsOn groovydoc, javadoc
-	group org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
+    dependsOn groovydoc, javadoc
+    group org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
 }

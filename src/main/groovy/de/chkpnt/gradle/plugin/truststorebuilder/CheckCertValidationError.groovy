@@ -22,17 +22,17 @@ import org.gradle.api.GradleException
 
 class CheckCertValidationError extends GradleException {
 
-	Path file
+    Path file
 
-	String reason
+    String reason
 
-	CheckCertValidationError(Path file, String reason) {
-		this.file = file
-		this.reason = reason
-	}
+    CheckCertValidationError(Path file, String reason) {
+        this.file = file
+        this.reason = reason
+    }
 
-	@Override
-	public String getMessage() {
-		return "${reason}: ${file}"
-	}
+    @Override
+    public String getMessage() {
+        return "${reason}: ${file}"
+    }
 }

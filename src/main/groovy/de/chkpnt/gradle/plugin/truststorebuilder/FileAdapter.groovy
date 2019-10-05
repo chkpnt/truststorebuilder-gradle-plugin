@@ -19,13 +19,13 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 import java.nio.file.Path
 
 interface FileAdapter {
-	File toFile(Path path)
+    File toFile(Path path)
 }
 
 class DefaultFileAdapter implements FileAdapter {
 
-	@Override
-	public File toFile(Path path) {
-		return path.toFile();
-	}
+    @Override
+    public File toFile(Path path) {
+        return path.toFile();
+    }
 }

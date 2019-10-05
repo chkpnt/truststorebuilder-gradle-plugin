@@ -16,19 +16,18 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Path
 import java.nio.file.Files
 import java.nio.file.Path
 
 class TestFileAdapter implements FileAdapter {
 
-	@Override
-	File toFile(Path path) {
-		def temp = Files.isDirectory(path)
-				? Files.createTempDirectory(null)
-				: Files.createTempFile(null, null)
-		def file = temp.toFile()
-		file.deleteOnExit()
-		return file
-	}
+    @Override
+    File toFile(Path path) {
+        def temp = Files.isDirectory(path)
+                ? Files.createTempDirectory(null)
+                : Files.createTempFile(null, null)
+        def file = temp.toFile()
+        file.deleteOnExit()
+        return file
+    }
 }

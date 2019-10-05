@@ -1,17 +1,17 @@
 buildscript {
-	repositories.maven { url 'https://plugins.gradle.org/m2/' }
-	dependencies.classpath 'org.ajoberstar:gradle-git:1.4.2'
+    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+    dependencies.classpath 'org.ajoberstar:gradle-git:1.4.2'
 }
 
 apply plugin: org.ajoberstar.gradle.git.ghpages.GithubPagesPlugin
 
 githubPages {
-	ext {
-		groomingDir = "$buildDir/ghpages-grooming"
-	}
-	repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
-	deleteExistingFiles = false // until sonargraph's report can be built again
-	pages {
-		from groomingDir
-	}
+    ext {
+        groomingDir = "$buildDir/ghpages-grooming"
+    }
+    repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
+    deleteExistingFiles = false // until sonargraph's report can be built again
+    pages {
+        from groomingDir
+    }
 }

@@ -23,56 +23,56 @@ import org.gradle.api.internal.project.ProjectInternal
 
 class TrustStoreBuilderExtension {
 
-	private ProjectInternal project
+    private ProjectInternal project
 
-	TrustStoreBuilderExtension(Project project) {
-		this.project = project
-	}
+    TrustStoreBuilderExtension(Project project) {
+        this.project = project
+    }
 
-	/**
-	 * The password used for the TrustStore. Defaults to 'changeit'.
-	 */
-	String password = 'changeit'
+    /**
+     * The password used for the TrustStore. Defaults to 'changeit'.
+     */
+    String password = 'changeit'
 
-	/**
-	 * Path pointing to the TrustStore being built. Defaults to '$buildDir/cacerts.jks'.
-	 */
-	Path trustStore
+    /**
+     * Path pointing to the TrustStore being built. Defaults to '$buildDir/cacerts.jks'.
+     */
+    Path trustStore
 
-	void setTrustStore(Object file) {
-		trustStore = project.file(file).toPath()
-	}
+    void setTrustStore(Object file) {
+        trustStore = project.file(file).toPath()
+    }
 
-	Path getTrustStore() {
-		if (trustStore == null) {
-			return project.buildDir.toPath().resolve('cacerts.jks')
-		}
-		return trustStore
-	}
+    Path getTrustStore() {
+        if (trustStore == null) {
+            return project.buildDir.toPath().resolve('cacerts.jks')
+        }
+        return trustStore
+    }
 
-	/**
-	 * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
-	 */
-	Path inputDir
+    /**
+     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
+     */
+    Path inputDir
 
-	void setInputDir(Object dir) {
-		inputDir = project.file(dir).toPath()
-	}
+    void setInputDir(Object dir) {
+        inputDir = project.file(dir).toPath()
+    }
 
-	Path getInputDir() {
-		if (inputDir == null) {
-			return project.file('src/main/certs').toPath()
-		}
-		return inputDir
-	}
+    Path getInputDir() {
+        if (inputDir == null) {
+            return project.file('src/main/certs').toPath()
+        }
+        return inputDir
+    }
 
-	/**
-	 * A file being processed as a certificate has to have a file ending from this list. Defaults to  ['crt', 'cer', 'pem'].
-	 */
-	List<String> acceptedFileEndings = ['crt', 'cer', 'pem']
+    /**
+     * A file being processed as a certificate has to have a file ending from this list. Defaults to  ['crt', 'cer', 'pem'].
+     */
+    List<String> acceptedFileEndings = ['crt', 'cer', 'pem']
 
-	/**
-	 * Number of days the certificates have to be at least valid. Defaults to 90 days.
-	 */
-	int atLeastValidDays = 90
+    /**
+     * Number of days the certificates have to be at least valid. Defaults to 90 days.
+     */
+    int atLeastValidDays = 90
 }
