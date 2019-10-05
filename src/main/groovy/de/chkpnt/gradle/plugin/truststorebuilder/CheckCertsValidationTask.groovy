@@ -22,31 +22,46 @@ import java.security.cert.CertificateFactory
 import java.time.Duration
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.TaskAction
 
 class CheckCertsValidationTask extends DefaultTask {
 
-	List<Path> files = new ArrayList<>()
-
-	Duration atLeastValidDays
+	final Property<Path> inputDir
+	final ListProperty<String> acceptedFileEndings
+	final Property<Integer> atLeastValidDays
 
 	CertificateService certificateService = new CertificateService()
-
 	CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
 
-	private def INVALID_REASON = { -> "Certificate is already or becomes invalid within the next ${atLeastValidDays.toDays()} days" }
+	private def INVALID_REASON = { -> "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days" }
+
+	public CheckCertsValidationTask() {
+		inputDir = getProject().getObjects().property(Path)
+		acceptedFileEndings = getProject().getObjects().listProperty(String)
+		atLeastValidDays = getProject().getObjects().property(Integer)
+
+		// After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
+		acceptedFileEndings.set([])
+	}
+
+	Duration getAtLeastValid() {
+		return Duration.ofDays(atLeastValidDays.get())
+	}
 
 	@TaskAction
 	def testValidation() {
-		for (Path file : files) {
-			checkValidation file
+		List<Path> certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
+		for (certFile in certFiles) {
+			checkValidation certFile
 		}
 	}
 
 	private def checkValidation(Path file) {
 		def cert = loadX509Certificate file
 
-		if (! certificateService.isCertificateValidInFuture(cert, atLeastValidDays)) {
+		if (! certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
 			throw new CheckCertValidationError(file, INVALID_REASON())
 		}
 	}
@@ -59,13 +74,5 @@ class CheckCertsValidationTask extends DefaultTask {
 		} catch (CertificateException e) {
 			throw new CheckCertValidationError(file, "Could not load certificate")
 		}
-	}
-
-	def file(Path file) {
-		files.add(file)
-	}
-
-	def setAtLeastValidDays(int days) {
-		atLeastValidDays = Duration.ofDays days
 	}
 }

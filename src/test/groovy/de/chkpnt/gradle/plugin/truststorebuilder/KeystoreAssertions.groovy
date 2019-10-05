@@ -34,4 +34,9 @@ class KeystoreAssertions {
 
 		assert fingerprint == expectedFingerprint
 	}
+
+	static void assertNumberOfEntriesInKeystore(Path keystore, String password, int expectedNumber) {
+		def ks = certificateService.loadKeystore(keystore, password)
+		assert ks.size() == expectedNumber
+	}
 }

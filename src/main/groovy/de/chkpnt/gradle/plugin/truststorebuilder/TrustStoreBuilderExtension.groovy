@@ -16,13 +16,10 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.FileSystems
 import java.nio.file.Path
-import java.nio.file.PathMatcher
 
 import org.gradle.api.PathValidation
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.internal.project.ProjectInternal
 
 class TrustStoreBuilderExtension {
@@ -75,24 +72,8 @@ class TrustStoreBuilderExtension {
 	 */
 	List<String> acceptedFileEndings = ['crt', 'cer', 'pem']
 
-	PathMatcher getPathMatcherForAcceptedFileEndings() {
-		def extensions = String.join(',', acceptedFileEndings)
-		return FileSystems.getDefault().getPathMatcher("glob:*.{$extensions}")
-	}
-
 	/**
 	 * Number of days the certificates have to be at least valid. Defaults to 90 days.
 	 */
 	int atLeastValidDays = 90
-
-
-	void validate() {
-		if (atLeastValidDays < 1) {
-			throw new ProjectConfigurationException("The setting 'atLeastValidDays' has to be positive (currently $atLeastValidDays)", null)
-		}
-		if (!acceptedFileEndings || acceptedFileEndings.empty
-		|| acceptedFileEndings.findAll { it?.trim() }.empty ) {
-			throw new ProjectConfigurationException("The setting 'acceptedFileEndings' has to contain at least one entry", null)
-		}
-	}
 }

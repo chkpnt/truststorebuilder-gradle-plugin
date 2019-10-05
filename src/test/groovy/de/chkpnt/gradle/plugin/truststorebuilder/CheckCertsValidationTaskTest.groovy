@@ -17,42 +17,39 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import java.nio.file.FileSystem
+import java.nio.file.Files
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
 
-import spock.lang.Specification
-
 import com.google.common.jimfs.Jimfs
+
+import spock.lang.Specification
 
 class CheckCertsValidationTaskTest extends Specification {
 
 	private CheckCertsValidationTask classUnderTest
-
 	private CertificateService certificateServiceMock = Mock()
-
 	private FileSystem fs
-
 	private Project project
 
 	def setup() {
 		fs = Jimfs.newFileSystem()
-		fs.getPath("cacert.pem").write(CertificateProvider.CACERT_ROOT_CA)
-		fs.getPath("letsencrypt.pem").write(CertificateProvider.LETSENCRYPT_ROOT_CA)
-		fs.getPath("corrupt.pem").write(CertificateProvider.CORRUPT)
-		fs.getPath("notACert.txt").write(CertificateProvider.NOT_A_CERT)
+		Files.createDirectory(fs.getPath("certs"))
 
 		project = ProjectBuilder.builder().build()
 		classUnderTest = project.task('testCertValidation', type: CheckCertsValidationTask)
 
 		classUnderTest.certificateService = certificateServiceMock
+		classUnderTest.atLeastValidDays = 30
+		classUnderTest.inputDir = fs.getPath("certs")
+		classUnderTest.acceptedFileEndings = ["pem"]
 	}
 
 	def "loading a corrupt certificate"() {
 		given:
-		classUnderTest.atLeastValidDays = 30
-		classUnderTest.file fs.getPath("corrupt.pem")
+		fs.getPath("certs/corrupt.pem").text = CertificateProvider.CORRUPT
 
 		when:
 		classUnderTest.execute()
@@ -60,13 +57,15 @@ class CheckCertsValidationTaskTest extends Specification {
 		then:
 		def e = thrown(TaskExecutionException)
 		e.cause instanceof CheckCertValidationError
-		e.cause.message == "Could not load certificate: corrupt.pem"
+		e.cause.message == "Could not load certificate: certs/corrupt.pem"
 	}
 
 	def "loading a non-certificate"() {
 		given:
-		classUnderTest.atLeastValidDays = 30
-		classUnderTest.file fs.getPath("notACert.txt")
+		fs.getPath("certs/notACert.txt").text = CertificateProvider.NOT_A_CERT
+
+		and:
+		classUnderTest.acceptedFileEndings = ["txt"]
 
 		when:
 		classUnderTest.execute()
@@ -74,14 +73,13 @@ class CheckCertsValidationTaskTest extends Specification {
 		then:
 		def e = thrown(TaskExecutionException)
 		e.cause instanceof CheckCertValidationError
-		e.cause.message == "Could not load certificate: notACert.txt"
+		e.cause.message == "Could not load certificate: certs/notACert.txt"
 	}
 
 	def "certificate letsencrypt.pem is invalid"() {
 		given:
-		classUnderTest.atLeastValidDays = 30
-		classUnderTest.file fs.getPath("cacert.pem")
-		classUnderTest.file fs.getPath("letsencrypt.pem")
+		fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+		fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
 
 		and:
 		certificateServiceMock.isCertificateValidInFuture(_, _) >>> [true, false]
@@ -92,14 +90,13 @@ class CheckCertsValidationTaskTest extends Specification {
 		then:
 		def e = thrown(TaskExecutionException)
 		e.cause instanceof CheckCertValidationError
-		e.cause.message == "Certificate is already or becomes invalid within the next 30 days: letsencrypt.pem"
+		e.cause.message == "Certificate is already or becomes invalid within the next 30 days: certs/letsencrypt.pem"
 	}
 
 	def "when all certificates are valid nothing happens"() {
 		given:
-		classUnderTest.atLeastValidDays = 30
-		classUnderTest.file fs.getPath("cacert.pem")
-		classUnderTest.file fs.getPath("letsencrypt.pem")
+		fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+		fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
 
 		and:
 		certificateServiceMock.isCertificateValidInFuture(_, _) >> true

@@ -43,8 +43,6 @@ class ImportCertsTaskTest extends Specification {
 	def setup() {
 		fs = Jimfs.newFileSystem(Configuration.unix())
 		Files.createDirectory(fs.getPath("certs"))
-		fs.getPath("certs/letsencrypt.pem").write(CertificateProvider.LETSENCRYPT_ROOT_CA)
-		fs.getPath("certs/cacert.pem").write(CertificateProvider.CACERT_ROOT_CA)
 
 		project = ProjectBuilder.builder().build()
 		classUnderTest = project.task('importCert', type: ImportCertsTask)
@@ -53,11 +51,16 @@ class ImportCertsTaskTest extends Specification {
 
 	def "ImportCertsTask works awesome"() {
 		given:
+		fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+		fs.getPath("certs/letsencrypt.pem.config").text = "alias=Let's Encrypt Root CA"
+		fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+		fs.getPath("certs/cacert.pem.config").text = "alias=CACert Root CA"
+
+		and:
 		classUnderTest.keystore = fs.getPath("truststore.jks")
 		classUnderTest.password = "changeit"
 		classUnderTest.inputDir = fs.getPath("certs")
-		classUnderTest.importCert(fs.getPath("certs/letsencrypt.pem"), "Let's Encrypt Root CA")
-		classUnderTest.importCert(fs.getPath("certs/cacert.pem"), "CAcert Root CA")
+		classUnderTest.acceptedFileEndings = ["pem"]
 
 		when:
 		classUnderTest.execute()
@@ -66,6 +69,27 @@ class ImportCertsTaskTest extends Specification {
 		def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
 		assertFingerprintOfKeystoreEntry(ks, "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
 		assertFingerprintOfKeystoreEntry(ks, "cacert root ca", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+	}
+
+	def "alias is derived from filename if not available through config file"() {
+		given:
+		fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+		fs.getPath("certs/letsencrypt.pem.config").text = "bla=no_alias"
+		fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+
+		and:
+		classUnderTest.keystore = fs.getPath("truststore.jks")
+		classUnderTest.password = "changeit"
+		classUnderTest.inputDir = fs.getPath("certs")
+		classUnderTest.acceptedFileEndings = ["pem"]
+
+		when:
+		classUnderTest.execute()
+
+		then:
+		def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
+		assertFingerprintOfKeystoreEntry(ks, "letsencrypt.pem", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+		assertFingerprintOfKeystoreEntry(ks, "cacert.pem", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
 	}
 
 
@@ -78,6 +102,7 @@ class ImportCertsTaskTest extends Specification {
 		and:
 		classUnderTest.password = "changeit"
 		classUnderTest.inputDir = fs.getPath("certs")
+		classUnderTest.acceptedFileEndings = ["pem"]
 
 		when:
 		classUnderTest.execute()
@@ -86,10 +111,11 @@ class ImportCertsTaskTest extends Specification {
 		Files.exists(outputdir)
 	}
 
-	def "throwing exception some properties are not set"() {
+	def "throwing exception if password is not set"() {
 		given:
 		classUnderTest.inputDir = fs.getPath("certs")
 		classUnderTest.keystore = fs.getPath("truststore.jks")
+		classUnderTest.acceptedFileEndings = ["pem"]
 
 		when:
 		classUnderTest.execute()
@@ -97,6 +123,25 @@ class ImportCertsTaskTest extends Specification {
 		then:
 		TaskExecutionException e = thrown()
 		IllegalArgumentException rootCause = e.cause.cause
-		rootCause.message == "The following properties has to be configured: password"
+		rootCause.message == "The following properties have to be configured appropriately: password"
+	}
+
+	def "throwing exception if acceptedFileEndings is not set appropriately"() {
+		given:
+		classUnderTest.inputDir = fs.getPath("certs")
+		classUnderTest.keystore = fs.getPath("truststore.jks")
+		classUnderTest.password = "changeit"
+
+		and:
+		// PropertyList<String> can't contain null values, therefore testing is not needed
+		classUnderTest.acceptedFileEndings = ["", " "]
+
+		when:
+		classUnderTest.execute()
+
+		then:
+		TaskExecutionException e = thrown()
+		IllegalArgumentException rootCause = e.cause.cause
+		rootCause.message == "The following properties have to be configured appropriately: acceptedFileEndings"
 	}
 }

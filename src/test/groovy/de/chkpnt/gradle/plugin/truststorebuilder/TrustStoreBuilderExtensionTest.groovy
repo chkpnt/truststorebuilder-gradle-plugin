@@ -19,10 +19,7 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static spock.util.matcher.HamcrestSupport.that
 
-import java.nio.file.Paths
-
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
 import org.gradle.testfixtures.ProjectBuilder
 
 import spock.lang.Specification
@@ -83,43 +80,5 @@ class TrustStoreBuilderExtensionTest extends Specification  {
 		then:
 		classUnderTest.acceptedFileEndings.size() == 1
 		classUnderTest.acceptedFileEndings.first() == 'txt'
-	}
-
-	def "test PathMatcher for accepted file endings"() {
-		expect:
-		classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.cer'))
-		classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.crt'))
-		classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.pem'))
-		! classUnderTest.pathMatcherForAcceptedFileEndings.matches(Paths.get('foo.txt'))
-	}
-
-	def "validation check 1"() {
-		given:
-		classUnderTest.atLeastValidDays = -3
-
-		when:
-		classUnderTest.validate()
-
-		then:
-		ProjectConfigurationException e = thrown()
-		e.message == "The setting 'atLeastValidDays' has to be positive (currently -3)"
-	}
-
-	def "validation check 2"(List<String> fileEndings) {
-		given:
-		classUnderTest.acceptedFileEndings = fileEndings
-
-		when:
-		classUnderTest.validate()
-
-		then:
-		ProjectConfigurationException e = thrown()
-		e.message == "The setting 'acceptedFileEndings' has to contain at least one entry"
-
-		where:
-		_ | fileEndings
-		_ | null
-		_ | []
-		_ | ["", " ", null]
 	}
 }
