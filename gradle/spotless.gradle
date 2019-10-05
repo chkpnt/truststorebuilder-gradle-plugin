@@ -1,6 +1,6 @@
 buildscript {
     repositories.maven { url 'https://plugins.gradle.org/m2/' }
-    dependencies.classpath 'com.diffplug.gradle.spotless:spotless:1.3.3'
+    dependencies.classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.24.3'
 }
 
 apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
@@ -9,24 +9,25 @@ spotless {
     java {
         target '**/*.java'
         
-        licenseHeaderFile rootProject.file('gradle/spotless.license.txt')
+        licenseHeaderFile 'gradle/spotless.license.txt'
         
-        eclipseFormatFile rootProject.file('gradle/spotless.eclipseformatter.xml')
-        importOrder(['java', 'javax', 'org', 'com'])
+        eclipse().configFile 'gradle/spotless.eclipseformatter.xml'
+        importOrder 'java', 'javax', 'org', 'com'
         
         indentWithSpaces()
         trimTrailingWhitespace()
     }
     
+    // TODO #4: Migrate to 'groovy { ... }'
     format 'groovy', {
         target '**/*.groovy'
         
-        licenseHeaderFile rootProject.file('gradle/spotless.license.txt'), "package "
+        licenseHeaderFile 'gradle/spotless.license.txt', "package "
         
         indentWithSpaces()
         trimTrailingWhitespace()
         
-        customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
-        customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
+       // customReplaceRegex 'class-level Javadoc indentation fix', /^\*/, ' *'
+       // customReplaceRegex 'nested Javadoc indentation fix', /\t\*/, '\t *'
     }
 }

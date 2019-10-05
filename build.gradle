@@ -1,3 +1,7 @@
+buildscript {
+    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+}
+
 apply plugin: 'groovy'
 apply plugin: 'java'
 
