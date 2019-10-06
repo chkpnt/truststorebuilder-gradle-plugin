@@ -57,7 +57,7 @@ class CheckCertsValidationTaskTest extends Specification {
         then:
         def e = thrown(TaskExecutionException)
         e.cause instanceof CheckCertValidationError
-        e.cause.message == "Could not load certificate: certs/corrupt.pem"
+        e.cause.message == "Could not load certificate: certs${fs.separator}corrupt.pem"
     }
 
     def "loading a non-certificate"() {
@@ -73,7 +73,7 @@ class CheckCertsValidationTaskTest extends Specification {
         then:
         def e = thrown(TaskExecutionException)
         e.cause instanceof CheckCertValidationError
-        e.cause.message == "Could not load certificate: certs/notACert.txt"
+        e.cause.message == "Could not load certificate: certs${fs.separator}notACert.txt"
     }
 
     def "certificate letsencrypt.pem is invalid"() {
@@ -90,7 +90,7 @@ class CheckCertsValidationTaskTest extends Specification {
         then:
         def e = thrown(TaskExecutionException)
         e.cause instanceof CheckCertValidationError
-        e.cause.message == "Certificate is already or becomes invalid within the next 30 days: certs/letsencrypt.pem"
+        e.cause.message == "Certificate is already or becomes invalid within the next 30 days: certs${fs.separator}letsencrypt.pem"
     }
 
     def "when all certificates are valid nothing happens"() {
