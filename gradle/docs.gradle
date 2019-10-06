@@ -1,3 +1,31 @@
+buildscript {
+    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+    dependencies.classpath 'org.ajoberstar:gradle-git-publish:2.1.1'
+}
+
+/***************************
+ * Publish to Github Pages
+ ***************************/
+
+apply plugin: org.ajoberstar.gradle.git.publish.GitPublishPlugin
+
+gitPublish {
+    ext {
+        groomingDir = "$buildDir/ghpages-grooming"
+    }
+    repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
+    branch = 'gh-pages'
+    preserve { include 'reports/*' } // until Sonargraph's report can be built again
+    contents {
+        from groomingDir
+    }
+    commitMessage = 'Publish of Github pages from Gradle'
+}
+
+/***************************
+ * Groovydoc
+ ***************************/
+
 groovydoc {
     // It seems to have issues with Lambdas in Java-Files.
     exclude "**/TrustStoreBuilderPlugin.java"
@@ -5,14 +33,18 @@ groovydoc {
 
 task prepareGroovydocForGhPages(type: Copy) {
     from groovydoc.destinationDir
-    into "${githubPages.groomingDir}/groovydoc"
+    into "${gitPublish.groomingDir}/groovydoc"
 }
 
 groovydoc.finalizedBy(prepareGroovydocForGhPages)
 
+/***************************
+ * Javadoc
+ ***************************/
+
 task prepareJavadocForGhPages(type: Copy) {
     from javadoc.destinationDir
-    into "${githubPages.groomingDir}/javadoc"
+    into "${gitPublish.groomingDir}/javadoc"
 }
 
 javadoc.finalizedBy(prepareJavadocForGhPages)

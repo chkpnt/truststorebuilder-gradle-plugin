@@ -1,16 +1,14 @@
 buildscript {
     repositories.maven { url 'https://plugins.gradle.org/m2/' }
-    dependencies.classpath 'org.ajoberstar:gradle-git:1.4.2'
+    dependencies.classpath 'org.ajoberstar.grgit:grgit-core:3.1.1'
 }
 
 import org.ajoberstar.grgit.*
 
-apply plugin: org.ajoberstar.gradle.git.base.GrgitPlugin
-
 task initBuildMetadata {
     def major = 0
     def minor = 3
-    def repo = Grgit.open(project.file('.'))
+    def repo = Grgit.open(dir: project.file('.'))
     project.version = "${major}.${minor}.${repo.log().size()}"
     project.ext.revision = repo.head().id
     project.ext.buildDate = new Date().toString()

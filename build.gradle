@@ -58,7 +58,6 @@ wrapper {
 }
 
 apply from: 'gradle/versioning.gradle'
-apply from: 'gradle/github.gradle'
 apply from: 'gradle/docs.gradle'
 apply from: 'gradle/publish.gradle'
 apply from: 'gradle/spotless.gradle'
