@@ -36,18 +36,8 @@ class TrustStoreBuilderPluginTest extends Specification {
 
     private File buildFile
 
-    private List<File> pluginClasspath
-
     def setup() {
         initProjectDir()
-
-        // Was needed when I wrote the tests with Gradle 2. Still needed?
-        def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
-        if (pluginClasspathResource == null) {
-            throw new IllegalStateException("Did not find plugin classpath resource, run `testClasses` build task.")
-        }
-
-        pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
     }
 
     private def initProjectDir() {
@@ -183,6 +173,6 @@ class TrustStoreBuilderPluginTest extends Specification {
                 .withDebug(true)
                 .withProjectDir(testProjectDir.root)
                 .withArguments(tasks)
-                .withPluginClasspath(pluginClasspath)
+                .withPluginClasspath()
     }
 }
