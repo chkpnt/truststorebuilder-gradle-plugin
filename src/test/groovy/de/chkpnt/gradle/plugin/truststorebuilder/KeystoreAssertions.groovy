@@ -21,7 +21,7 @@ import java.security.KeyStore
 
 class KeystoreAssertions {
 
-    private static CertificateService certificateService = new CertificateService()
+    private static DefaultCertificateService certificateService = new DefaultCertificateService()
 
     static void assertFingerprintOfKeystoreEntry(Path keystore, String password, String alias, String expectedFingerprint) {
         def ks = certificateService.loadKeystore(keystore, password)

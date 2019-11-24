@@ -35,14 +35,14 @@ import spock.lang.Specification
 
 class CertificateServiceTest extends Specification {
 
-    private CertificateService classUnderTest
+    private DefaultCertificateService classUnderTest
 
     private X509Certificate caCertCertificate
 
     private FileSystem fs
 
     def setup() {
-        classUnderTest = new CertificateService()
+        classUnderTest = new DefaultCertificateService()
 
         fs = Jimfs.newFileSystem()
 

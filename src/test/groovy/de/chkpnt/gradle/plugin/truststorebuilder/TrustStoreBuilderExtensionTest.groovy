@@ -39,8 +39,8 @@ class TrustStoreBuilderExtensionTest extends Specification  {
     def "check default values"() {
         expect:
         classUnderTest.password == 'changeit'
-        classUnderTest.trustStore == project.file('build/cacerts.jks').toPath()
-        classUnderTest.inputDir == project.file('src/main/certs').toPath()
+        classUnderTest.trustStorePath == project.file('build/cacerts.jks').toPath()
+        classUnderTest.inputDirPath == project.file('src/main/certs').toPath()
         that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
     }
 
@@ -49,7 +49,7 @@ class TrustStoreBuilderExtensionTest extends Specification  {
         project.buildDir = 'mybuild'
 
         then:
-        classUnderTest.trustStore == project.file('mybuild/cacerts.jks').toPath()
+        classUnderTest.trustStorePath == project.file('mybuild/cacerts.jks').toPath()
     }
 
     def "TrustStore with explicit input and output"() {
@@ -61,8 +61,8 @@ class TrustStoreBuilderExtensionTest extends Specification  {
         classUnderTest.inputDir = 'src/x509/certs'
 
         then:
-        classUnderTest.inputDir == project.file('src/x509/certs').toPath()
-        classUnderTest.trustStore == project.file('öäü/truststore.jks').toPath()
+        classUnderTest.inputDirPath == project.file('src/x509/certs').toPath()
+        classUnderTest.trustStorePath == project.file('öäü/truststore.jks').toPath()
     }
 
     def "accept additional file ending"() {

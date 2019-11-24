@@ -1,8 +1,13 @@
 buildscript {
-    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+	repositories.maven { url 'https://plugins.gradle.org/m2/' }
+	//repositories { mavenCentral() }
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.60"
+	}
 }
 
 apply plugin: 'groovy'
+apply plugin: 'kotlin'
 apply plugin: 'java-gradle-plugin'
 
 group = 'de.chkpnt'
@@ -25,10 +30,22 @@ compileGroovy {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+compileKotlin {
+	kotlinOptions {
+		jvmTarget = "1.8"
+	}
+}
+compileTestKotlin {
+	kotlinOptions {
+		jvmTarget = "1.8"
+	}
+}
+
 dependencies {
 	compile gradleApi()
-	compile localGroovy()
-	
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.60"
+
+	testCompile localGroovy()
 	testCompile gradleTestKit()
 	testCompile 'commons-io:commons-io:2.2'
 	testCompile 'com.google.jimfs:jimfs:1.0'      // In-Memory Filesystem

@@ -38,7 +38,7 @@ class ImportCertsTaskTest extends Specification {
 
     private Project project
 
-    private CertificateService certificateService = new CertificateService()
+    private DefaultCertificateService certificateService = new DefaultCertificateService()
 
     def setup() {
         fs = Jimfs.newFileSystem(Configuration.unix())
