@@ -17,7 +17,12 @@ spotless {
         indentWithSpaces()
         trimTrailingWhitespace()
     }
-    
+
+    kotlin {
+        ktlint()
+        licenseHeaderFile 'gradle/formatter/spotless.license.txt'
+    }
+
     groovy {
         excludeJava()
         licenseHeaderFile 'gradle/formatter/spotless.license.txt'
