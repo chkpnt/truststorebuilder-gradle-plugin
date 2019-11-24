@@ -1,6 +1,7 @@
 buildscript {
     repositories.maven { url 'https://plugins.gradle.org/m2/' }
     dependencies.classpath 'org.ajoberstar:gradle-git-publish:2.1.1'
+    dependencies.classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.10.0'
 }
 
 /***************************
@@ -23,33 +24,17 @@ gitPublish {
 }
 
 /***************************
- * Groovydoc
+ * KDoc
  ***************************/
 
-groovydoc {
-    // It seems to have issues with Lambdas in Java-Files.
-    exclude "**/TrustStoreBuilderPlugin.java"
+apply plugin: org.jetbrains.dokka.gradle.DokkaPlugin
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "${gitPublish.groomingDir}/kdoc"
 }
-
-task prepareGroovydocForGhPages(type: Copy) {
-    from groovydoc.destinationDir
-    into "${gitPublish.groomingDir}/groovydoc"
-}
-
-groovydoc.finalizedBy(prepareGroovydocForGhPages)
-
-/***************************
- * Javadoc
- ***************************/
-
-task prepareJavadocForGhPages(type: Copy) {
-    from javadoc.destinationDir
-    into "${gitPublish.groomingDir}/javadoc"
-}
-
-javadoc.finalizedBy(prepareJavadocForGhPages)
 
 task docs {
-    dependsOn groovydoc, javadoc
+    dependsOn dokka
     group org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
 }
