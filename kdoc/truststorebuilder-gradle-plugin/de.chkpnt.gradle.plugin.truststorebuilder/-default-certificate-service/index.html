@@ -1,0 +1,105 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DefaultCertificateService - truststorebuilder-gradle-plugin</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">truststorebuilder-gradle-plugin</a>&nbsp;/&nbsp;<a href="../index.html">de.chkpnt.gradle.plugin.truststorebuilder</a>&nbsp;/&nbsp;<a href="./index.html">DefaultCertificateService</a><br/>
+<br/>
+<h1>DefaultCertificateService</h1>
+<code><span class="keyword">class </span><span class="identifier">DefaultCertificateService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-certificate-service/index.html"><span class="identifier">CertificateService</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<code><span class="identifier">DefaultCertificateService</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="cf.html">cf</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">cf</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/security/cert/CertificateFactory.html"><span class="identifier">CertificateFactory</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="clock.html">clock</a></h4>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">clock</span><span class="symbol">: </span><span class="identifier">Clock</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="add-certificate-to-keystore.html">addCertificateToKeystore</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addCertificateToKeystore</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$addCertificateToKeystore(java.security.KeyStore, java.security.cert.X509Certificate, kotlin.String)/ks">ks</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/security/KeyStore.html"><span class="identifier">KeyStore</span></a><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$addCertificateToKeystore(java.security.KeyStore, java.security.cert.X509Certificate, kotlin.String)/cert">cert</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/security/cert/X509Certificate.html"><span class="identifier">X509Certificate</span></a><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$addCertificateToKeystore(java.security.KeyStore, java.security.cert.X509Certificate, kotlin.String)/alias">alias</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="fingerprint-sha1.html">fingerprintSha1</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">fingerprintSha1</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$fingerprintSha1(java.security.cert.X509Certificate)/cert">cert</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/security/cert/X509Certificate.html"><span class="identifier">X509Certificate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="get-certificate-from-keystore.html">getCertificateFromKeystore</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCertificateFromKeystore</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$getCertificateFromKeystore(java.security.KeyStore, kotlin.String)/ks">ks</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/security/KeyStore.html"><span class="identifier">KeyStore</span></a><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$getCertificateFromKeystore(java.security.KeyStore, kotlin.String)/alias">alias</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/security/cert/X509Certificate.html"><span class="identifier">X509Certificate</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="is-certificate-valid-in-future.html">isCertificateValidInFuture</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">isCertificateValidInFuture</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$isCertificateValidInFuture(java.security.cert.X509Certificate, java.time.Duration)/cert">cert</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/security/cert/X509Certificate.html"><span class="identifier">X509Certificate</span></a><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$isCertificateValidInFuture(java.security.cert.X509Certificate, java.time.Duration)/duration">duration</span><span class="symbol">:</span>&nbsp;<span class="identifier">Duration</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="load-certificate.html">loadCertificate</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">loadCertificate</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$loadCertificate(java.nio.file.Path)/file">file</span><span class="symbol">:</span>&nbsp;<span class="identifier">Path</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/security/cert/X509Certificate.html"><span class="identifier">X509Certificate</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="load-keystore.html">loadKeystore</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">loadKeystore</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$loadKeystore(java.nio.file.Path, kotlin.String)/file">file</span><span class="symbol">:</span>&nbsp;<span class="identifier">Path</span><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$loadKeystore(java.nio.file.Path, kotlin.String)/password">password</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/security/KeyStore.html"><span class="identifier">KeyStore</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="new-keystore.html">newKeystore</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">newKeystore</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/security/KeyStore.html"><span class="identifier">KeyStore</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="store-keystore.html">storeKeystore</a></h4>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">storeKeystore</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$storeKeystore(java.security.KeyStore, java.nio.file.Path, kotlin.String)/ks">ks</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/security/KeyStore.html"><span class="identifier">KeyStore</span></a><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$storeKeystore(java.security.KeyStore, java.nio.file.Path, kotlin.String)/file">file</span><span class="symbol">:</span>&nbsp;<span class="identifier">Path</span><span class="symbol">, </span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.DefaultCertificateService$storeKeystore(java.security.KeyStore, java.nio.file.Path, kotlin.String)/password">password</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

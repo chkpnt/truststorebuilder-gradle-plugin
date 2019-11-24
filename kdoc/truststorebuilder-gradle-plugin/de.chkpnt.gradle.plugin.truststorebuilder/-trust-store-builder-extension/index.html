@@ -1,0 +1,84 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>TrustStoreBuilderExtension - truststorebuilder-gradle-plugin</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">truststorebuilder-gradle-plugin</a>&nbsp;/&nbsp;<a href="../index.html">de.chkpnt.gradle.plugin.truststorebuilder</a>&nbsp;/&nbsp;<a href="./index.html">TrustStoreBuilderExtension</a><br/>
+<br/>
+<h1>TrustStoreBuilderExtension</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">TrustStoreBuilderExtension</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<code><span class="identifier">TrustStoreBuilderExtension</span><span class="symbol">(</span><span class="identifier" id="de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderExtension$<init>(org.gradle.api.Project)/project">project</span><span class="symbol">:</span>&nbsp;<span class="identifier">Project</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="accepted-file-endings.html">acceptedFileEndings</a></h4>
+</td>
+<td>
+<p>A file being processed as a certificate has to have a file ending from this list. Defaults to  <a href="#">crt,cer,pem</a>.</p>
+<code><span class="keyword">var </span><span class="identifier">acceptedFileEndings</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="at-least-valid-days.html">atLeastValidDays</a></h4>
+</td>
+<td>
+<p>Number of days the certificates have to be at least valid. Defaults to 90 days.</p>
+<code><span class="keyword">var </span><span class="identifier">atLeastValidDays</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="input-dir.html">inputDir</a></h4>
+</td>
+<td>
+<p>The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.</p>
+<code><span class="keyword">var </span><span class="identifier">inputDir</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="input-dir-path.html">inputDirPath</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">inputDirPath</span><span class="symbol">: </span><span class="identifier">Path</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="password.html">password</a></h4>
+</td>
+<td>
+<p>The password used for the TrustStore. Defaults to 'changeit'.</p>
+<code><span class="keyword">var </span><span class="identifier">password</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="trust-store.html">trustStore</a></h4>
+</td>
+<td>
+<p>Path pointing to the TrustStore being built. Defaults to '$buildDir/cacerts.jks'.</p>
+<code><span class="keyword">var </span><span class="identifier">trustStore</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="trust-store-path.html">trustStorePath</a></h4>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">trustStorePath</span><span class="symbol">: </span><span class="identifier">Path</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
