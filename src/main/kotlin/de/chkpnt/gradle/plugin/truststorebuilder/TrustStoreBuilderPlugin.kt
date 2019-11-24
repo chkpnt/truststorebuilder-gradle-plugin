@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Gregor Dschung
+ * Copyright 2016 - 2019 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,46 +25,46 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager
-                .apply(BasePlugin::class.java)
+            .apply(BasePlugin::class.java)
 
         val extension = project.extensions
-                .create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderExtension::class.java, project)
+            .create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderExtension::class.java, project)
 
         project.tasks
-                .register(CHECK_CERTS_TASK_NAME, CheckCertsValidationTask::class.java) { task ->
-                    task.group = LifecycleBasePlugin.VERIFICATION_GROUP
-                    task.description = "Checks the validation of the certificates to import."
+            .register(CHECK_CERTS_TASK_NAME, CheckCertsValidationTask::class.java) { task ->
+                task.group = LifecycleBasePlugin.VERIFICATION_GROUP
+                task.description = "Checks the validation of the certificates to import."
 
-                    task.inputDir.set(extension.inputDirPath)
-                    task.acceptedFileEndings.set(extension.acceptedFileEndings)
-                    task.atLeastValidDays.set(Integer(extension.atLeastValidDays))
-                }
-
-        project.tasks
-                .getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
-                .dependsOn(CHECK_CERTS_TASK_NAME)
+                task.inputDir.set(extension.inputDirPath)
+                task.acceptedFileEndings.set(extension.acceptedFileEndings)
+                task.atLeastValidDays.set(Integer(extension.atLeastValidDays))
+            }
 
         project.tasks
-                .register(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask::class.java) { task ->
-                    task.group = BasePlugin.BUILD_GROUP
+            .getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
+            .dependsOn(CHECK_CERTS_TASK_NAME)
 
-                    task.keystore.set(extension.trustStorePath)
-                    task.password.set(extension.password)
-                    task.inputDir.set(extension.inputDirPath)
-                    task.acceptedFileEndings.set(extension.acceptedFileEndings)
-                }
+        project.tasks
+            .register(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask::class.java) { task ->
+                task.group = BasePlugin.BUILD_GROUP
+
+                task.keystore.set(extension.trustStorePath)
+                task.password.set(extension.password)
+                task.inputDir.set(extension.inputDirPath)
+                task.acceptedFileEndings.set(extension.acceptedFileEndings)
+            }
 
         configureTaskDependencies(project)
     }
 
     private fun configureTaskDependencies(project: Project) {
         project.tasks
-                .getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
-                .dependsOn(CHECK_CERTS_TASK_NAME)
+            .getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
+            .dependsOn(CHECK_CERTS_TASK_NAME)
 
         project.tasks
-                .getByName(LifecycleBasePlugin.BUILD_TASK_NAME)
-                .dependsOn(BUILD_TRUSTSTORE_TASK_NAME)
+            .getByName(LifecycleBasePlugin.BUILD_TASK_NAME)
+            .dependsOn(BUILD_TRUSTSTORE_TASK_NAME)
     }
 
     companion object {
@@ -73,5 +73,4 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
         private val BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore"
         private val CHECK_CERTS_TASK_NAME = "checkCertificates"
     }
-
 }
