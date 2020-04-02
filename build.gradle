@@ -43,7 +43,7 @@ compileTestKotlin {
 
 dependencies {
 	compile gradleApi()
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.60"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.71"
 
 	testCompile localGroovy()
 	testCompile gradleTestKit()
