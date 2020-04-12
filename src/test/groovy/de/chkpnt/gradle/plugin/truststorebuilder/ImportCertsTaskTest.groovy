@@ -63,7 +63,7 @@ class ImportCertsTaskTest extends Specification {
         classUnderTest.acceptedFileEndings = ["pem"]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.importCerts()
 
         then:
         def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
@@ -84,7 +84,7 @@ class ImportCertsTaskTest extends Specification {
         classUnderTest.acceptedFileEndings = ["pem"]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.importCerts()
 
         then:
         def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
@@ -105,7 +105,7 @@ class ImportCertsTaskTest extends Specification {
         classUnderTest.acceptedFileEndings = ["pem"]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.importCerts()
 
         then:
         Files.exists(outputdir)
@@ -118,11 +118,11 @@ class ImportCertsTaskTest extends Specification {
         classUnderTest.acceptedFileEndings = ["pem"]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.importCerts()
 
         then:
-        TaskExecutionException e = thrown()
-        IllegalArgumentException rootCause = e.cause.cause
+        def e = thrown(TaskExecutionException)
+        IllegalArgumentException rootCause = e.cause
         rootCause.message == "The following properties have to be configured appropriately: password"
     }
 
@@ -137,11 +137,11 @@ class ImportCertsTaskTest extends Specification {
         classUnderTest.acceptedFileEndings = ["", " "]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.importCerts()
 
         then:
-        TaskExecutionException e = thrown()
-        IllegalArgumentException rootCause = e.cause.cause
+        def e = thrown(TaskExecutionException)
+        IllegalArgumentException rootCause = e.cause
         rootCause.message == "The following properties have to be configured appropriately: acceptedFileEndings"
     }
 }

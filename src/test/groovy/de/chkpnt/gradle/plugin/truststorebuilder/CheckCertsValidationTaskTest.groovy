@@ -52,12 +52,11 @@ class CheckCertsValidationTaskTest extends Specification {
         fs.getPath("certs/corrupt.pem").text = CertificateProvider.CORRUPT
 
         when:
-        classUnderTest.execute()
+        classUnderTest.testValidation()
 
         then:
-        def e = thrown(TaskExecutionException)
-        e.cause instanceof CheckCertValidationError
-        e.cause.message == "Could not load certificate: certs${fs.separator}corrupt.pem"
+        def e = thrown(CheckCertValidationError)
+        e.message == "Could not load certificate: certs${fs.separator}corrupt.pem"
     }
 
     def "loading a non-certificate"() {
@@ -68,12 +67,11 @@ class CheckCertsValidationTaskTest extends Specification {
         classUnderTest.acceptedFileEndings = ["txt"]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.testValidation()
 
         then:
-        def e = thrown(TaskExecutionException)
-        e.cause instanceof CheckCertValidationError
-        e.cause.message == "Could not load certificate: certs${fs.separator}notACert.txt"
+        def e = thrown(CheckCertValidationError)
+        e.message == "Could not load certificate: certs${fs.separator}notACert.txt"
     }
 
     def "certificate letsencrypt.pem is invalid"() {
@@ -85,12 +83,11 @@ class CheckCertsValidationTaskTest extends Specification {
         certificateServiceMock.isCertificateValidInFuture(_, _) >>> [true, false]
 
         when:
-        classUnderTest.execute()
+        classUnderTest.testValidation()
 
         then:
-        def e = thrown(TaskExecutionException)
-        e.cause instanceof CheckCertValidationError
-        e.cause.message == "Certificate is already or becomes invalid within the next 30 days: certs${fs.separator}letsencrypt.pem"
+        def e = thrown(CheckCertValidationError)
+        e.message == "Certificate is already or becomes invalid within the next 30 days: certs${fs.separator}letsencrypt.pem"
     }
 
     def "when all certificates are valid nothing happens"() {
@@ -102,7 +99,7 @@ class CheckCertsValidationTaskTest extends Specification {
         certificateServiceMock.isCertificateValidInFuture(_, _) >> true
 
         when:
-        classUnderTest.execute()
+        classUnderTest.testValidation()
 
         then:
         true
