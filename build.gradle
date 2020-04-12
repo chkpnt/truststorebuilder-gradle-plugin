@@ -29,20 +29,19 @@ compileGroovy {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+compileKotlin.kotlinOptions.jvmTarget = "1.8"
+compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 
-compileKotlin {
-	kotlinOptions {
-		jvmTarget = "1.8"
-	}
-}
-compileTestKotlin {
-	kotlinOptions {
-		jvmTarget = "1.8"
+gradlePlugin {
+	plugins {
+		truststorebuilder {
+			id = 'de.chkpnt.truststorebuilder'
+			implementationClass = 'de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin'
+		}
 	}
 }
 
 dependencies {
-	compile gradleApi()
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.60"
 
 	testCompile localGroovy()
