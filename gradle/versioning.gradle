@@ -7,9 +7,14 @@ import org.ajoberstar.grgit.*
 
 task initBuildMetadata {
     def major = 0
-    def minor = 3
+    def minor = 4
+    def patch = 0
     def repo = Grgit.open(dir: project.file('.'))
-    project.version = "${major}.${minor}.${repo.log().size()}"
+    if (repo.branch.current().name == 'release') {
+        project.version = "${major}.${minor}.${patch}"
+    } else {
+        project.version = "${major}.${minor}.${patch}-SNAPSHOT"
+    }
     project.ext.revision = repo.head().id
     project.ext.buildDate = new Date().toString()
 }
