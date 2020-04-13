@@ -55,8 +55,8 @@ dependencies {
 }
 
 wrapper {
-	gradleVersion = '4.10.3'
-	distributionUrl = 'https://services.gradle.org/distributions/gradle-4.10.3-all.zip'
+	gradleVersion = '6.3'
+	distributionType = 'all'
 }
 
 apply from: 'gradle/versioning.gradle'
