@@ -37,7 +37,7 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
 
                 task.inputDir.set(extension.inputDirPath)
                 task.acceptedFileEndings.set(extension.acceptedFileEndings)
-                task.atLeastValidDays.set(Integer(extension.atLeastValidDays))
+                task.atLeastValidDays.set(extension.atLeastValidDays)
             }
 
         project.tasks

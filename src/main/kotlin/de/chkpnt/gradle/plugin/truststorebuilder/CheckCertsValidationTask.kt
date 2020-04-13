@@ -38,7 +38,7 @@ open class CheckCertsValidationTask() : DefaultTask() {
     @Input
     val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
     @Input
-    val atLeastValidDays: Property<Integer> = project.objects.property(Integer::class.java)
+    val atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
