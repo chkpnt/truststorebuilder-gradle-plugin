@@ -7,7 +7,7 @@ buildscript {
 /*********************************
  * Configure Maven-Artifact
  *********************************/
-apply plugin: 'maven'
+//apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 task sourcesJar (type : Jar) {
@@ -17,9 +17,9 @@ task sourcesJar (type : Jar) {
 
 publishing {
     publications {
-        plugin(MavenPublication) {
-            from components.java
-            
+        pluginMaven(MavenPublication) {
+            artifact sourcesJar
+
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
@@ -46,8 +46,6 @@ publishing {
                     }
                 }
             }
-
-            artifact sourcesJar
         }
     }
 }
@@ -63,7 +61,7 @@ setToDefaultIfNotExists('bintrayApiKey', 'unspecified')
 bintray {
     user = project.bintrayUser
     key = project.bintrayApiKey
-    publications = ['plugin'] // This refers to the Maven-based publication files above
+    publications = ['pluginMaven'] // This refers to the Maven-based publication files above
     dryRun = false
     publish = true
     pkg {
