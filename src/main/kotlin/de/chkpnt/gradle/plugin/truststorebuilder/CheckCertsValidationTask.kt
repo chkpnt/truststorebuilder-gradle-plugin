@@ -20,6 +20,9 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import java.nio.file.Files
 import java.nio.file.Path
@@ -30,11 +33,16 @@ import java.time.Duration
 
 open class CheckCertsValidationTask() : DefaultTask() {
 
+    @InputDirectory
     val inputDir: Property<Path> = project.objects.property(Path::class.java)
+    @Input
     val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
+    @Input
     val atLeastValidDays: Property<Integer> = project.objects.property(Integer::class.java)
 
+    @Internal
     var certificateService: CertificateService = DefaultCertificateService()
+    @Internal
     var certificateFactory = CertificateFactory.getInstance("X.509")
 
     init {
@@ -46,6 +54,7 @@ open class CheckCertsValidationTask() : DefaultTask() {
         get() = "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days"
 
     val atLeastValid: Duration
+        @Input
         get() = Duration.ofDays(atLeastValidDays.get().toLong())
 
     @TaskAction

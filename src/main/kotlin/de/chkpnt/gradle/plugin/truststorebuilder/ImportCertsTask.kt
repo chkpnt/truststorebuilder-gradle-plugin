@@ -19,7 +19,10 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Console
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
@@ -42,12 +45,18 @@ class DefaultFileAdapter : FileAdapter {
 
 open class ImportCertsTask() : DefaultTask() {
 
+    @OutputFile
     val keystore: Property<Path> = project.objects.property(Path::class.java)
+    @Input
     val password: Property<String> = project.objects.property(String::class.java)
+    @InputDirectory
     val inputDir: Property<Path> = project.objects.property(Path::class.java)
+    @Input
     val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
 
+    @Internal
     var fileAdapter: FileAdapter = DefaultFileAdapter()
+    @Internal
     var certificateService: CertificateService = DefaultCertificateService()
 
     init {
@@ -65,6 +74,7 @@ open class ImportCertsTask() : DefaultTask() {
         return fileAdapter.toFile(keystore.get())
     }
 
+    @Console
     override fun getDescription(): String {
         val inputDirName = project.projectDir
                 .toPath()
