@@ -44,14 +44,14 @@ gradlePlugin {
 dependencies {
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.71"
 
-	testCompile localGroovy()
-	testCompile gradleTestKit()
-	testCompile 'commons-io:commons-io:2.6'
-	testCompile 'com.google.jimfs:jimfs:1.1'      // In-Memory Filesystem
-	testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
+	testImplementation localGroovy()
+	testImplementation gradleTestKit()
+	testImplementation 'commons-io:commons-io:2.6'
+	testImplementation 'com.google.jimfs:jimfs:1.1'      // In-Memory Filesystem
+	testImplementation 'org.spockframework:spock-core:1.0-groovy-2.4', {
 		exclude group: 'org.codehaus.groovy'
 	}
-	testCompile 'org.hamcrest:hamcrest-all:1.3'
+	testImplementation 'org.hamcrest:hamcrest-all:1.3'
 }
 
 wrapper {
