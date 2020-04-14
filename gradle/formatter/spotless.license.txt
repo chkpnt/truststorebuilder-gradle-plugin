@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Gregor Dschung
+ * Copyright 2016 - 2020 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,3 @@
  * limitations under the License.
  */
 
-package de.chkpnt.gradle.plugin.truststorebuilder
-
-import java.nio.file.Path
-
-import org.gradle.api.GradleException
-
-class CheckCertValidationError extends GradleException {
-
-	Path file
-
-	String reason
-
-	CheckCertValidationError(Path file, String reason) {
-		this.file = file
-		this.reason = reason
-	}
-
-	@Override
-	public String getMessage() {
-		return "${reason}: ${file}"
-	}
-}

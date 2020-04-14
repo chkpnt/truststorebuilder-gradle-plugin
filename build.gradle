@@ -1,5 +1,14 @@
+buildscript {
+	repositories.maven { url 'https://plugins.gradle.org/m2/' }
+	//repositories { mavenCentral() }
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71"
+	}
+}
+
 apply plugin: 'groovy'
-apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'java-gradle-plugin'
 
 group = 'de.chkpnt'
 description = "Building Java TrustStores with Gradle."
@@ -20,41 +29,37 @@ compileGroovy {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+compileKotlin.kotlinOptions.jvmTarget = "1.8"
+compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 
-// Write the plugin's classpath to a file to share with the tests
-task createClasspathManifest {
-	def outputDir = file("$buildDir/$name")
-
-	inputs.files sourceSets.main.runtimeClasspath
-	outputs.dir outputDir
-
-	doLast {
-		outputDir.mkdirs()
-		file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
+gradlePlugin {
+	plugins {
+		truststorebuilder {
+			id = 'de.chkpnt.truststorebuilder'
+			implementationClass = 'de.chkpnt.gradle.plugin.truststorebuilder.TrustStoreBuilderPlugin'
+		}
 	}
 }
 
 dependencies {
-	compile gradleApi()
-	compile localGroovy()
-	
-	testCompile gradleTestKit()
-	testRuntime files(createClasspathManifest)
-	testCompile 'commons-io:commons-io:2.2'
-	testCompile 'com.google.jimfs:jimfs:1.0'      // In-Memory Filesystem
-	testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
-		exclude group: 'org.codehaus.groovy' }
-	testCompile 'cglib:cglib-nodep:3.2.0'
-	testCompile 'org.hamcrest:hamcrest-all:1.3'
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.71"
+
+	testImplementation localGroovy()
+	testImplementation gradleTestKit()
+	testImplementation 'commons-io:commons-io:2.6'
+	testImplementation 'com.google.jimfs:jimfs:1.1'      // In-Memory Filesystem
+	testImplementation 'org.spockframework:spock-core:1.0-groovy-2.4', {
+		exclude group: 'org.codehaus.groovy'
+	}
+	testImplementation 'org.hamcrest:hamcrest-all:1.3'
 }
 
 wrapper {
-	gradleVersion = '4.10.3'
-	distributionUrl = 'https://services.gradle.org/distributions/gradle-4.10.3-all.zip'
+	gradleVersion = '6.3'
+	distributionType = 'all'
 }
 
 apply from: 'gradle/versioning.gradle'
-apply from: 'gradle/github.gradle'
 apply from: 'gradle/docs.gradle'
 apply from: 'gradle/publish.gradle'
 apply from: 'gradle/spotless.gradle'

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Gregor Dschung
+ * Copyright 2016 - 2020 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,18 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Path
 import java.nio.file.Files
 import java.nio.file.Path
 
 class TestFileAdapter implements FileAdapter {
 
-	@Override
-	File toFile(Path path) {
-		def temp = Files.isDirectory(path)
-				? Files.createTempDirectory(null)
-				: Files.createTempFile(null, null)
-		def file = temp.toFile()
-		file.deleteOnExit()
-		return file
-	}
+    @Override
+    File toFile(Path path) {
+        def temp = Files.isDirectory(path)
+                ? Files.createTempDirectory(null)
+                : Files.createTempFile(null, null)
+        def file = temp.toFile()
+        file.deleteOnExit()
+        return file
+    }
 }

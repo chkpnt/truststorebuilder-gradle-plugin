@@ -1,23 +1,40 @@
-groovydoc {
-	// It seems to have issues with Lambdas in Java-Files.
-	exclude "**/TrustStoreBuilderPlugin.java"
+buildscript {
+    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+    dependencies.classpath 'org.ajoberstar:gradle-git-publish:2.1.3'
+    dependencies.classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.10.1'
 }
 
-task prepareGroovydocForGhPages(type: Copy) {
-	from groovydoc.destinationDir
-	into "${githubPages.groomingDir}/groovydoc"
+/***************************
+ * Publish to Github Pages
+ ***************************/
+
+apply plugin: org.ajoberstar.gradle.git.publish.GitPublishPlugin
+
+gitPublish {
+    ext {
+        groomingDir = "$buildDir/ghpages-grooming"
+    }
+    repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
+    branch = 'gh-pages'
+    preserve { include 'reports/*' } // until Sonargraph's report can be built again
+    contents {
+        from groomingDir
+    }
+    commitMessage = 'Publish of Github pages from Gradle'
 }
 
-groovydoc.finalizedBy(prepareGroovydocForGhPages)
+/***************************
+ * KDoc
+ ***************************/
 
-task prepareJavadocForGhPages(type: Copy) {
-	from javadoc.destinationDir
-	into "${githubPages.groomingDir}/javadoc"
+apply plugin: org.jetbrains.dokka.gradle.DokkaPlugin
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "${gitPublish.groomingDir}/kdoc"
 }
-
-javadoc.finalizedBy(prepareJavadocForGhPages)
 
 task docs {
-	dependsOn groovydoc, javadoc
-	group org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
+    dependsOn dokka
+    group org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
 }

@@ -1,55 +1,52 @@
 buildscript {
-	repositories.maven { url 'https://plugins.gradle.org/m2/' }
-	dependencies.classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-	dependencies.classpath 'com.gradle.publish:plugin-publish-plugin:0.10.1'
+    repositories.maven { url 'https://plugins.gradle.org/m2/' }
+    dependencies.classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+    dependencies.classpath 'com.gradle.publish:plugin-publish-plugin:0.11.0'
 }
 
 /*********************************
  * Configure Maven-Artifact
  *********************************/
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 task sourcesJar (type : Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
 
 publishing {
-	publications {
-		plugin(MavenPublication) {
-			from components.java
-			
-			pom.withXml {
-				asNode().children().last() + {
-					resolveStrategy = Closure.DELEGATE_FIRST
-					description "${project.description}\r\n\r\nRevision: ${project.revision}\r\nBuild-date: ${project.buildDate}"
-					url 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
-					scm {
-						url 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
-						connection 'scm:git:https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
-						developerConnection 'scm:git:ssh:git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
-					}
-					licenses {
-						license {
-							name 'The Apache Software License, Version 2.0'
-							url 'http://www.apache.org/license/LICENSE-2.0.txt'
-							distribution 'repo'
-						}
-					}
-					developers {
-						developer {
-							id 'chkpnt'
-							name 'Gregor Dschung'
-							email 'gregor@chkpnt.de'
-						}
-					}
-				}
-			}
+    publications {
+        pluginMaven(MavenPublication) {
+            artifact sourcesJar
 
-			artifact sourcesJar
-		}
-	}
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    description "${project.description}\r\n\r\nRevision: ${project.revision}\r\nBuild-date: ${project.buildDate}"
+                    url 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+                    scm {
+                        url 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+                        connection 'scm:git:https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
+                        developerConnection 'scm:git:ssh:git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'chkpnt'
+                            name 'Gregor Dschung'
+                            email 'gregor@chkpnt.de'
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /*********************************
@@ -61,32 +58,32 @@ setToDefaultIfNotExists('bintrayUser', 'unspecified')
 setToDefaultIfNotExists('bintrayApiKey', 'unspecified')
 
 bintray {
-	user = project.bintrayUser
-	key = project.bintrayApiKey
-	publications = ['plugin'] // This refers to the Maven-based publication files above
-	dryRun = false
-	publish = true
-	pkg {
-		repo = 'maven'
-		name = project.name
-		desc = project.description
-		websiteUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
-		issueTrackerUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin/issues'
-		vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
-		licenses = ['Apache-2.0']
-		labels = ['gradle', 'truststore', 'certificates', 'ca']
-		publicDownloadNumbers = false
-		version {
-			name = project.version //Bintray logical version name
-			vcsTag = project.revision
-			attributes = [
-				'Build-date': project.buildDate
-			]
-			mavenCentralSync {
-				sync = false
-			}
-		}
-	}
+    user = project.bintrayUser
+    key = project.bintrayApiKey
+    publications = ['pluginMaven'] // This refers to the Maven-based publication files above
+    dryRun = false
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = project.name
+        desc = project.description
+        websiteUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+        issueTrackerUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin/issues'
+        vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
+        licenses = ['Apache-2.0']
+        labels = ['gradle', 'truststore', 'certificates', 'ca']
+        publicDownloadNumbers = false
+        version {
+            name = project.version //Bintray logical version name
+            vcsTag = project.revision
+            attributes = [
+                'Build-date': project.buildDate
+            ]
+            mavenCentralSync {
+                sync = false
+            }
+        }
+    }
 }
 
 /*********************************
@@ -95,16 +92,15 @@ bintray {
 apply plugin: com.gradle.publish.PublishPlugin
 
 pluginBundle {
-	website = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
-	vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
-	description = project.description
-	tags = ['truststore', 'certificates', 'ca']
+    website = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
+    vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
+    description = project.description
+    tags = ['truststore', 'certificates', 'ca']
 
-	plugins {
-		truststorebuilder {
-			id = 'de.chkpnt.truststorebuilder'
-			displayName = 'Gradle TrustStore-builder plugin'
-		}
-	}
+    plugins {
+        truststorebuilder {
+            displayName = 'Gradle TrustStore-builder plugin'
+        }
+    }
 }
 
