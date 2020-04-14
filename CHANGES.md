@@ -1,10 +1,9 @@
 # Release notes
 
-The version number consists of 3 parts: MAJOR.MINOR.BUILD
-* MAJOR and MINOR must get updated with any significant changes.
-* BUILD must get updated whenever a release is built. The BUILD number is an ever-increasing number representing a point in time of the projects repository.
-
-Currently, the BUILD number is equal to the number of commits referred to the commit to build. 
+# v0.4.0
+* Changed the versioning scheme to be more similar to [semantic versioning](https://semver.org/)
+* Updated several build dependencies
+* Plugin requires users to use Gradle 5.0 or later
 
 # v0.3.x
 * Refactored the plugin to use the [Task Configuration Avoidance API](https://github.com/gradle/gradle/blob/v5.6.2/subprojects/docs/src/docs/userguide/task_configuration_avoidance.adoc)
