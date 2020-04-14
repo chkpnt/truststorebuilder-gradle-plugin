@@ -4,4 +4,5 @@
           -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET \
           -PbintrayUser=chkpnt \
           -PbintrayApiKey=$BINTRAY_API_KEY \
+          -PisRelease=true \
           bintrayUpload publishPlugins

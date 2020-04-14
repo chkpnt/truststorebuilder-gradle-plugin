@@ -5,16 +5,18 @@ buildscript {
 
 import org.ajoberstar.grgit.*
 
+setToDefaultIfNotExists('isRelease', false)
+
 task initBuildMetadata {
     def major = 0
     def minor = 4
     def patch = 0
-    def repo = Grgit.open(dir: project.file('.'))
-    if (repo.branch.current().name == 'release') {
+    if (project.isRelease.toBoolean()) {
         project.version = "${major}.${minor}.${patch}"
     } else {
         project.version = "${major}.${minor}.${patch}-SNAPSHOT"
     }
+    def repo = Grgit.open(dir: project.file('.'))
     project.ext.revision = repo.head().id
     project.ext.buildDate = new Date().toString()
 }
