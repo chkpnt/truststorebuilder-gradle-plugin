@@ -54,7 +54,7 @@ dependencies {
 }
 
 wrapper {
-	gradleVersion = '6.3'
+	gradleVersion = '6.9'
 	distributionType = 'all'
 }
 
