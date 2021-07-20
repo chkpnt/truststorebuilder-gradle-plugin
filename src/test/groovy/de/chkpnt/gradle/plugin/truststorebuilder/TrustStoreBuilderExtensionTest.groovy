@@ -43,6 +43,8 @@ class TrustStoreBuilderExtensionTest extends Specification  {
         classUnderTest.inputDirPath == project.file('src/main/certs').toPath()
         that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
         classUnderTest.atLeastValidDays == 90
+        classUnderTest.checkEnabled == true
+        classUnderTest.buildEnabled == true
     }
 
     def "Default TrustStore is in build dir"() {

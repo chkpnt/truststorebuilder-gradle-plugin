@@ -72,6 +72,37 @@ class TrustStoreBuilderPluginTest extends Specification {
         result.output.contains("checkCertificates - Checks the validation of the certificates")
     }
 
+    def "buildTrustStore and checkCertificates tasks are included in lifecycle"() {
+        when:
+        def result = buildGradleRunner("build").build()
+
+        then:
+        result.output.contains("Task :buildTrustStore")
+        result.output.contains("Task :checkCertificates")
+    }
+
+
+    def "buildTrustStore and checkCertificates tasks can be excluded from lifecycle"() {
+        given:
+        buildFile.text = """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+
+            trustStoreBuilder {
+                checkEnabled = false
+                buildEnabled = false
+            }
+        """
+
+        when:
+        def result = buildGradleRunner("build").build()
+
+        then:
+        result.output.contains("Task :buildTrustStore") == false
+        result.output.contains("Task :checkCertificates") == false
+    }
+
     def "buildTrustStore task builds a TrustStore"() {
         when:
         def result = buildGradleRunner("buildTrustStore").build()

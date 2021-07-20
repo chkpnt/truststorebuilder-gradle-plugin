@@ -65,4 +65,14 @@ open class TrustStoreBuilderExtension(project: Project) {
      * Number of days the certificates have to be at least valid. Defaults to 90 days.
      */
     var atLeastValidDays: Int = 90
+
+    /**
+     * Should the `check`-task depend on `checkCertificates`? Defaults to true.
+     */
+    var checkEnabled: Boolean = true
+
+    /**
+     * Should the `build`-task depend on `buildTrustStore`? Defaults to true.
+     */
+    var buildEnabled: Boolean = true
 }
