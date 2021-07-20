@@ -10,6 +10,10 @@ buildscript {
  ***************************/
 apply plugin: 'jacoco'
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 jacocoTestReport {
     reports {
         xml.enabled = true
