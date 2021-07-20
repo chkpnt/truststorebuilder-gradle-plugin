@@ -32,7 +32,6 @@ Total time: 4.62 secs
 ## Status
 
 [![Gradle plugin](https://img.shields.io/badge/plugins.gradle.org-de.chkpnt.truststorebuilder-blue.svg)](https://plugins.gradle.org/plugin/de.chkpnt.truststorebuilder)
-[![JCenter artifact](https://img.shields.io/badge/JCenter-de.chkpnt%3Atrust%E2%80%A6--plugin-blue.svg)](https://bintray.com/chkpnt/maven/truststorebuilder-gradle-plugin/view)
 [![License](https://img.shields.io/github/license/chkpnt/truststorebuilder-gradle-plugin.svg?label=License)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))  
 [![Linux Build Status](https://travis-ci.com/chkpnt/truststorebuilder-gradle-plugin.svg?branch=master)](https://travis-ci.com/chkpnt/truststorebuilder-gradle-plugin)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/c5cu6n9ngma600y9?svg=true)](https://ci.appveyor.com/project/chkpnt/truststorebuilder-gradle-plugin/branch/master)
