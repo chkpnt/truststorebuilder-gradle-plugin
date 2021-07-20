@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2020 Gregor Dschung
+ * Copyright 2016 - 2021 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,37 @@ class TrustStoreBuilderPluginTest extends Specification {
         then:
         result.output.contains("buildTrustStore - Adds all certificates found")
         result.output.contains("checkCertificates - Checks the validation of the certificates")
+    }
+
+    def "buildTrustStore and checkCertificates tasks are included in lifecycle"() {
+        when:
+        def result = buildGradleRunner("build").build()
+
+        then:
+        result.output.contains("Task :buildTrustStore")
+        result.output.contains("Task :checkCertificates")
+    }
+
+
+    def "buildTrustStore and checkCertificates tasks can be excluded from lifecycle"() {
+        given:
+        buildFile.text = """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+
+            trustStoreBuilder {
+                checkEnabled = false
+                buildEnabled = false
+            }
+        """
+
+        when:
+        def result = buildGradleRunner("build").build()
+
+        then:
+        result.output.contains("Task :buildTrustStore") == false
+        result.output.contains("Task :checkCertificates") == false
     }
 
     def "buildTrustStore task builds a TrustStore"() {

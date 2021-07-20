@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2020 Gregor Dschung
+ * Copyright 2016 - 2021 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,8 @@ class TrustStoreBuilderExtensionTest extends Specification  {
         classUnderTest.inputDirPath == project.file('src/main/certs').toPath()
         that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
         classUnderTest.atLeastValidDays == 90
+        classUnderTest.checkEnabled == true
+        classUnderTest.buildEnabled == true
     }
 
     def "Default TrustStore is in build dir"() {

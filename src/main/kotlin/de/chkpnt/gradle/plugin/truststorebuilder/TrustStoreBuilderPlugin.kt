@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2020 Gregor Dschung
+ * Copyright 2016 - 2021 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,11 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
             }
 
         project.tasks
-            .getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
-            .dependsOn(CHECK_CERTS_TASK_NAME)
+            .named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { task ->
+                if (extension.checkEnabled) {
+                    task.dependsOn(CHECK_CERTS_TASK_NAME)
+                }
+            }
 
         project.tasks
             .register(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask::class.java) { task ->
@@ -54,17 +57,12 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
                 task.acceptedFileEndings.set(extension.acceptedFileEndings)
             }
 
-        configureTaskDependencies(project)
-    }
-
-    private fun configureTaskDependencies(project: Project) {
         project.tasks
-            .getByName(LifecycleBasePlugin.CHECK_TASK_NAME)
-            .dependsOn(CHECK_CERTS_TASK_NAME)
-
-        project.tasks
-            .getByName(LifecycleBasePlugin.BUILD_TASK_NAME)
-            .dependsOn(BUILD_TRUSTSTORE_TASK_NAME)
+            .named(LifecycleBasePlugin.BUILD_TASK_NAME) { task ->
+                if (extension.buildEnabled) {
+                    task.dependsOn(BUILD_TRUSTSTORE_TASK_NAME)
+                }
+            }
     }
 
     companion object {

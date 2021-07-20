@@ -1,5 +1,5 @@
 language: groovy
-dist: trusty
+dist: bionic
 sudo: false
 
 env:
@@ -16,7 +16,7 @@ env:
     - secure: "D8dZnWDhpHVxuYXN87c79sDZ55kL1ZmWcsRrk6L/9mm3HWJcl4NyiPfe2XpMGHDyWVIrxDzKm9NnsiCjuY1vlM3Ygk6CuJj94mG3l2Fx6bv7BEIT1eVvYKCjsKqoflVTgKnkjChdJsDKVeDXPqEEYkaiyJ8Oev9AP6ruIp4/VvwB+2OuISGMk0a46PjzbM9HrGH+s5IMBrHF/rXD9ucHMIWOMgy+sQb5z0SAgZv4VPiEuL1jAQuojR5+0xLfqypBTQr7CuJVl3fycSEikzIa7VPpq6WbKYp5lcegIhk7ClAshTCsMuDhznbCdAQL6cPRfgkwbM2TjMi8kNuHuwTMjQDXQizmv8RG25m5RpdBFnAnOYY3SeN683kHOjRo75k5AtLt6szDxukGGxU+AIOLZ1b3nAgsoKbCciInX4f7mOEWBhGeUp/0HGYIxeeVeehXBGVYgBhN3wQvQ1a7SVHS/zfrmMx4drLFvdI6G0jPKjpqiAay0gwohaZM0jaHLFm3h9qnOalgRNv9oO/B5OYW+cP1YfjVa1aopvtxvBhk1bh9V5J0hqvEcWqHuCO63Y3WcnBhjDcpD3aYJXpVUzKB08G+THjQ4+hMbZXfLRtnZJRSdhQSRBijBBdbtpTuWdmZp65CK1cLdNtS6P3yp/mc2zDCiQ3GyduYNl+mE6Y8urY="
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

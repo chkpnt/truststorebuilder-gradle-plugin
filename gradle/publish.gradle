@@ -1,6 +1,5 @@
 buildscript {
     repositories.maven { url 'https://plugins.gradle.org/m2/' }
-    dependencies.classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     dependencies.classpath 'com.gradle.publish:plugin-publish-plugin:0.11.0'
 }
 
@@ -44,43 +43,6 @@ publishing {
                         }
                     }
                 }
-            }
-        }
-    }
-}
-
-/*********************************
- * Publish to Bintray / JCenter
- *********************************/
-apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
-
-setToDefaultIfNotExists('bintrayUser', 'unspecified')
-setToDefaultIfNotExists('bintrayApiKey', 'unspecified')
-
-bintray {
-    user = project.bintrayUser
-    key = project.bintrayApiKey
-    publications = ['pluginMaven'] // This refers to the Maven-based publication files above
-    dryRun = false
-    publish = true
-    pkg {
-        repo = 'maven'
-        name = project.name
-        desc = project.description
-        websiteUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
-        issueTrackerUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin/issues'
-        vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
-        licenses = ['Apache-2.0']
-        labels = ['gradle', 'truststore', 'certificates', 'ca']
-        publicDownloadNumbers = false
-        version {
-            name = project.version //Bintray logical version name
-            vcsTag = project.revision
-            attributes = [
-                'Build-date': project.buildDate
-            ]
-            mavenCentralSync {
-                sync = false
             }
         }
     }

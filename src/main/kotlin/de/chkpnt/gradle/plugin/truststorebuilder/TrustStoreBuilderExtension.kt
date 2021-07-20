@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2020 Gregor Dschung
+ * Copyright 2016 - 2021 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,4 +65,14 @@ open class TrustStoreBuilderExtension(project: Project) {
      * Number of days the certificates have to be at least valid. Defaults to 90 days.
      */
     var atLeastValidDays: Int = 90
+
+    /**
+     * Should the `check`-task depend on `checkCertificates`? Defaults to true.
+     */
+    var checkEnabled: Boolean = true
+
+    /**
+     * Should the `build`-task depend on `buildTrustStore`? Defaults to true.
+     */
+    var buildEnabled: Boolean = true
 }
