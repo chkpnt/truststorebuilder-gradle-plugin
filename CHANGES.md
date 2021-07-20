@@ -1,5 +1,9 @@
 # Release notes
 
+# v0.5.0
+* Task `buildTrustStore` can be excluded from lifecycle task `build`
+* Task `checkCertificates` can be excluded from lifecycle task `check`
+
 # v0.4.0
 * Changed the versioning scheme to be more similar to [semantic versioning](https://semver.org/)
 * Updated several build dependencies
