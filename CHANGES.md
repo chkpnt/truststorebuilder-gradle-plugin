@@ -1,5 +1,8 @@
 # Release notes
 
+# v0.5.1
+* Remove runtime dependency to kotlin-stdlib
+
 # v0.5.0
 * Task `buildTrustStore` can be excluded from lifecycle task `build`
 * Task `checkCertificates` can be excluded from lifecycle task `check`
