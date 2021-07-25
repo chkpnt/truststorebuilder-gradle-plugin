@@ -1,14 +1,18 @@
-buildscript {
-    repositories.maven { url 'https://plugins.gradle.org/m2/' }
-    repositories.maven { url 'https://maven.hello2morrow.com/repository' }
-    dependencies.classpath 'com.hello2morrow:sonargraph-gradle-plugin:8.8.0'
-    dependencies.classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+plugins {
+    id("jacoco")
+    id "org.sonarqube"
+    id "com.hello2morrow.sonargraph"
+}
+
+def setToDefaultIfNotExists(property, defaultValue) {
+    if (!project.hasProperty(property)) {
+        project.ext.setProperty(property, defaultValue)
+    }
 }
 
 /***************************
  * JaCoCo
  ***************************/
-apply plugin: 'jacoco'
 
 jacoco {
     toolVersion = "0.8.7"
@@ -26,7 +30,6 @@ check.dependsOn jacocoTestReport
 /*********************************
  * SonarQube
  *********************************/
-apply plugin: org.sonarqube.gradle.SonarQubePlugin
 
 setToDefaultIfNotExists('sonarqubeToken', '')
 
@@ -52,8 +55,6 @@ sonarqube {
 /*********************************
  * Sonargraph
  *********************************/
-apply plugin: com.hello2morrow.sonargraph.build.client.gradle.SonargraphGradlePlugin
-
 setToDefaultIfNotExists('sonargraphActivationCode', '')
 
 sonargraphDynamicReport {

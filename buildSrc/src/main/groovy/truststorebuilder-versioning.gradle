@@ -1,0 +1,23 @@
+import org.ajoberstar.grgit.*
+
+def Boolean isRelease() {
+    return project.findProperty("release")?.toBoolean() ?: false;
+}
+
+def String getArtifactVersion() {
+    return isRelease() ? "${truststorebuilderVersion}" : "${truststorebuilderVersion}-SNAPSHOT"
+}
+
+project.version = getArtifactVersion()
+
+def repo = Grgit.open(dir: project.file('.'))
+project.ext.revision = repo.head().id
+project.ext.buildDate = new Date().toString()
+
+task printBuildMetadata {
+    doLast {
+        println "Version: ${project.version}"
+        println "Revision: ${project.revision}"
+        println "Build-date: ${project.buildDate}"
+    }
+}
