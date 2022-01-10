@@ -16,23 +16,22 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.*
-import static org.gradle.testkit.runner.TaskOutcome.*
+import org.gradle.testkit.runner.GradleRunner
+import spock.lang.Specification
+import spock.lang.TempDir
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
-
-import spock.lang.Specification
+import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.assertFingerprintOfKeystoreEntry
+import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.assertNumberOfEntriesInKeystore
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class TrustStoreBuilderPluginTest extends Specification {
 
-    @Rule
-    final TemporaryFolder testProjectDir = new TemporaryFolder()
+    @TempDir
+    private Path testProjectDir
 
     private File buildFile
 
@@ -42,7 +41,7 @@ class TrustStoreBuilderPluginTest extends Specification {
 
     private def initProjectDir() {
         copyCertsToProjectDir()
-        buildFile = testProjectDir.newFile('build.gradle')
+        buildFile = testProjectDir.resolve('build.gradle').toFile()
         buildFile << """
             plugins {
                 id 'de.chkpnt.truststorebuilder'
@@ -52,10 +51,12 @@ class TrustStoreBuilderPluginTest extends Specification {
                 //acceptedFileEndings = ['bla']
             }
         """
+        def settingsFile = testProjectDir.resolve('settings.gradle').toFile()
+        settingsFile << ""
     }
 
     private def copyCertsToProjectDir() {
-        def dest = testProjectDir.newFolder('src', 'main', 'certs').toPath()
+        def dest = testProjectDir.resolve("src/main/certs")
 
         def certsFolder = getClass().getClassLoader().getResource("certs")
         def source = Paths.get(certsFolder.toURI())
@@ -118,8 +119,8 @@ class TrustStoreBuilderPluginTest extends Specification {
 
     def "buildTrustStore task respects configuration (inputDir)"() {
         given:
-        def origPath = Paths.get(testProjectDir.getRoot().getPath(), "src/main/certs")
-        def newPath = Paths.get(testProjectDir.getRoot().getPath(), "src/main/x509")
+        def origPath = testProjectDir.resolve("src/main/certs")
+        def newPath = testProjectDir.resolve("src/main/x509")
         Files.move(origPath, newPath)
 
         and:
@@ -169,7 +170,7 @@ class TrustStoreBuilderPluginTest extends Specification {
     def "alias for certificate is filename if config file is missing"() {
         given:
         def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
-        Files.delete(testProjectDir.getRoot().toPath().resolve(configfile))
+        Files.delete(testProjectDir.resolve(configfile))
 
         when:
         def result = buildGradleRunner("buildTrustStore").build()
@@ -182,7 +183,7 @@ class TrustStoreBuilderPluginTest extends Specification {
     def "alias for certificate is filename if config file contains no alias"() {
         given:
         def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
-        def file = testProjectDir.getRoot().toPath().resolve(configfile)
+        def file = testProjectDir.resolve(configfile)
         file.write("foobar")
 
         when:
@@ -194,7 +195,7 @@ class TrustStoreBuilderPluginTest extends Specification {
     }
 
     private Path getDefaultTrustStorePath() {
-        Path keystore = Paths.get(testProjectDir.root.getPath(), "build/cacerts.jks")
+        Path keystore = testProjectDir.resolve("build/cacerts.jks")
         assert Files.exists(keystore)
         return keystore
     }
@@ -202,7 +203,7 @@ class TrustStoreBuilderPluginTest extends Specification {
     private def GradleRunner buildGradleRunner(String... tasks) {
         GradleRunner.create()
                 .withDebug(true)
-                .withProjectDir(testProjectDir.root)
+                .withProjectDir(testProjectDir.toFile())
                 .withArguments(tasks)
                 .withPluginClasspath()
     }
