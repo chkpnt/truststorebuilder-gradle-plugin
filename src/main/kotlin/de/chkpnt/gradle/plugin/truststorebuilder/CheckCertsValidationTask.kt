@@ -16,12 +16,6 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.security.cert.CertificateException
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
-import java.time.Duration
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.provider.ListProperty
@@ -30,6 +24,12 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import java.nio.file.Files
+import java.nio.file.Path
+import java.security.cert.CertificateException
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.time.Duration
 
 open class CheckCertsValidationTask() : DefaultTask() {
 

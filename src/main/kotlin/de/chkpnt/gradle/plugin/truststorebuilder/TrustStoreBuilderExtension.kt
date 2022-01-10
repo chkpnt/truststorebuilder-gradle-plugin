@@ -16,8 +16,8 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Path
 import org.gradle.api.Project
+import java.nio.file.Path
 
 open class TrustStoreBuilderExtension(project: Project) {
 

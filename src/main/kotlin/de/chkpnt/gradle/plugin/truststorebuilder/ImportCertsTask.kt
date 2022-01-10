@@ -16,14 +16,6 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.io.File
-import java.nio.file.FileSystems
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
-import java.util.Properties
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -34,6 +26,14 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
+import java.io.File
+import java.nio.file.FileSystems
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.Properties
 
 interface FileAdapter {
     fun toFile(path: Path): File
@@ -77,9 +77,9 @@ open class ImportCertsTask() : DefaultTask() {
     @Console
     override fun getDescription(): String {
         val inputDirName = project.projectDir
-                .toPath()
-                .relativize(inputDir.get())
-                .toString()
+            .toPath()
+            .relativize(inputDir.get())
+            .toString()
         return "Adds all certificates found under '$inputDirName' to the TrustStore."
     }
 
@@ -143,23 +143,26 @@ internal object PathScanner {
     fun scanForFilesWithFileEnding(path: Path, endsWith: List<String>): List<Path> {
         val extensions = endsWith.joinToString(",")
         val endsWithMatcher = FileSystems.getDefault()
-                .getPathMatcher("glob:*.{$extensions}")
+            .getPathMatcher("glob:*.{$extensions}")
 
         val certs = ArrayList<Path>()
 
-        Files.walkFileTree(path, object : SimpleFileVisitor<Path>() {
+        Files.walkFileTree(
+            path,
+            object : SimpleFileVisitor<Path>() {
 
-            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                super.visitFile(file, attrs)
+                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    super.visitFile(file, attrs)
 
-                val filename = file.fileName
-                if (endsWithMatcher.matches(filename)) {
-                    certs.add(file)
+                    val filename = file.fileName
+                    if (endsWithMatcher.matches(filename)) {
+                        certs.add(file)
+                    }
+
+                    return FileVisitResult.CONTINUE
                 }
-
-                return FileVisitResult.CONTINUE
             }
-        })
+        )
 
         return certs
     }
