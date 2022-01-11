@@ -1,6 +1,7 @@
 plugins {
     id("maven-publish")
     id("com.gradle.plugin-publish")
+    id("org.ajoberstar.git-publish")
 }
 
 /*********************************
@@ -62,4 +63,29 @@ pluginBundle {
             displayName = 'Gradle TrustStore-builder plugin'
         }
     }
+}
+
+task printSourceSetInformation2(){
+    doLast{
+        sourceSets.each { srcSet ->
+            println "["+srcSet.name+"]"
+            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
+            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
+            println ""
+        }
+    }
+}
+
+/***************************
+ * Publish to Github Pages
+ ***************************/
+
+gitPublish {
+    repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
+    branch = 'gh-pages'
+    preserve { include 'reports/*' } // until Sonargraph's report can be built again
+    contents {
+        from ghPagesGroomingDir
+    }
+    commitMessage = 'Publish of Github pages from Gradle'
 }

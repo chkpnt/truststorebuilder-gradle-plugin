@@ -1,35 +1,20 @@
 plugins {
-    id("org.ajoberstar.git-publish")
     id("org.jetbrains.dokka")
 }
 
-/***************************
- * Publish to Github Pages
- ***************************/
-
-gitPublish {
-    ext {
-        groomingDir = "$buildDir/ghpages-grooming"
-    }
-    repoUri = 'git@github.com:chkpnt/truststorebuilder-gradle-plugin.git'
-    branch = 'gh-pages'
-    preserve { include 'reports/*' } // until Sonargraph's report can be built again
-    contents {
-        from groomingDir
-    }
-    commitMessage = 'Publish of Github pages from Gradle'
+ext {
+    ghPagesGroomingDir = "$buildDir/ghpages-grooming"
 }
 
 /***************************
  * KDoc
  ***************************/
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "${gitPublish.groomingDir}/kdoc"
+dokkaHtml {
+    outputDirectory.set(file("${ghPagesGroomingDir}/kdoc"))
 }
 
 task docs {
-    dependsOn dokka
+    dependsOn dokkaHtml
     group org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
 }

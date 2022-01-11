@@ -73,7 +73,7 @@ sonargraphDynamicReport {
 // not the default value but null if not set explicitly :-/
 task prepareSonargraphReportForGhPages(type: Copy) {
     from "$buildDir/sonargraph"
-    into "${gitPublish.groomingDir}/reports"
+    into "${ghPagesGroomingDir}/reports"
     exclude '*.xml'
 }
 
