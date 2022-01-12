@@ -28,11 +28,11 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/install-codecov.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'main' ]]; then ./scripts/install-codecov.sh; fi
 
 after_success:
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/sonargraph.sh; fi
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-ghpages.sh; fi
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-sonarqube.sh; fi
-  - if [[ $TRAVIS_BRANCH == 'master' ]]; then ./scripts/publish-codecov.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'main' ]]; then ./scripts/sonargraph.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'main' ]]; then ./scripts/publish-ghpages.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'main' ]]; then ./scripts/publish-sonarqube.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'main' ]]; then ./scripts/publish-codecov.sh; fi
   - if [[ $TRAVIS_BRANCH == 'release' ]]; then ./scripts/deploy-release.sh; fi
