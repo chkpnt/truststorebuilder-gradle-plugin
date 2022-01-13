@@ -59,11 +59,6 @@ open class ImportCertsTask() : DefaultTask() {
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
 
-    init {
-        // After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
-        acceptedFileEndings.set(emptyList())
-    }
-
     @InputDirectory
     fun getInput(): File {
         return fileAdapter.toFile(inputDir.get())

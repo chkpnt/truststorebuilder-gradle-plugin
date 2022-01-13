@@ -45,11 +45,6 @@ open class CheckCertsValidationTask() : DefaultTask() {
     @Internal
     var certificateFactory = CertificateFactory.getInstance("X.509")
 
-    init {
-        // After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
-        acceptedFileEndings.set(emptyList())
-    }
-
     private val INVALID_REASON: String
         get() = "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days"
 
