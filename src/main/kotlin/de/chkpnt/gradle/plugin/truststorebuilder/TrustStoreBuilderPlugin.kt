@@ -67,8 +67,8 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
 
     companion object {
 
-        private val TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder"
-        private val BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore"
-        private val CHECK_CERTS_TASK_NAME = "checkCertificates"
+        private const val TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder"
+        private const val BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore"
+        private const val CHECK_CERTS_TASK_NAME = "checkCertificates"
     }
 }
