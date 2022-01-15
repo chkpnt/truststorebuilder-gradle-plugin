@@ -91,8 +91,8 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                checkEnabled = false
-                buildEnabled = false
+                checkEnabled(false)
+                buildEnabled(false)
             }
         """
 
@@ -130,7 +130,7 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                inputDir = 'src/main/x509'
+                inputDir('src/main/x509')
             }
         """
 
@@ -155,7 +155,7 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                acceptedFileEndings = ['crt']
+                acceptedFileEndings('crt')
             }
         """
 
@@ -165,6 +165,30 @@ class TrustStoreBuilderPluginTest extends Specification {
         then:
         result.task(":buildTrustStore").outcome == SUCCESS
         assertNumberOfEntriesInKeystore(getDefaultTrustStorePath(), "changeit", 1)
+    }
+
+    def "buildTrustStore task respects configuration (multiple trustStores)"() {
+        // Textfixtures contains 'isrgrootx1.pem' and 'root.crt'
+        given:
+        buildFile.text = """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+
+            trustStoreBuilder {
+                trustStore {
+                    path('trustStores/cacerts.jks')
+                    password('changeit')
+                }
+            }
+        """
+
+        when:
+        def result = buildGradleRunner("buildTrustStore").build()
+
+        then:
+        result.task(":buildTrustStore").outcome == SUCCESS
+        assertNumberOfEntriesInKeystore(testProjectDir.resolve("trustStores/cacerts.jks"), "changeit", 2)
     }
 
     def "alias for certificate is filename if config file is missing"() {

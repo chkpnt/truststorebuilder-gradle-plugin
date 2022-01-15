@@ -35,14 +35,14 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
                 task.group = LifecycleBasePlugin.VERIFICATION_GROUP
                 task.description = "Checks the validation of the certificates to import."
 
-                task.inputDir.set(extension.inputDirPath)
+                task.inputDir.set(extension.inputDir)
                 task.acceptedFileEndings.set(extension.acceptedFileEndings)
                 task.atLeastValidDays.set(extension.atLeastValidDays)
             }
 
         project.tasks
             .named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { task ->
-                if (extension.checkEnabled) {
+                if (extension.checkEnabled.get()) {
                     task.dependsOn(CHECK_CERTS_TASK_NAME)
                 }
             }
@@ -51,15 +51,15 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
             .register(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask::class.java) { task ->
                 task.group = BasePlugin.BUILD_GROUP
 
-                task.keystore.set(extension.trustStorePath)
-                task.password.set(extension.password)
-                task.inputDir.set(extension.inputDirPath)
+                task.keystore.set(extension.trustStore.path)
+                task.password.set(extension.trustStore.password)
+                task.inputDir.set(extension.inputDir)
                 task.acceptedFileEndings.set(extension.acceptedFileEndings)
             }
 
         project.tasks
             .named(LifecycleBasePlugin.BUILD_TASK_NAME) { task ->
-                if (extension.buildEnabled) {
+                if (extension.buildEnabled.get()) {
                     task.dependsOn(BUILD_TRUSTSTORE_TASK_NAME)
                 }
             }

@@ -16,15 +16,15 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import static org.hamcrest.Matchers.containsInAnyOrder
-import static spock.util.matcher.HamcrestSupport.that
-
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-
 import spock.lang.Specification
 
-class TrustStoreBuilderExtensionTest extends Specification  {
+import static org.hamcrest.Matchers.containsInAnyOrder
+import static org.hamcrest.Matchers.hasSize
+import static spock.util.matcher.HamcrestSupport.that
+
+class TrustStoreBuilderExtensionTest extends Specification {
 
     Project project
 
@@ -38,13 +38,13 @@ class TrustStoreBuilderExtensionTest extends Specification  {
 
     def "check default values"() {
         expect:
-        classUnderTest.password == 'changeit'
-        classUnderTest.trustStorePath == project.file('build/cacerts.jks').toPath()
-        classUnderTest.inputDirPath == project.file('src/main/certs').toPath()
-        that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem'])
-        classUnderTest.atLeastValidDays == 90
-        classUnderTest.checkEnabled == true
-        classUnderTest.buildEnabled == true
+        classUnderTest.trustStore.password.get() == 'changeit'
+        classUnderTest.trustStore.path.get() == project.file('build/cacerts.jks').toPath()
+        classUnderTest.inputDir.get() == project.file('src/main/certs').toPath()
+        that classUnderTest.acceptedFileEndings.get(), containsInAnyOrder(*['cer', 'crt', 'pem'])
+        classUnderTest.atLeastValidDays.get() == 90
+        classUnderTest.checkEnabled.get() == true
+        classUnderTest.buildEnabled.get() == true
     }
 
     def "Default TrustStore is in build dir"() {
@@ -52,7 +52,7 @@ class TrustStoreBuilderExtensionTest extends Specification  {
         project.buildDir = 'mybuild'
 
         then:
-        classUnderTest.trustStorePath == project.file('mybuild/cacerts.jks').toPath()
+        classUnderTest.trustStore.path.get() == project.file('mybuild/cacerts.jks').toPath()
     }
 
     def "TrustStore with explicit input and output"() {
@@ -60,28 +60,21 @@ class TrustStoreBuilderExtensionTest extends Specification  {
         project.file('src/x509/certs').mkdirs()
 
         when:
-        classUnderTest.trustStore = 'öäü/truststore.jks'
-        classUnderTest.inputDir = 'src/x509/certs'
+        classUnderTest.trustStore({
+            it.path('öäü/truststore.jks')
+        })
+        classUnderTest.inputDir('src/x509/certs')
 
         then:
-        classUnderTest.inputDirPath == project.file('src/x509/certs').toPath()
-        classUnderTest.trustStorePath == project.file('öäü/truststore.jks').toPath()
-    }
-
-    def "accept additional file ending"() {
-        when:
-        classUnderTest.acceptedFileEndings << 'der'
-
-        then:
-        that classUnderTest.acceptedFileEndings, containsInAnyOrder(*['cer', 'crt', 'pem', 'der'])
+        classUnderTest.inputDir.get() == project.file('src/x509/certs').toPath()
+        classUnderTest.trustStore.path.get() == project.file('öäü/truststore.jks').toPath()
     }
 
     def "change accepted file endings"() {
         when:
-        classUnderTest.acceptedFileEndings = ['txt']
+        classUnderTest.acceptedFileEndings("txt", "pem")
 
         then:
-        classUnderTest.acceptedFileEndings.size() == 1
-        classUnderTest.acceptedFileEndings.first() == 'txt'
+        that classUnderTest.acceptedFileEndings.get(), containsInAnyOrder(*["txt", "pem"])
     }
 }
