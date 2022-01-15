@@ -26,7 +26,6 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
-import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -34,14 +33,6 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.Properties
-
-interface FileAdapter {
-    fun toFile(path: Path): File
-}
-
-class DefaultFileAdapter : FileAdapter {
-    override fun toFile(path: Path): File = path.toFile()
-}
 
 open class BuildTrustStoreTask() : DefaultTask() {
 
@@ -55,19 +46,7 @@ open class BuildTrustStoreTask() : DefaultTask() {
     val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
 
     @Internal
-    var fileAdapter: FileAdapter = DefaultFileAdapter()
-    @Internal
     var certificateService: CertificateService = DefaultCertificateService()
-
-    @InputDirectory
-    fun getInput(): File {
-        return fileAdapter.toFile(inputDir.get())
-    }
-
-    @OutputFile
-    fun getOutput(): File {
-        return fileAdapter.toFile(trustStore.get())
-    }
 
     @Console
     override fun getDescription(): String {

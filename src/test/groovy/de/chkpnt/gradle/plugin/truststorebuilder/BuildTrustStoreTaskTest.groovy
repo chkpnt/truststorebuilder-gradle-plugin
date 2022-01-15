@@ -46,7 +46,6 @@ class BuildTrustStoreTaskTest extends Specification {
 
         project = ProjectBuilder.builder().build()
         classUnderTest = project.task('importCert', type: BuildTrustStoreTask)
-        classUnderTest.fileAdapter = new TestFileAdapter()
     }
 
     def "BuildTrustStoreTask works awesome"() {
