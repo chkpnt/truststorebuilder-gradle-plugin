@@ -46,7 +46,7 @@ class DefaultFileAdapter : FileAdapter {
 open class BuildTrustStoreTask() : DefaultTask() {
 
     @OutputFile
-    val keystore: Property<Path> = project.objects.property(Path::class.java)
+    val trustStore: Property<Path> = project.objects.property(Path::class.java)
     @Input
     val password: Property<String> = project.objects.property(String::class.java)
     @InputDirectory
@@ -66,7 +66,7 @@ open class BuildTrustStoreTask() : DefaultTask() {
 
     @OutputFile
     fun getOutput(): File {
-        return fileAdapter.toFile(keystore.get())
+        return fileAdapter.toFile(trustStore.get())
     }
 
     @Console
@@ -81,7 +81,7 @@ open class BuildTrustStoreTask() : DefaultTask() {
     @TaskAction
     fun importCerts() {
         checkTaskConfiguration()
-        prepareOutputDir(keystore.get().parent)
+        prepareOutputDir(trustStore.get().parent)
 
         val jks = certificateService.newKeystore()
 
@@ -92,7 +92,7 @@ open class BuildTrustStoreTask() : DefaultTask() {
             certificateService.addCertificateToKeystore(jks, cert, alias)
         }
 
-        certificateService.storeKeystore(jks, keystore.get(), password.get())
+        certificateService.storeKeystore(jks, trustStore.get(), password.get())
     }
 
     private fun prepareOutputDir(outputDir: Path?) {
@@ -103,7 +103,7 @@ open class BuildTrustStoreTask() : DefaultTask() {
 
     private fun checkTaskConfiguration() {
         val listOfImproperConfiguredProperties = mutableListOf<String>()
-        if (!keystore.isPresent) listOfImproperConfiguredProperties.add("keystore")
+        if (!trustStore.isPresent) listOfImproperConfiguredProperties.add("keystore")
         if (!password.isPresent) listOfImproperConfiguredProperties.add("password")
         if (acceptedFileEndings.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("acceptedFileEndings")
 

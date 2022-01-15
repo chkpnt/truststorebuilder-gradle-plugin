@@ -57,7 +57,7 @@ class BuildTrustStoreTaskTest extends Specification {
         fs.getPath("certs/cacert.pem.config").text = "alias=CACert Root CA"
 
         and:
-        classUnderTest.keystore = fs.getPath("truststore.jks")
+        classUnderTest.trustStore = fs.getPath("truststore.jks")
         classUnderTest.password = "changeit"
         classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.acceptedFileEndings = ["pem"]
@@ -78,7 +78,7 @@ class BuildTrustStoreTaskTest extends Specification {
         fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
 
         and:
-        classUnderTest.keystore = fs.getPath("truststore.jks")
+        classUnderTest.trustStore = fs.getPath("truststore.jks")
         classUnderTest.password = "changeit"
         classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.acceptedFileEndings = ["pem"]
@@ -96,7 +96,7 @@ class BuildTrustStoreTaskTest extends Specification {
     def "output folder is generated"() {
         given:
         def outputdir = fs.getPath("foo", "bar")
-        classUnderTest.keystore = fs.getPath("foo", "bar", "truststore.jks")
+        classUnderTest.trustStore = fs.getPath("foo", "bar", "truststore.jks")
         assert Files.notExists(outputdir)
 
         and:
@@ -114,7 +114,7 @@ class BuildTrustStoreTaskTest extends Specification {
     def "throwing exception if password is not set"() {
         given:
         classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.keystore = fs.getPath("truststore.jks")
+        classUnderTest.trustStore = fs.getPath("truststore.jks")
         classUnderTest.acceptedFileEndings = ["pem"]
 
         when:
@@ -129,7 +129,7 @@ class BuildTrustStoreTaskTest extends Specification {
     def "throwing exception if acceptedFileEndings is not set appropriately"() {
         given:
         classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.keystore = fs.getPath("truststore.jks")
+        classUnderTest.trustStore = fs.getPath("truststore.jks")
         classUnderTest.password = "changeit"
 
         and:
