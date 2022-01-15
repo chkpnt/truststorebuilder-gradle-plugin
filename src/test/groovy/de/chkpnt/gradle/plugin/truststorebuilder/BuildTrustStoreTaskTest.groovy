@@ -30,9 +30,9 @@ import com.google.common.jimfs.Jimfs
 
 import spock.lang.Specification
 
-class ImportCertsTaskTest extends Specification {
+class BuildTrustStoreTaskTest extends Specification {
 
-    private ImportCertsTask classUnderTest
+    private BuildTrustStoreTask classUnderTest
 
     private FileSystem fs
 
@@ -45,11 +45,11 @@ class ImportCertsTaskTest extends Specification {
         Files.createDirectory(fs.getPath("certs"))
 
         project = ProjectBuilder.builder().build()
-        classUnderTest = project.task('importCert', type: ImportCertsTask)
+        classUnderTest = project.task('importCert', type: BuildTrustStoreTask)
         classUnderTest.fileAdapter = new TestFileAdapter()
     }
 
-    def "ImportCertsTask works awesome"() {
+    def "BuildTrustStoreTask works awesome"() {
         given:
         fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
         fs.getPath("certs/letsencrypt.pem.config").text = "alias=Let's Encrypt Root CA"

@@ -43,7 +43,7 @@ class DefaultFileAdapter : FileAdapter {
     override fun toFile(path: Path): File = path.toFile()
 }
 
-open class ImportCertsTask() : DefaultTask() {
+open class BuildTrustStoreTask() : DefaultTask() {
 
     @OutputFile
     val keystore: Property<Path> = project.objects.property(Path::class.java)

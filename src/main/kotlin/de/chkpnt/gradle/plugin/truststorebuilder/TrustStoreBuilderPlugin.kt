@@ -48,7 +48,7 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
             }
 
         project.tasks
-            .register(BUILD_TRUSTSTORE_TASK_NAME, ImportCertsTask::class.java) { task ->
+            .register(BUILD_TRUSTSTORE_TASK_NAME, BuildTrustStoreTask::class.java) { task ->
                 task.group = BasePlugin.BUILD_GROUP
 
                 task.keystore.set(extension.trustStore.path)
