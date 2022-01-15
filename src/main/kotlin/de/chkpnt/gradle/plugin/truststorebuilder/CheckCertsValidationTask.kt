@@ -31,14 +31,14 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.time.Duration
 
-open class CheckCertsValidationTask() : DefaultTask() {
+abstract class CheckCertsValidationTask() : DefaultTask() {
 
-    @InputDirectory
-    val inputDir: Property<Path> = project.objects.property(Path::class.java)
-    @Input
-    val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
-    @Input
-    val atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
+    @get:InputDirectory
+    abstract val inputDir: Property<Path>
+    @get:Input
+    abstract val acceptedFileEndings: ListProperty<String>
+    @get:Input
+    abstract val atLeastValidDays: Property<Int>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()

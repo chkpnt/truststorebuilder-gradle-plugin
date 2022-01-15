@@ -34,16 +34,16 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.Properties
 
-open class BuildTrustStoreTask() : DefaultTask() {
+abstract class BuildTrustStoreTask() : DefaultTask() {
 
-    @OutputFile
-    val trustStore: Property<Path> = project.objects.property(Path::class.java)
-    @Input
-    val password: Property<String> = project.objects.property(String::class.java)
-    @InputDirectory
-    val inputDir: Property<Path> = project.objects.property(Path::class.java)
-    @Input
-    val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
+    @get:OutputFile
+    abstract val trustStore: Property<Path>
+    @get:Input
+    abstract val password: Property<String>
+    @get:InputDirectory
+    abstract val inputDir: Property<Path>
+    @get:Input
+    abstract val acceptedFileEndings: ListProperty<String>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
