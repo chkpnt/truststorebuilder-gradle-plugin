@@ -24,7 +24,7 @@ import java.nio.file.Path
 
 open class TrustStoreBuilderExtension(private val project: Project) {
 
-    internal val trustStore: TrustStoreExtension = TrustStoreExtension()
+    internal val trustStore: TrustStoreSpec = TrustStoreSpec(project)
     internal val inputDir: Property<Path> = project.objects.property(Path::class.java)
         .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
     internal val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
@@ -36,7 +36,7 @@ open class TrustStoreBuilderExtension(private val project: Project) {
     internal val buildEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
         .convention(true)
 
-    fun trustStore(action: Action<TrustStoreExtension>) {
+    fun trustStore(action: Action<TrustStoreSpec>) {
         action.execute(trustStore)
     }
 
@@ -73,31 +73,5 @@ open class TrustStoreBuilderExtension(private val project: Project) {
      */
     fun buildEnabled(value: Boolean) {
         buildEnabled.set(value)
-    }
-
-    inner class TrustStoreExtension {
-
-        internal val path: Property<Path> = project.objects.property(Path::class.java)
-            .convention(project.layout.buildDirectory.file("cacerts.jks").map { it.asFile.toPath() })
-        internal val password: Property<String> = project.objects.property(String::class.java)
-            .convention("changeit")
-
-        /**
-         * Path pointing to the TrustStore being built.
-         * Can be anything that can be handled by `project.file(...)`.
-         * Defaults to '$buildDir/cacerts.jks'
-         *
-         * @see https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html#file-java.lang.Object-
-         */
-        fun path(value: Any) {
-            path.set(project.file(value).toPath())
-        }
-
-        /**
-         * The password used for the TrustStore. Defaults to 'changeit'.
-         */
-        fun password(value: String) {
-            password.set(value)
-        }
     }
 }
