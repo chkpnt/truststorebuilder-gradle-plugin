@@ -56,8 +56,10 @@ class BuildTrustStoreTaskTest extends Specification {
         fs.getPath("certs/cacert.pem.config").text = "alias=CACert Root CA"
 
         and:
-        classUnderTest.trustStore = fs.getPath("truststore.jks")
-        classUnderTest.password = "changeit"
+        classUnderTest.trustStore({
+            it.path.set(fs.getPath("truststore.jks"))
+            it.password("changeit")
+        })
         classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.acceptedFileEndings = ["pem"]
 
@@ -77,8 +79,10 @@ class BuildTrustStoreTaskTest extends Specification {
         fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
 
         and:
-        classUnderTest.trustStore = fs.getPath("truststore.jks")
-        classUnderTest.password = "changeit"
+        classUnderTest.trustStore({
+            it.path.set(fs.getPath("truststore.jks"))
+            it.password("changeit")
+        })
         classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.acceptedFileEndings = ["pem"]
 
@@ -95,11 +99,13 @@ class BuildTrustStoreTaskTest extends Specification {
     def "output folder is generated"() {
         given:
         def outputdir = fs.getPath("foo", "bar")
-        classUnderTest.trustStore = fs.getPath("foo", "bar", "truststore.jks")
+        classUnderTest.trustStore({
+            it.path.set(fs.getPath("foo", "bar", "truststore.jks"))
+            it.password("changeit")
+        })
         assert Files.notExists(outputdir)
 
         and:
-        classUnderTest.password = "changeit"
         classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.acceptedFileEndings = ["pem"]
 
@@ -113,7 +119,10 @@ class BuildTrustStoreTaskTest extends Specification {
     def "throwing exception if password is not set"() {
         given:
         classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.trustStore = fs.getPath("truststore.jks")
+        classUnderTest.trustStore({
+            it.path.set(fs.getPath("foo", "bar", "truststore.jks"))
+            it.password("")
+        })
         classUnderTest.acceptedFileEndings = ["pem"]
 
         when:
@@ -128,8 +137,10 @@ class BuildTrustStoreTaskTest extends Specification {
     def "throwing exception if acceptedFileEndings is not set appropriately"() {
         given:
         classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.trustStore = fs.getPath("truststore.jks")
-        classUnderTest.password = "changeit"
+        classUnderTest.trustStore({
+            it.path.set(fs.getPath("foo", "bar", "truststore.jks"))
+            it.password("changeit")
+        })
 
         and:
         // PropertyList<String> can't contain null values, therefore testing is not needed

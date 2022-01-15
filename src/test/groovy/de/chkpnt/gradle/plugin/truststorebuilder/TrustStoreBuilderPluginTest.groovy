@@ -167,7 +167,7 @@ class TrustStoreBuilderPluginTest extends Specification {
         assertNumberOfEntriesInKeystore(getDefaultTrustStorePath(), "changeit", 1)
     }
 
-    def "buildTrustStore task respects configuration (multiple trustStores)"() {
+    def "buildTrustStore task respects configuration (trustStore)"() {
         // Textfixtures contains 'isrgrootx1.pem' and 'root.crt'
         given:
         buildFile.text = """

@@ -16,6 +16,7 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
+import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -36,10 +37,16 @@ import java.util.Properties
 
 abstract class BuildTrustStoreTask() : DefaultTask() {
 
+    private var trustStore: TrustStoreSpec = TrustStoreSpec(project)
+
     @get:OutputFile
-    abstract val trustStore: Property<Path>
+    internal val trustStorePath: Property<Path>
+        get() = trustStore.path
+
     @get:Input
-    abstract val password: Property<String>
+    internal val trustStorePassword: Property<String>
+        get() = trustStore.password
+
     @get:InputDirectory
     abstract val inputDir: Property<Path>
     @get:Input
@@ -47,6 +54,14 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
+
+    fun trustStore(action: Action<TrustStoreSpec>) {
+        action.execute(trustStore)
+    }
+
+    internal fun trustStore(spec: TrustStoreSpec) {
+        trustStore = spec
+    }
 
     @Console
     override fun getDescription(): String {
@@ -60,7 +75,7 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
     @TaskAction
     fun importCerts() {
         checkTaskConfiguration()
-        prepareOutputDir(trustStore.get().parent)
+        prepareOutputDir(trustStore.path.get().parent)
 
         val jks = certificateService.newKeystore()
 
@@ -71,7 +86,7 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
             certificateService.addCertificateToKeystore(jks, cert, alias)
         }
 
-        certificateService.storeKeystore(jks, trustStore.get(), password.get())
+        certificateService.storeKeystore(jks, trustStore.path.get(), trustStore.password.get())
     }
 
     private fun prepareOutputDir(outputDir: Path?) {
@@ -82,8 +97,7 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
 
     private fun checkTaskConfiguration() {
         val listOfImproperConfiguredProperties = mutableListOf<String>()
-        if (!trustStore.isPresent) listOfImproperConfiguredProperties.add("keystore")
-        if (!password.isPresent) listOfImproperConfiguredProperties.add("password")
+        if (trustStorePassword.getOrElse("").isBlank()) listOfImproperConfiguredProperties.add("password")
         if (acceptedFileEndings.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("acceptedFileEndings")
 
         if (listOfImproperConfiguredProperties.any()) {

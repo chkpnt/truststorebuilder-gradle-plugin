@@ -51,8 +51,7 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
             .register(BUILD_TRUSTSTORE_TASK_NAME, BuildTrustStoreTask::class.java) { task ->
                 task.group = BasePlugin.BUILD_GROUP
 
-                task.trustStore.set(extension.trustStore.path)
-                task.password.set(extension.trustStore.password)
+                task.trustStore(extension.trustStore)
                 task.inputDir.set(extension.inputDir)
                 task.acceptedFileEndings.set(extension.acceptedFileEndings)
             }
