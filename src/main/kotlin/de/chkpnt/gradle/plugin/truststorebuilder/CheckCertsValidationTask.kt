@@ -24,6 +24,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.util.PatternSet
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.cert.CertificateException
@@ -34,11 +35,11 @@ import java.time.Duration
 abstract class CheckCertsValidationTask() : DefaultTask() {
 
     @get:InputDirectory
-    abstract val inputDir: Property<Path>
+    internal abstract val source: Property<Path>
     @get:Input
-    abstract val acceptedFileEndings: ListProperty<String>
+    internal abstract val includes: ListProperty<String>
     @get:Input
-    abstract val atLeastValidDays: Property<Int>
+    internal abstract val atLeastValidDays: Property<Int>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
@@ -48,14 +49,44 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
     private val INVALID_REASON: String
         get() = "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days"
 
-    val atLeastValid: Duration
-        @Input
+    private val atLeastValid: Duration
         get() = Duration.ofDays(atLeastValidDays.get().toLong())
+
+    /**
+     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
+     */
+    fun source(directory: Any) {
+        source.set(project.file(directory).toPath())
+    }
+
+    /**
+     * Filter for the source directory.
+     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
+     */
+    fun include(vararg patterns: String) {
+        includes.set(patterns.toList())
+    }
+
+    /**
+     * Filter for the source directory.
+     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
+     */
+    fun include(patterns: Iterable<String>) {
+        includes.set(patterns)
+    }
+
+    /**
+     * Number of days the certificates have to be at least valid. Defaults to 90 days.
+     */
+    fun atLeastValidDays(numberOfDays: Int) {
+        atLeastValidDays.set(numberOfDays)
+    }
 
     @TaskAction
     fun testValidation() {
-        val certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
-        for (certFile in certFiles) {
+        val patterns = PatternSet().include(includes.get())
+        project.fileTree(source.get()).matching(patterns).forEach {
+            val certFile = it.toPath()
             checkValidation(certFile)
         }
     }
@@ -64,7 +95,10 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
         val cert = loadX509Certificate(file)
 
         if (!certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
-            throw CheckCertValidationError(file, INVALID_REASON)
+            val relativePath = project.projectDir
+                .toPath()
+                .relativize(file)
+            throw CheckCertValidationError(relativePath, INVALID_REASON)
         }
     }
 
@@ -73,7 +107,10 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
             try {
                 return certificateFactory.generateCertificate(inputStream) as X509Certificate
             } catch (e: CertificateException) {
-                throw CheckCertValidationError(file, "Could not load certificate")
+                val relativePath = project.projectDir
+                    .toPath()
+                    .relativize(file)
+                throw CheckCertValidationError(relativePath, "Could not load certificate")
             }
         }
     }

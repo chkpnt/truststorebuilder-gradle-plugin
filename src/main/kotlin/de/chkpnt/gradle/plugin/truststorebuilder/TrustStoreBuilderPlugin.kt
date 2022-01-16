@@ -35,8 +35,8 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
                 task.group = LifecycleBasePlugin.VERIFICATION_GROUP
                 task.description = "Checks the validation of the certificates to import."
 
-                task.inputDir.set(extension.inputDir)
-                task.acceptedFileEndings.set(extension.acceptedFileEndings)
+                task.source.set(extension.source)
+                task.includes.set(extension.includes)
                 task.atLeastValidDays.set(extension.atLeastValidDays)
             }
 
@@ -52,8 +52,8 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
                 task.group = BasePlugin.BUILD_GROUP
 
                 task.trustStore(extension.trustStore)
-                task.inputDir.set(extension.inputDir)
-                task.acceptedFileEndings.set(extension.acceptedFileEndings)
+                task.source.set(extension.source)
+                task.includes.set(extension.includes)
             }
 
         project.tasks

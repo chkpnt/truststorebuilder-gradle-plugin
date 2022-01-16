@@ -16,81 +16,79 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.*
-
-import java.nio.file.FileSystem
-import java.nio.file.Files
-
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
-
-import com.google.common.jimfs.Configuration
-import com.google.common.jimfs.Jimfs
-
 import spock.lang.Specification
+import spock.lang.TempDir
+
+import java.nio.file.Files
+import java.nio.file.Path
+
+import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.assertFingerprintOfKeystoreEntry
 
 class BuildTrustStoreTaskTest extends Specification {
 
     private BuildTrustStoreTask classUnderTest
 
-    private FileSystem fs
+    @TempDir
+    private Path testProjectDir
 
     private Project project
 
     private DefaultCertificateService certificateService = new DefaultCertificateService()
 
     def setup() {
-        fs = Jimfs.newFileSystem(Configuration.unix())
-        Files.createDirectory(fs.getPath("certs"))
-
-        project = ProjectBuilder.builder().build()
-        classUnderTest = project.task('importCert', type: BuildTrustStoreTask)
+        Files.createDirectory(testProjectDir.resolve("certs"))
+        project = ProjectBuilder.builder()
+                .withProjectDir(testProjectDir.toFile())
+                .build()
+        classUnderTest = project.task('buildTrustStore', type: BuildTrustStoreTask)
     }
 
     def "BuildTrustStoreTask works awesome"() {
         given:
-        fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
-        fs.getPath("certs/letsencrypt.pem.config").text = "alias=Let's Encrypt Root CA"
-        fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
-        fs.getPath("certs/cacert.pem.config").text = "alias=CACert Root CA"
+        testProjectDir.resolve("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+        testProjectDir.resolve("certs/letsencrypt.pem.config").text = "alias=Let's Encrypt Root CA"
+        testProjectDir.resolve("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+        testProjectDir.resolve("certs/cacert.pem.config").text = "alias=CACert Root CA"
 
         and:
         classUnderTest.trustStore({
-            it.path.set(fs.getPath("truststore.jks"))
+            it.path(testProjectDir.resolve("truststore.jks"))
             it.password("changeit")
         })
-        classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.acceptedFileEndings = ["pem"]
+        classUnderTest.source(testProjectDir.resolve("certs"))
+        classUnderTest.include(["**/*.pem"])
 
         when:
         classUnderTest.importCerts()
 
         then:
-        def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
+        def ks = certificateService.loadKeystore(testProjectDir.resolve("truststore.jks"), "changeit")
         assertFingerprintOfKeystoreEntry(ks, "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
         assertFingerprintOfKeystoreEntry(ks, "cacert root ca", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
     def "alias is derived from filename if not available through config file"() {
         given:
-        fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
-        fs.getPath("certs/letsencrypt.pem.config").text = "bla=no_alias"
-        fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+        testProjectDir.resolve("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+        testProjectDir.resolve("certs/letsencrypt.pem.config").text = "bla=no_alias"
+        testProjectDir.resolve("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
 
         and:
         classUnderTest.trustStore({
-            it.path.set(fs.getPath("truststore.jks"))
+            it.path("truststore.jks")
             it.password("changeit")
         })
-        classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.acceptedFileEndings = ["pem"]
+        classUnderTest.source(testProjectDir.resolve("certs"))
+        classUnderTest.include("**/*.pem")
 
         when:
         classUnderTest.importCerts()
 
         then:
-        def ks = certificateService.loadKeystore(fs.getPath("truststore.jks"), "changeit")
+        def ks = certificateService.loadKeystore(testProjectDir.resolve("truststore.jks"), "changeit")
         assertFingerprintOfKeystoreEntry(ks, "letsencrypt.pem", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
         assertFingerprintOfKeystoreEntry(ks, "cacert.pem", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
@@ -98,16 +96,16 @@ class BuildTrustStoreTaskTest extends Specification {
 
     def "output folder is generated"() {
         given:
-        def outputdir = fs.getPath("foo", "bar")
+        def outputdir = testProjectDir.resolve("foo/bar")
         classUnderTest.trustStore({
-            it.path.set(fs.getPath("foo", "bar", "truststore.jks"))
+            it.path("foo/bar/truststore.jks")
             it.password("changeit")
         })
         assert Files.notExists(outputdir)
 
         and:
-        classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.acceptedFileEndings = ["pem"]
+        classUnderTest.source("certs")
+        classUnderTest.include("**/*.pem")
 
         when:
         classUnderTest.importCerts()
@@ -118,12 +116,12 @@ class BuildTrustStoreTaskTest extends Specification {
 
     def "throwing exception if password is not set"() {
         given:
-        classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.trustStore({
-            it.path.set(fs.getPath("foo", "bar", "truststore.jks"))
+            it.path(testProjectDir.resolve("foo/bar/truststore.jks"))
             it.password("")
         })
-        classUnderTest.acceptedFileEndings = ["pem"]
+        classUnderTest.source("certs")
+        classUnderTest.include("**/*.pem")
 
         when:
         classUnderTest.importCerts()
@@ -134,17 +132,17 @@ class BuildTrustStoreTaskTest extends Specification {
         rootCause.message == "The following properties have to be configured appropriately: password"
     }
 
-    def "throwing exception if acceptedFileEndings is not set appropriately"() {
+    def "throwing exception if include is not set appropriately"() {
         given:
-        classUnderTest.inputDir = fs.getPath("certs")
         classUnderTest.trustStore({
-            it.path.set(fs.getPath("foo", "bar", "truststore.jks"))
+            it.path("foo/bar/truststore.jks")
             it.password("changeit")
         })
+        classUnderTest.source("certs")
 
         and:
         // PropertyList<String> can't contain null values, therefore testing is not needed
-        classUnderTest.acceptedFileEndings = ["", " "]
+        classUnderTest.include("", " ")
 
         when:
         classUnderTest.importCerts()
@@ -152,6 +150,6 @@ class BuildTrustStoreTaskTest extends Specification {
         then:
         def e = thrown(TaskExecutionException)
         IllegalArgumentException rootCause = e.cause
-        rootCause.message == "The following properties have to be configured appropriately: acceptedFileEndings"
+        rootCause.message == "The following properties have to be configured appropriately: include"
     }
 }

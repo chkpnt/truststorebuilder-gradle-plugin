@@ -25,10 +25,12 @@ import java.nio.file.Path
 open class TrustStoreBuilderExtension(private val project: Project) {
 
     internal val trustStore: TrustStoreSpec = TrustStoreSpec(project)
-    internal val inputDir: Property<Path> = project.objects.property(Path::class.java)
+
+    internal val source: Property<Path> = project.objects.property(Path::class.java)
         .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
-    internal val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
-        .convention(listOf("crt", "cer", "pem"))
+    internal val includes: ListProperty<String> = project.objects.listProperty(String::class.java)
+        .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
+
     internal val atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
         .convention(90)
     internal val checkEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
@@ -43,15 +45,16 @@ open class TrustStoreBuilderExtension(private val project: Project) {
     /**
      * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
      */
-    fun inputDir(value: Any) {
-        inputDir.set(project.file(value).toPath())
+    fun source(directory: Any) {
+        source.set(project.file(directory).toPath())
     }
 
     /**
-     * A file being processed as a certificate has to have a file ending from this list. Defaults to  ['crt', 'cer', 'pem'].
+     * Filter for the source directory.
+     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
      */
-    fun acceptedFileEndings(vararg values: String) {
-        acceptedFileEndings.set(values.toList())
+    fun include(vararg patterns: String) {
+        includes.set(patterns.toList())
     }
 
     /**

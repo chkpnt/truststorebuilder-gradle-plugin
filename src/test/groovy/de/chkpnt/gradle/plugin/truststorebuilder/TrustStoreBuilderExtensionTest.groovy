@@ -21,7 +21,6 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.containsInAnyOrder
-import static org.hamcrest.Matchers.hasSize
 import static spock.util.matcher.HamcrestSupport.that
 
 class TrustStoreBuilderExtensionTest extends Specification {
@@ -40,8 +39,12 @@ class TrustStoreBuilderExtensionTest extends Specification {
         expect:
         classUnderTest.trustStore.password.get() == 'changeit'
         classUnderTest.trustStore.path.get() == project.file('build/cacerts.jks').toPath()
-        classUnderTest.inputDir.get() == project.file('src/main/certs').toPath()
-        that classUnderTest.acceptedFileEndings.get(), containsInAnyOrder(*['cer', 'crt', 'pem'])
+        classUnderTest.source.get() == project.file('src/main/certs').toPath()
+        that classUnderTest.includes.get(), containsInAnyOrder(*[
+            "**/*.crt",
+            "**/*.cer",
+            "**/*.pem"
+        ])
         classUnderTest.atLeastValidDays.get() == 90
         classUnderTest.checkEnabled.get() == true
         classUnderTest.buildEnabled.get() == true
@@ -63,18 +66,18 @@ class TrustStoreBuilderExtensionTest extends Specification {
         classUnderTest.trustStore({
             it.path('öäü/truststore.jks')
         })
-        classUnderTest.inputDir('src/x509/certs')
+        classUnderTest.source('src/x509/certs')
 
         then:
-        classUnderTest.inputDir.get() == project.file('src/x509/certs').toPath()
+        classUnderTest.source.get() == project.file('src/x509/certs').toPath()
         classUnderTest.trustStore.path.get() == project.file('öäü/truststore.jks').toPath()
     }
 
     def "change accepted file endings"() {
         when:
-        classUnderTest.acceptedFileEndings("txt", "pem")
+        classUnderTest.include("**/*.txt", "**/*.pem")
 
         then:
-        that classUnderTest.acceptedFileEndings.get(), containsInAnyOrder(*["txt", "pem"])
+        that classUnderTest.includes.get(), containsInAnyOrder(*["**/*.txt", "**/*.pem"])
     }
 }

@@ -69,8 +69,8 @@ class TrustStoreBuilderPluginTest extends Specification {
         def result = buildGradleRunner("tasks", "--all").build()
 
         then:
-        result.output.contains("buildTrustStore - Adds all certificates found")
-        result.output.contains("checkCertificates - Checks the validation of the certificates")
+        result.output.contains("buildTrustStore - Adds all certificates found under 'src/main/certs' to the TrustStore.\n")
+        result.output.contains("checkCertificates - Checks the validation of the certificates to import.\n")
     }
 
     def "buildTrustStore and checkCertificates tasks are included in lifecycle"() {
@@ -130,7 +130,7 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                inputDir('src/main/x509')
+                source('src/main/x509')
             }
         """
 
@@ -146,7 +146,7 @@ class TrustStoreBuilderPluginTest extends Specification {
         assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
-    def "buildTrustStore task respects configuration (acceptedFileEndings)"() {
+    def "buildTrustStore task respects configuration (include)"() {
         // Textfixtures contains 'isrgrootx1.pem' and 'root.crt'
         given:
         buildFile.text = """
@@ -155,7 +155,7 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                acceptedFileEndings('crt')
+                include('**/*.crt')
             }
         """
 

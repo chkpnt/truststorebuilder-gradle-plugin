@@ -27,13 +27,14 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
-import java.nio.file.FileSystems
-import java.nio.file.FileVisitResult
+import org.gradle.api.tasks.util.PatternSet
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
 import java.util.Properties
+
+// I do not inherit from SourceTask (which would provide source and includes for free),
+// as I'd like to print the source directory in the task's description. With SourceTask,
+// I'd only have access to the FileTree, which doesn't have a root directory.
 
 abstract class BuildTrustStoreTask() : DefaultTask() {
 
@@ -48,14 +49,16 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         get() = trustStore.password
 
     @get:InputDirectory
-    abstract val inputDir: Property<Path>
+    internal abstract val source: Property<Path>
+
     @get:Input
-    abstract val acceptedFileEndings: ListProperty<String>
+    internal abstract val includes: ListProperty<String>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
 
     fun trustStore(action: Action<TrustStoreSpec>) {
+        project.copySpec()
         action.execute(trustStore)
     }
 
@@ -63,13 +66,36 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         trustStore = spec
     }
 
+    /**
+     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
+     */
+    fun source(directory: Any) {
+        source.set(project.file(directory).toPath())
+    }
+
+    /**
+     * Filter for the source directory.
+     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
+     */
+    fun include(vararg patterns: String) {
+        includes.set(patterns.toList())
+    }
+
+    /**
+     * Filter for the source directory.
+     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
+     */
+    fun include(patterns: Iterable<String>) {
+        includes.set(patterns)
+    }
+
     @Console
     override fun getDescription(): String {
-        val inputDirName = project.projectDir
+        val sourceDirName = project.projectDir
             .toPath()
-            .relativize(inputDir.get())
+            .relativize(source.get())
             .toString()
-        return "Adds all certificates found under '$inputDirName' to the TrustStore."
+        return "Adds all certificates found under '$sourceDirName' to the TrustStore."
     }
 
     @TaskAction
@@ -79,8 +105,9 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
 
         val jks = certificateService.newKeystore()
 
-        val certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
-        for (certFile in certFiles) {
+        val patterns = PatternSet().include(includes.get())
+        project.fileTree(source.get()).matching(patterns).forEach {
+            val certFile = it.toPath()
             val alias = getCertAlias(certFile)
             val cert = certificateService.loadCertificate(certFile)
             certificateService.addCertificateToKeystore(jks, cert, alias)
@@ -98,7 +125,7 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
     private fun checkTaskConfiguration() {
         val listOfImproperConfiguredProperties = mutableListOf<String>()
         if (trustStorePassword.getOrElse("").isBlank()) listOfImproperConfiguredProperties.add("password")
-        if (acceptedFileEndings.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("acceptedFileEndings")
+        if (includes.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("include")
 
         if (listOfImproperConfiguredProperties.any()) {
             val improperConfiguredProperties = listOfImproperConfiguredProperties.joinToString(separator = ", ")
@@ -123,35 +150,5 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
             val alias = properties.getProperty("alias")
             return alias ?: filename.toString()
         }
-    }
-}
-
-internal object PathScanner {
-
-    fun scanForFilesWithFileEnding(path: Path, endsWith: List<String>): List<Path> {
-        val extensions = endsWith.joinToString(",")
-        val endsWithMatcher = FileSystems.getDefault()
-            .getPathMatcher("glob:*.{$extensions}")
-
-        val certs = ArrayList<Path>()
-
-        Files.walkFileTree(
-            path,
-            object : SimpleFileVisitor<Path>() {
-
-                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                    super.visitFile(file, attrs)
-
-                    val filename = file.fileName
-                    if (endsWithMatcher.matches(filename)) {
-                        certs.add(file)
-                    }
-
-                    return FileVisitResult.CONTINUE
-                }
-            }
-        )
-
-        return certs
     }
 }
