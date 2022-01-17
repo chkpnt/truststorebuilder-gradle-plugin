@@ -18,6 +18,7 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Console
@@ -57,8 +58,20 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
 
+    init {
+        group = BasePlugin.BUILD_GROUP
+    }
+
+    @Console
+    override fun getDescription(): String {
+        val sourceDirName = project.projectDir
+            .toPath()
+            .relativize(source.get())
+            .toString()
+        return "Adds all certificates found under '$sourceDirName' to the TrustStore."
+    }
+
     fun trustStore(action: Action<TrustStoreSpec>) {
-        project.copySpec()
         action.execute(trustStore)
     }
 
@@ -87,15 +100,6 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
      */
     fun include(patterns: Iterable<String>) {
         includes.set(patterns)
-    }
-
-    @Console
-    override fun getDescription(): String {
-        val sourceDirName = project.projectDir
-            .toPath()
-            .relativize(source.get())
-            .toString()
-        return "Adds all certificates found under '$sourceDirName' to the TrustStore."
     }
 
     @TaskAction

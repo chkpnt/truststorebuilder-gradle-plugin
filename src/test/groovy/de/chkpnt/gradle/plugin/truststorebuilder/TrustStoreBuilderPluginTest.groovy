@@ -218,6 +218,31 @@ class TrustStoreBuilderPluginTest extends Specification {
         assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
+    def "custom BuildTrustStoreTask"() {
+        given:
+        buildFile.text = """            
+            import de.chkpnt.gradle.plugin.truststorebuilder.*
+
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+
+            tasks.register('buildTrustStoreForAppX', BuildTrustStoreTask) {
+                trustStore {
+                    path('build/truststore-x.jks')
+                    password('changeit')
+                }
+                source('src/certs/AppX')
+            }
+        """
+
+        when:
+        def result = buildGradleRunner("tasks", "--all").build()
+
+        then:
+        result.output.contains("buildTrustStoreForAppX - Adds all certificates found under 'src/certs/AppX' to the TrustStore.\n")
+    }
+
     private Path getDefaultTrustStorePath() {
         Path keystore = testProjectDir.resolve("build/cacerts.jks")
         assert Files.exists(keystore)
