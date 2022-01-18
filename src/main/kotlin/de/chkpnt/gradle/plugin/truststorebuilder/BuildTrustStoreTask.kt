@@ -16,7 +16,6 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.provider.ListProperty
@@ -27,7 +26,6 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.api.tasks.util.PatternSet
 import java.nio.file.Files
 import java.nio.file.Path
@@ -39,21 +37,17 @@ import java.util.Properties
 
 abstract class BuildTrustStoreTask() : DefaultTask() {
 
-    private var trustStore: TrustStoreSpec = TrustStoreSpec(project)
-
     @get:OutputFile
-    internal val trustStorePath: Property<Path>
-        get() = trustStore.path
+    abstract val trustStorePath: Property<Path>
 
     @get:Input
-    internal val trustStorePassword: Property<String>
-        get() = trustStore.password
+    abstract val trustStorePassword: Property<String>
 
     @get:InputDirectory
-    internal abstract val source: Property<Path>
+    abstract val source: Property<Path>
 
     @get:Input
-    internal abstract val includes: ListProperty<String>
+    abstract val includes: ListProperty<String>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
@@ -71,41 +65,9 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         return "Adds all certificates found under '$sourceDirName' to the TrustStore."
     }
 
-    fun trustStore(action: Action<TrustStoreSpec>) {
-        action.execute(trustStore)
-    }
-
-    internal fun trustStore(spec: TrustStoreSpec) {
-        trustStore = spec
-    }
-
-    /**
-     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
-     */
-    fun source(directory: Any) {
-        source.set(project.file(directory).toPath())
-    }
-
-    /**
-     * Filter for the source directory.
-     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
-     */
-    fun include(vararg patterns: String) {
-        includes.set(patterns.toList())
-    }
-
-    /**
-     * Filter for the source directory.
-     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
-     */
-    fun include(patterns: Iterable<String>) {
-        includes.set(patterns)
-    }
-
     @TaskAction
     fun importCerts() {
-        checkTaskConfiguration()
-        prepareOutputDir(trustStore.path.get().parent)
+        prepareOutputDir(trustStorePath.get().parent)
 
         val jks = certificateService.newKeystore()
 
@@ -117,23 +79,12 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
             certificateService.addCertificateToKeystore(jks, cert, alias)
         }
 
-        certificateService.storeKeystore(jks, trustStore.path.get(), trustStore.password.get())
+        certificateService.storeKeystore(jks, trustStorePath.get(), trustStorePassword.get())
     }
 
     private fun prepareOutputDir(outputDir: Path?) {
         if (outputDir != null && Files.notExists(outputDir)) {
             Files.createDirectories(outputDir)
-        }
-    }
-
-    private fun checkTaskConfiguration() {
-        val listOfImproperConfiguredProperties = mutableListOf<String>()
-        if (trustStorePassword.getOrElse("").isBlank()) listOfImproperConfiguredProperties.add("password")
-        if (includes.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("include")
-
-        if (listOfImproperConfiguredProperties.any()) {
-            val improperConfiguredProperties = listOfImproperConfiguredProperties.joinToString(separator = ", ")
-            throw TaskExecutionException(this, IllegalArgumentException("The following properties have to be configured appropriately: $improperConfiguredProperties"))
         }
     }
 

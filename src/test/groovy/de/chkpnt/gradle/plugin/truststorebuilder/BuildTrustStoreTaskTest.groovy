@@ -54,12 +54,10 @@ class BuildTrustStoreTaskTest extends Specification {
         testProjectDir.resolve("certs/cacert.pem.config").text = "alias=CACert Root CA"
 
         and:
-        classUnderTest.trustStore({
-            it.path(testProjectDir.resolve("truststore.jks"))
-            it.password("changeit")
-        })
-        classUnderTest.source(testProjectDir.resolve("certs"))
-        classUnderTest.include(["**/*.pem"])
+        classUnderTest.trustStorePath.set(testProjectDir.resolve("truststore.jks"))
+        classUnderTest.trustStorePassword.set("changeit")
+        classUnderTest.source.set(testProjectDir.resolve("certs"))
+        classUnderTest.includes.set(["**/*.pem"])
 
         when:
         classUnderTest.importCerts()
@@ -77,12 +75,10 @@ class BuildTrustStoreTaskTest extends Specification {
         testProjectDir.resolve("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
 
         and:
-        classUnderTest.trustStore({
-            it.path("truststore.jks")
-            it.password("changeit")
-        })
-        classUnderTest.source(testProjectDir.resolve("certs"))
-        classUnderTest.include("**/*.pem")
+        classUnderTest.trustStorePath.set(testProjectDir.resolve("truststore.jks"))
+        classUnderTest.trustStorePassword.set("changeit")
+        classUnderTest.source.set(testProjectDir.resolve("certs"))
+        classUnderTest.includes.set(["**/*.pem"])
 
         when:
         classUnderTest.importCerts()
@@ -97,59 +93,18 @@ class BuildTrustStoreTaskTest extends Specification {
     def "output folder is generated"() {
         given:
         def outputdir = testProjectDir.resolve("foo/bar")
-        classUnderTest.trustStore({
-            it.path("foo/bar/truststore.jks")
-            it.password("changeit")
-        })
+        classUnderTest.trustStorePath.set(testProjectDir.resolve("foo/bar/truststore.jks"))
+        classUnderTest.trustStorePassword.set("changeit")
         assert Files.notExists(outputdir)
 
         and:
-        classUnderTest.source("certs")
-        classUnderTest.include("**/*.pem")
+        classUnderTest.source.set(testProjectDir.resolve("certs"))
+        classUnderTest.includes.set(["**/*.pem"])
 
         when:
         classUnderTest.importCerts()
 
         then:
         Files.exists(outputdir)
-    }
-
-    def "throwing exception if password is not set"() {
-        given:
-        classUnderTest.trustStore({
-            it.path(testProjectDir.resolve("foo/bar/truststore.jks"))
-            it.password("")
-        })
-        classUnderTest.source("certs")
-        classUnderTest.include("**/*.pem")
-
-        when:
-        classUnderTest.importCerts()
-
-        then:
-        def e = thrown(TaskExecutionException)
-        IllegalArgumentException rootCause = e.cause
-        rootCause.message == "The following properties have to be configured appropriately: password"
-    }
-
-    def "throwing exception if include is not set appropriately"() {
-        given:
-        classUnderTest.trustStore({
-            it.path("foo/bar/truststore.jks")
-            it.password("changeit")
-        })
-        classUnderTest.source("certs")
-
-        and:
-        // PropertyList<String> can't contain null values, therefore testing is not needed
-        classUnderTest.include("", " ")
-
-        when:
-        classUnderTest.importCerts()
-
-        then:
-        def e = thrown(TaskExecutionException)
-        IllegalArgumentException rootCause = e.cause
-        rootCause.message == "The following properties have to be configured appropriately: include"
     }
 }

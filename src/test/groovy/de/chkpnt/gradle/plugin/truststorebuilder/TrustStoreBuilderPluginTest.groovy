@@ -48,7 +48,8 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                //acceptedFileEndings = ['bla']
+                trustStore {
+                }
             }
         """
         def settingsFile = testProjectDir.resolve('settings.gradle').toFile()
@@ -69,6 +70,7 @@ class TrustStoreBuilderPluginTest extends Specification {
         def result = buildGradleRunner("tasks", "--all").build()
 
         then:
+        println(result.output)
         result.output.contains("buildTrustStore - Adds all certificates found under 'src/main/certs' to the TrustStore.\n")
         result.output.contains("checkCertificates - Checks the validation of the certificates to import.\n")
     }
@@ -91,8 +93,10 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                checkEnabled(false)
-                buildEnabled(false)
+                trustStore {
+                    checkEnabled.set(false)
+                    buildEnabled.set(false)
+                }
             }
         """
 
@@ -130,7 +134,9 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                source('src/main/x509')
+                trustStore {
+                    source('src/main/x509')
+                }
             }
         """
 
@@ -155,7 +161,9 @@ class TrustStoreBuilderPluginTest extends Specification {
             }
 
             trustStoreBuilder {
-                include('**/*.crt')
+                trustStore {
+                    include('**/*.crt')
+                }
             }
         """
 
@@ -226,13 +234,13 @@ class TrustStoreBuilderPluginTest extends Specification {
             plugins {
                 id 'de.chkpnt.truststorebuilder'
             }
-
-            tasks.register('buildTrustStoreForAppX', BuildTrustStoreTask) {
-                trustStore {
+            
+            trustStoreBuilder {
+                trustStore("forAppX") {
                     path('build/truststore-x.jks')
                     password('changeit')
+                    source('src/certs/AppX')
                 }
-                source('src/certs/AppX')
             }
         """
 

@@ -25,6 +25,7 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.util.PatternSet
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.cert.CertificateException
@@ -51,6 +52,11 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
 
     private val atLeastValid: Duration
         get() = Duration.ofDays(atLeastValidDays.get().toLong())
+
+    init {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Checks the validation of the certificates to import."
+    }
 
     /**
      * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.

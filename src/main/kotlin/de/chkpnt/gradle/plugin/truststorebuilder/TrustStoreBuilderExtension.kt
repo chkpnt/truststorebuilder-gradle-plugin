@@ -18,63 +18,57 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.provider.ListProperty
-import org.gradle.api.provider.Property
-import java.nio.file.Path
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 open class TrustStoreBuilderExtension(private val project: Project) {
 
-    internal val trustStore: TrustStoreSpec = TrustStoreSpec(project)
-
-    internal val source: Property<Path> = project.objects.property(Path::class.java)
-        .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
-    internal val includes: ListProperty<String> = project.objects.listProperty(String::class.java)
-        .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
-
-    internal val atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
-        .convention(90)
-    internal val checkEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
-        .convention(true)
-    internal val buildEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
-        .convention(true)
-
     fun trustStore(action: Action<TrustStoreSpec>) {
-        action.execute(trustStore)
+        trustStore("", action)
     }
 
-    /**
-     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
-     */
-    fun source(directory: Any) {
-        source.set(project.file(directory).toPath())
+    fun trustStore(name: String, action: Action<TrustStoreSpec>) {
+        val trustStoreSpec = TrustStoreSpec(project)
+        action.execute(trustStoreSpec)
+        trustStoreSpec.check()
+        registerTasks(name, trustStoreSpec)
     }
 
-    /**
-     * Filter for the source directory.
-     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
-     */
-    fun include(vararg patterns: String) {
-        includes.set(patterns.toList())
+    private fun registerTasks(name: String, trustStoreSpec: TrustStoreSpec) {
+        val buildTaskName = "$BUILD_TRUSTSTORE_TASK_NAME_PREFIX${name.replaceFirstChar(Char::titlecase)}"
+        val buildTask = project.tasks
+            .register(buildTaskName, BuildTrustStoreTask::class.java) { task ->
+                task.trustStorePath.set(trustStoreSpec.path)
+                task.trustStorePassword.set(trustStoreSpec.password)
+                task.source.set(trustStoreSpec.source)
+                task.includes.set(trustStoreSpec.includes)
+            }
+
+        val checkTaskName = "$CHECK_CERTS_TASK_NAME_PREFIX${name.replaceFirstChar(Char::titlecase)}"
+        val checkTask = project.tasks
+            .register(checkTaskName, CheckCertsValidationTask::class.java) { task ->
+                task.source.set(trustStoreSpec.source)
+                task.includes.set(trustStoreSpec.includes)
+                task.atLeastValidDays.set(trustStoreSpec.atLeastValidDays)
+            }
+
+        project.tasks
+            .named(LifecycleBasePlugin.BUILD_TASK_NAME) { task ->
+                if (trustStoreSpec.buildEnabled.get()) {
+                    task.dependsOn(buildTask)
+                }
+            }
+
+        project.tasks
+            .named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { task ->
+                if (trustStoreSpec.checkEnabled.get()) {
+                    task.dependsOn(checkTask)
+                }
+            }
     }
 
-    /**
-     * Number of days the certificates have to be at least valid. Defaults to 90 days.
-     */
-    fun atLeastValidDays(value: Int) {
-        atLeastValidDays.set(value)
-    }
+    companion object {
 
-    /**
-     * Should the `check`-task depend on `checkCertificates`? Defaults to true.
-     */
-    fun checkEnabled(value: Boolean) {
-        checkEnabled.set(value)
-    }
-
-    /**
-     * Should the `build`-task depend on `buildTrustStore`? Defaults to true.
-     */
-    fun buildEnabled(value: Boolean) {
-        buildEnabled.set(value)
+        private const val BUILD_TRUSTSTORE_TASK_NAME_PREFIX = "buildTrustStore"
+        private const val CHECK_CERTS_TASK_NAME_PREFIX = "checkCertificates"
     }
 }

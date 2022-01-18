@@ -17,6 +17,8 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.Project
+import org.gradle.api.ProjectConfigurationException
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import java.nio.file.Path
 
@@ -26,6 +28,43 @@ class TrustStoreSpec(private val project: Project) {
         .convention(project.layout.buildDirectory.file("cacerts.jks").map { it.asFile.toPath() })
     internal val password: Property<String> = project.objects.property(String::class.java)
         .convention("changeit")
+    internal val source: Property<Path> = project.objects.property(Path::class.java)
+        .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
+    internal val includes: ListProperty<String> = project.objects.listProperty(String::class.java)
+        .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
+
+    /**
+     * Number of days the certificates have to be at least valid. Defaults to 90 days.
+     */
+    var atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
+        .convention(90)
+
+    /**
+     * Should the `check`-task depend on `checkCertificates`? Defaults to true.
+     */
+    var checkEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+        .convention(true)
+
+    /**
+     * Should the `build`-task depend on `buildTrustStore`? Defaults to true.
+     */
+    var buildEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+        .convention(true)
+
+    /**
+     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
+     */
+    fun source(directory: Any) {
+        source.set(project.file(directory).toPath())
+    }
+
+    /**
+     * Filter for the source directory.
+     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
+     */
+    fun include(vararg patterns: String) {
+        includes.set(patterns.toList())
+    }
 
     /**
      * Path pointing to the TrustStore being built.
@@ -43,5 +82,16 @@ class TrustStoreSpec(private val project: Project) {
      */
     fun password(value: String) {
         password.set(value)
+    }
+
+    internal fun check() {
+        val listOfImproperConfiguredProperties = mutableListOf<String>()
+        if (password.getOrElse("").isBlank()) listOfImproperConfiguredProperties.add("password")
+        if (includes.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("include")
+
+        if (listOfImproperConfiguredProperties.any()) {
+            val improperConfiguredProperties = listOfImproperConfiguredProperties.joinToString(separator = ", ")
+            throw ProjectConfigurationException("The following properties have to be configured appropriately: $improperConfiguredProperties", IllegalArgumentException())
+        }
     }
 }

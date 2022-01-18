@@ -19,7 +19,6 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 class TrustStoreBuilderPlugin : Plugin<Project> {
 
@@ -27,47 +26,11 @@ class TrustStoreBuilderPlugin : Plugin<Project> {
         project.pluginManager
             .apply(BasePlugin::class.java)
 
-        val extension = project.extensions
+        project.extensions
             .create(TRUSTSTOREBUILDER_EXTENSION_NAME, TrustStoreBuilderExtension::class.java, project)
-
-        project.tasks
-            .register(CHECK_CERTS_TASK_NAME, CheckCertsValidationTask::class.java) { task ->
-                task.group = LifecycleBasePlugin.VERIFICATION_GROUP
-                task.description = "Checks the validation of the certificates to import."
-
-                task.source.set(extension.source)
-                task.includes.set(extension.includes)
-                task.atLeastValidDays.set(extension.atLeastValidDays)
-            }
-
-        project.tasks
-            .named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { task ->
-                if (extension.checkEnabled.get()) {
-                    task.dependsOn(CHECK_CERTS_TASK_NAME)
-                }
-            }
-
-        project.tasks
-            .register(BUILD_TRUSTSTORE_TASK_NAME, BuildTrustStoreTask::class.java) { task ->
-                task.group = BasePlugin.BUILD_GROUP
-
-                task.trustStore(extension.trustStore)
-                task.source.set(extension.source)
-                task.includes.set(extension.includes)
-            }
-
-        project.tasks
-            .named(LifecycleBasePlugin.BUILD_TASK_NAME) { task ->
-                if (extension.buildEnabled.get()) {
-                    task.dependsOn(BUILD_TRUSTSTORE_TASK_NAME)
-                }
-            }
     }
 
     companion object {
-
         private const val TRUSTSTOREBUILDER_EXTENSION_NAME = "trustStoreBuilder"
-        private const val BUILD_TRUSTSTORE_TASK_NAME = "buildTrustStore"
-        private const val CHECK_CERTS_TASK_NAME = "checkCertificates"
     }
 }

@@ -17,11 +17,9 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.Project
+import org.gradle.api.ProjectConfigurationException
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
-
-import static org.hamcrest.Matchers.containsInAnyOrder
-import static spock.util.matcher.HamcrestSupport.that
 
 class TrustStoreBuilderExtensionTest extends Specification {
 
@@ -35,49 +33,26 @@ class TrustStoreBuilderExtensionTest extends Specification {
         classUnderTest = new TrustStoreBuilderExtension(project)
     }
 
-    def "check default values"() {
-        expect:
-        classUnderTest.trustStore.password.get() == 'changeit'
-        classUnderTest.trustStore.path.get() == project.file('build/cacerts.jks').toPath()
-        classUnderTest.source.get() == project.file('src/main/certs').toPath()
-        that classUnderTest.includes.get(), containsInAnyOrder(*[
-            "**/*.crt",
-            "**/*.cer",
-            "**/*.pem"
-        ])
-        classUnderTest.atLeastValidDays.get() == 90
-        classUnderTest.checkEnabled.get() == true
-        classUnderTest.buildEnabled.get() == true
-    }
-
-    def "Default TrustStore is in build dir"() {
+    def "throwing exception if password is not set"() {
         when:
-        project.buildDir = 'mybuild'
+        classUnderTest.trustStore("") {
+            it.password("")
+        }
 
         then:
-        classUnderTest.trustStore.path.get() == project.file('mybuild/cacerts.jks').toPath()
+        def e = thrown(ProjectConfigurationException)
+        e.message == "The following properties have to be configured appropriately: password"
     }
 
-    def "TrustStore with explicit input and output"() {
-        given:
-        project.file('src/x509/certs').mkdirs()
 
+    def "throwing exception if include is not set appropriately"() {
         when:
-        classUnderTest.trustStore({
-            it.path('öäü/truststore.jks')
-        })
-        classUnderTest.source('src/x509/certs')
+        classUnderTest.trustStore("") {
+            it.include("", " ")
+        }
 
         then:
-        classUnderTest.source.get() == project.file('src/x509/certs').toPath()
-        classUnderTest.trustStore.path.get() == project.file('öäü/truststore.jks').toPath()
-    }
-
-    def "change accepted file endings"() {
-        when:
-        classUnderTest.include("**/*.txt", "**/*.pem")
-
-        then:
-        that classUnderTest.includes.get(), containsInAnyOrder(*["**/*.txt", "**/*.pem"])
+        def e = thrown(ProjectConfigurationException)
+        e.message == "The following properties have to be configured appropriately: include"
     }
 }
