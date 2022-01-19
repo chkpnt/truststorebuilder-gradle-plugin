@@ -32,7 +32,7 @@ interface CertificateService {
     fun isCertificateValidInFuture(cert: X509Certificate, duration: Duration): Boolean
     fun addCertificateToKeystore(ks: KeyStore, cert: X509Certificate, alias: String)
     fun loadCertificate(file: Path): X509Certificate
-    fun extractCN(cert: X509Certificate): String
+    fun deriveAlias(cert: X509Certificate): String
     fun newKeystore(): KeyStore
     fun storeKeystore(ks: KeyStore, file: Path, password: String)
 }
@@ -75,19 +75,33 @@ class DefaultCertificateService : CertificateService {
         return cf.generateCertificate(inputStream) as X509Certificate
     }
 
-    override fun extractCN(cert: X509Certificate): String {
+    override fun deriveAlias(cert: X509Certificate): String {
         val dn = cert.subjectX500Principal.name
         val ldapName = LdapName(dn)
-        return ldapName.rdns.firstOrNull {
+        val cn = ldapName.rdns.firstOrNull {
             it.type.equals("cn", true)
         }?.value?.toString() ?: dn
+        val fingerprint = shortFingerprintSha1(cert)
+        return "$cn [$fingerprint]"
+    }
+
+    private fun shortFingerprintSha1(cert: X509Certificate): String {
+        val sha1 = sha1(cert)
+        return sha1.map { String.format("%02X", (it.toInt() and 0xFF)) }
+            .joinToString(separator = "")
+            .take(7)
     }
 
     fun fingerprintSha1(cert: X509Certificate): String {
+        val sha1 = sha1(cert)
+        return sha1.map { String.format("%02X", (it.toInt() and 0xFF)) }
+            .joinToString(separator = ":")
+    }
+
+    private fun sha1(cert: X509Certificate): ByteArray {
         val messageDigest = MessageDigest.getInstance("SHA1")
         messageDigest.update(cert.encoded)
-        val sha1 = messageDigest.digest()
-        return sha1.map { String.format("%02X", (it.toInt() and 0xFF)) }.joinToString(separator = ":")
+        return messageDigest.digest()
     }
 
     override fun newKeystore(): KeyStore {

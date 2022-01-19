@@ -127,12 +127,12 @@ class CertificateServiceTest extends Specification {
         // the PrivateKeyEntry "mysecretcert" is protected with the password "secret"
     }
 
-    def "Extract CN from certificate"() {
+    def "Derive alias from certificate"() {
         when:
-        def dn = classUnderTest.extractCN(caCertCertificate)
+        def dn = classUnderTest.deriveAlias(caCertCertificate)
 
         then:
-        dn == "CA Cert Signing Authority"
+        dn == "CA Cert Signing Authority [135CEC3]"
     }
 
     def "Fingerprint is calculated correctly"() {

@@ -117,8 +117,8 @@ class TrustStoreBuilderPluginTest extends Specification {
         Path trustStore = getDefaultTrustStorePath()
 
         assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_CN, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_CN, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_ALIAS, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_ALIAS, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
     def "buildTrustStore task respects configuration (inputDir)"() {
@@ -148,8 +148,8 @@ class TrustStoreBuilderPluginTest extends Specification {
         Path trustStore = getDefaultTrustStorePath()
 
         assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_CN, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_CN, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_ALIAS, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_ALIAS, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
     def "buildTrustStore task respects configuration (include)"() {

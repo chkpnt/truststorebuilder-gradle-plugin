@@ -89,6 +89,6 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
     }
 
     private fun getCertAlias(cert: X509Certificate): String {
-        return certificateService.extractCN(cert)
+        return certificateService.deriveAlias(cert)
     }
 }

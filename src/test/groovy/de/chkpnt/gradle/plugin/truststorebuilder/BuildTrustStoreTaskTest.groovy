@@ -64,11 +64,11 @@ class BuildTrustStoreTaskTest extends Specification {
         then:
         def ks = certificateService.loadKeystore(testProjectDir.resolve("truststore.jks"), "changeit")
         that Collections.list(ks.aliases()), containsInAnyOrder(*[
-            CertificateProvider.LETSENCRYPT_ROOT_CA_CN.toLowerCase(),
-            CertificateProvider.CACERT_ROOT_CA_CN.toLowerCase()
+            CertificateProvider.LETSENCRYPT_ROOT_CA_ALIAS.toLowerCase(),
+            CertificateProvider.CACERT_ROOT_CA_ALIAS.toLowerCase()
         ])
-        assertFingerprintOfKeystoreEntry(ks, CertificateProvider.LETSENCRYPT_ROOT_CA_CN, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(ks, CertificateProvider.CACERT_ROOT_CA_CN, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(ks, CertificateProvider.LETSENCRYPT_ROOT_CA_ALIAS, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(ks, CertificateProvider.CACERT_ROOT_CA_ALIAS, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
 
