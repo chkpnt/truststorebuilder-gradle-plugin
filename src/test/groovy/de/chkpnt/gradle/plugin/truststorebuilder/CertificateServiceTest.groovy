@@ -149,10 +149,10 @@ class CertificateServiceTest extends Specification {
         file.write(CertificateProvider.CACERT_ROOT_CA)
 
         when:
-        def cert = classUnderTest.loadCertificate(file)
+        def certs = classUnderTest.loadCertificates(file)
 
         then:
-        cert == caCertCertificate
+        certs.find() == caCertCertificate
     }
 
     def "New Keystore can be saved to the filesystem"() {

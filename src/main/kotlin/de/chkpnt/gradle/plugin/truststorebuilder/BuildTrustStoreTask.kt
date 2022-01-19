@@ -74,9 +74,13 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         val patterns = PatternSet().include(includes.get())
         project.fileTree(source.get()).matching(patterns).forEach {
             val certFile = it.toPath()
-            val cert = certificateService.loadCertificate(certFile)
-            val alias = getCertAlias(cert)
-            certificateService.addCertificateToKeystore(jks, cert, alias)
+            certificateService.loadCertificates(certFile).forEach { cert ->
+                val alias = getCertAlias(cert)
+                if (certificateService.containsAlias(jks, alias)) {
+                    project.logger.warn("Certificate $alias exists multiple times in source")
+                }
+                certificateService.addCertificateToKeystore(jks, cert, alias)
+            }
         }
 
         certificateService.storeKeystore(jks, trustStorePath.get(), trustStorePassword.get())

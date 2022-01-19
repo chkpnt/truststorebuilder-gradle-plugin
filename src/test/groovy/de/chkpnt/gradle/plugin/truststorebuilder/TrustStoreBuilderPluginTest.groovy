@@ -116,7 +116,7 @@ class TrustStoreBuilderPluginTest extends Specification {
         result.task(":buildTrustStore").outcome == SUCCESS
         Path trustStore = getDefaultTrustStorePath()
 
-        assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
+        assertNumberOfEntriesInKeystore(trustStore, "changeit", 131) // 130 from Mozilla (already contains Let's encrypt) + CAcert
         assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_ALIAS, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
         assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_ALIAS, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
@@ -147,7 +147,7 @@ class TrustStoreBuilderPluginTest extends Specification {
         result.task(":buildTrustStore").outcome == SUCCESS
         Path trustStore = getDefaultTrustStorePath()
 
-        assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
+        assertNumberOfEntriesInKeystore(trustStore, "changeit", 131)
         assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_ALIAS, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
         assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_ALIAS, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
@@ -196,7 +196,7 @@ class TrustStoreBuilderPluginTest extends Specification {
 
         then:
         result.task(":buildTrustStore").outcome == SUCCESS
-        assertNumberOfEntriesInKeystore(testProjectDir.resolve("trustStores/cacerts.jks"), "changeit", 2)
+        assertNumberOfEntriesInKeystore(testProjectDir.resolve("trustStores/cacerts.jks"), "changeit", 131)
     }
 
     def "custom BuildTrustStoreTask"() {

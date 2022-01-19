@@ -31,8 +31,9 @@ import javax.naming.ldap.LdapName
 interface CertificateService {
     fun isCertificateValidInFuture(cert: X509Certificate, duration: Duration): Boolean
     fun addCertificateToKeystore(ks: KeyStore, cert: X509Certificate, alias: String)
-    fun loadCertificate(file: Path): X509Certificate
+    fun loadCertificates(file: Path): List<X509Certificate>
     fun deriveAlias(cert: X509Certificate): String
+    fun containsAlias(ks: KeyStore, alias: String): Boolean
     fun newKeystore(): KeyStore
     fun storeKeystore(ks: KeyStore, file: Path, password: String)
 }
@@ -70,9 +71,9 @@ class DefaultCertificateService : CertificateService {
         return entry.trustedCertificate as X509Certificate
     }
 
-    override fun loadCertificate(file: Path): X509Certificate {
+    override fun loadCertificates(file: Path): List<X509Certificate> {
         val inputStream = Files.newInputStream(file)
-        return cf.generateCertificate(inputStream) as X509Certificate
+        return cf.generateCertificates(inputStream).map { it as X509Certificate }
     }
 
     override fun deriveAlias(cert: X509Certificate): String {
@@ -102,6 +103,10 @@ class DefaultCertificateService : CertificateService {
         val messageDigest = MessageDigest.getInstance("SHA1")
         messageDigest.update(cert.encoded)
         return messageDigest.digest()
+    }
+
+    override fun containsAlias(ks: KeyStore, alias: String): Boolean {
+        return ks.containsAlias(alias)
     }
 
     override fun newKeystore(): KeyStore {
