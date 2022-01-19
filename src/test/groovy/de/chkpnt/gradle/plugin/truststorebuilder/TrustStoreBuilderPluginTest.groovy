@@ -117,8 +117,8 @@ class TrustStoreBuilderPluginTest extends Specification {
         Path trustStore = getDefaultTrustStorePath()
 
         assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_CN, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_CN, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
     def "buildTrustStore task respects configuration (inputDir)"() {
@@ -148,8 +148,8 @@ class TrustStoreBuilderPluginTest extends Specification {
         Path trustStore = getDefaultTrustStorePath()
 
         assertNumberOfEntriesInKeystore(trustStore, "changeit", 2)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(trustStore, "changeit", "CAcert Root CA", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.LETSENCRYPT_ROOT_CA_CN, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(trustStore, "changeit", CertificateProvider.CACERT_ROOT_CA_CN, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
     def "buildTrustStore task respects configuration (include)"() {
@@ -197,33 +197,6 @@ class TrustStoreBuilderPluginTest extends Specification {
         then:
         result.task(":buildTrustStore").outcome == SUCCESS
         assertNumberOfEntriesInKeystore(testProjectDir.resolve("trustStores/cacerts.jks"), "changeit", 2)
-    }
-
-    def "alias for certificate is filename if config file is missing"() {
-        given:
-        def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
-        Files.delete(testProjectDir.resolve(configfile))
-
-        when:
-        def result = buildGradleRunner("buildTrustStore").build()
-
-        then:
-        result.task(":buildTrustStore").outcome == SUCCESS
-        assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
-    }
-
-    def "alias for certificate is filename if config file contains no alias"() {
-        given:
-        def configfile = Paths.get("src/main/certs/CAcert/root.crt.config")
-        def file = testProjectDir.resolve(configfile)
-        file.write("foobar")
-
-        when:
-        def result = buildGradleRunner("buildTrustStore").build()
-
-        then:
-        result.task(":buildTrustStore").outcome == SUCCESS
-        assertFingerprintOfKeystoreEntry(getDefaultTrustStorePath(), "changeit", "root.crt", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
     def "custom BuildTrustStoreTask"() {

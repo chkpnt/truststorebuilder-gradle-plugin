@@ -127,6 +127,14 @@ class CertificateServiceTest extends Specification {
         // the PrivateKeyEntry "mysecretcert" is protected with the password "secret"
     }
 
+    def "Extract CN from certificate"() {
+        when:
+        def dn = classUnderTest.extractCN(caCertCertificate)
+
+        then:
+        dn == "CA Cert Signing Authority"
+    }
+
     def "Fingerprint is calculated correctly"() {
         when:
         def fingerprint = classUnderTest.fingerprintSha1(caCertCertificate)

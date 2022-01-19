@@ -17,7 +17,6 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 import spock.lang.TempDir
@@ -26,6 +25,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 import static de.chkpnt.gradle.plugin.truststorebuilder.KeystoreAssertions.assertFingerprintOfKeystoreEntry
+import static org.hamcrest.Matchers.containsInAnyOrder
+import static spock.util.matcher.HamcrestSupport.that
 
 class BuildTrustStoreTaskTest extends Specification {
 
@@ -49,29 +50,6 @@ class BuildTrustStoreTaskTest extends Specification {
     def "BuildTrustStoreTask works awesome"() {
         given:
         testProjectDir.resolve("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
-        testProjectDir.resolve("certs/letsencrypt.pem.config").text = "alias=Let's Encrypt Root CA"
-        testProjectDir.resolve("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
-        testProjectDir.resolve("certs/cacert.pem.config").text = "alias=CACert Root CA"
-
-        and:
-        classUnderTest.trustStorePath.set(testProjectDir.resolve("truststore.jks"))
-        classUnderTest.trustStorePassword.set("changeit")
-        classUnderTest.source.set(testProjectDir.resolve("certs"))
-        classUnderTest.includes.set(["**/*.pem"])
-
-        when:
-        classUnderTest.importCerts()
-
-        then:
-        def ks = certificateService.loadKeystore(testProjectDir.resolve("truststore.jks"), "changeit")
-        assertFingerprintOfKeystoreEntry(ks, "Let's Encrypt Root CA", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(ks, "cacert root ca", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
-    }
-
-    def "alias is derived from filename if not available through config file"() {
-        given:
-        testProjectDir.resolve("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
-        testProjectDir.resolve("certs/letsencrypt.pem.config").text = "bla=no_alias"
         testProjectDir.resolve("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
 
         and:
@@ -85,8 +63,12 @@ class BuildTrustStoreTaskTest extends Specification {
 
         then:
         def ks = certificateService.loadKeystore(testProjectDir.resolve("truststore.jks"), "changeit")
-        assertFingerprintOfKeystoreEntry(ks, "letsencrypt.pem", CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
-        assertFingerprintOfKeystoreEntry(ks, "cacert.pem", CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
+        that Collections.list(ks.aliases()), containsInAnyOrder(*[
+            CertificateProvider.LETSENCRYPT_ROOT_CA_CN.toLowerCase(),
+            CertificateProvider.CACERT_ROOT_CA_CN.toLowerCase()
+        ])
+        assertFingerprintOfKeystoreEntry(ks, CertificateProvider.LETSENCRYPT_ROOT_CA_CN, CertificateProvider.LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1)
+        assertFingerprintOfKeystoreEntry(ks, CertificateProvider.CACERT_ROOT_CA_CN, CertificateProvider.CACERT_ROOT_CA_FINGERPRINT_SHA1)
     }
 
 

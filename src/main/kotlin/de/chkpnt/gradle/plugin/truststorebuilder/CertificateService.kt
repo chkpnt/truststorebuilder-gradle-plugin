@@ -26,11 +26,13 @@ import java.time.Clock
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import javax.naming.ldap.LdapName
 
 interface CertificateService {
     fun isCertificateValidInFuture(cert: X509Certificate, duration: Duration): Boolean
     fun addCertificateToKeystore(ks: KeyStore, cert: X509Certificate, alias: String)
     fun loadCertificate(file: Path): X509Certificate
+    fun extractCN(cert: X509Certificate): String
     fun newKeystore(): KeyStore
     fun storeKeystore(ks: KeyStore, file: Path, password: String)
 }
@@ -71,6 +73,14 @@ class DefaultCertificateService : CertificateService {
     override fun loadCertificate(file: Path): X509Certificate {
         val inputStream = Files.newInputStream(file)
         return cf.generateCertificate(inputStream) as X509Certificate
+    }
+
+    override fun extractCN(cert: X509Certificate): String {
+        val dn = cert.subjectX500Principal.name
+        val ldapName = LdapName(dn)
+        return ldapName.rdns.firstOrNull {
+            it.type.equals("cn", true)
+        }?.value?.toString() ?: dn
     }
 
     fun fingerprintSha1(cert: X509Certificate): String {

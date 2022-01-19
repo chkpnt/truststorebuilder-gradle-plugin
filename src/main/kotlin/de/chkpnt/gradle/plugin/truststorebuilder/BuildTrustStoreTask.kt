@@ -29,7 +29,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.util.PatternSet
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.Properties
+import java.security.cert.X509Certificate
 
 // I do not inherit from SourceTask (which would provide source and includes for free),
 // as I'd like to print the source directory in the task's description. With SourceTask,
@@ -74,8 +74,8 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         val patterns = PatternSet().include(includes.get())
         project.fileTree(source.get()).matching(patterns).forEach {
             val certFile = it.toPath()
-            val alias = getCertAlias(certFile)
             val cert = certificateService.loadCertificate(certFile)
+            val alias = getCertAlias(cert)
             certificateService.addCertificateToKeystore(jks, cert, alias)
         }
 
@@ -88,22 +88,7 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         }
     }
 
-    companion object {
-
-        private fun getCertAlias(certFile: Path): String {
-            val filename = certFile.fileName.toString()
-            val configFile = certFile.resolveSibling("$filename.config")
-
-            if (!Files.exists(configFile)) {
-                return filename
-            }
-
-            val properties = Properties()
-            val inputStream = Files.newInputStream(configFile)
-            properties.load(inputStream)
-
-            val alias = properties.getProperty("alias")
-            return alias ?: filename.toString()
-        }
+    private fun getCertAlias(cert: X509Certificate): String {
+        return certificateService.extractCN(cert)
     }
 }
