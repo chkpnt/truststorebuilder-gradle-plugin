@@ -69,7 +69,8 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
     fun importCerts() {
         prepareOutputDir(trustStorePath.get().parent)
 
-        val jks = certificateService.newKeystore()
+        val type = checkNotNull(trustStorePath.get().keyStoreType()) // is ensured to be not null via TrustStoreSpec
+        val jks = certificateService.newKeystore(type)
 
         val patterns = PatternSet().include(includes.get())
         project.fileTree(source.get()).matching(patterns).forEach {

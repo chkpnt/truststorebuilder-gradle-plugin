@@ -28,13 +28,17 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import javax.naming.ldap.LdapName
 
+enum class KeyStoreType {
+    JKS, PKCS12
+}
+
 interface CertificateService {
     fun isCertificateValidInFuture(cert: X509Certificate, duration: Duration): Boolean
     fun addCertificateToKeystore(ks: KeyStore, cert: X509Certificate, alias: String)
     fun loadCertificates(file: Path): List<X509Certificate>
     fun deriveAlias(cert: X509Certificate): String
     fun containsAlias(ks: KeyStore, alias: String): Boolean
-    fun newKeystore(): KeyStore
+    fun newKeystore(type: KeyStoreType): KeyStore
     fun storeKeystore(ks: KeyStore, file: Path, password: String)
 }
 
@@ -109,14 +113,15 @@ class DefaultCertificateService : CertificateService {
         return ks.containsAlias(alias)
     }
 
-    override fun newKeystore(): KeyStore {
-        val keystore = KeyStore.getInstance("JKS")
+    override fun newKeystore(type: KeyStoreType): KeyStore {
+        val keystore = KeyStore.getInstance(type.name)
         keystore.load(null)
         return keystore
     }
 
     fun loadKeystore(file: Path, password: String): KeyStore {
-        val keystore = KeyStore.getInstance("JKS")
+        val type = file.keyStoreType() ?: throw IllegalArgumentException("Can't derive KeyStoreType for $file")
+        val keystore = KeyStore.getInstance(type.name)
         Files.newInputStream(file).use { inputStream ->
             keystore.load(inputStream, password.toCharArray())
         }

@@ -155,10 +155,10 @@ class CertificateServiceTest extends Specification {
         certs.find() == caCertCertificate
     }
 
-    def "New Keystore can be saved to the filesystem"() {
+    def "New Keystore can be saved to the filesystem"(filename) {
         given:
         def file = fs.getPath("keystore.jks")
-        def ks = classUnderTest.newKeystore()
+        def ks = classUnderTest.newKeystore(KeyStoreType.JKS)
         assert Files.notExists(file)
 
         when:
@@ -166,6 +166,12 @@ class CertificateServiceTest extends Specification {
 
         then:
         Files.exists(file)
+
+        where:
+        filename       | _
+        "keystore.jks" | _
+        "keystore.p12" | _
+        "keystore.pfx" | _
     }
 
     private def prepareKeystore(String filename) {

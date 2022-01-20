@@ -86,6 +86,7 @@ class TrustStoreSpec(private val project: Project) {
 
     internal fun check() {
         val listOfImproperConfiguredProperties = mutableListOf<String>()
+        if (path.get().keyStoreType() == null) listOfImproperConfiguredProperties.add("path")
         if (password.getOrElse("").isBlank()) listOfImproperConfiguredProperties.add("password")
         if (includes.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("include")
 

@@ -55,4 +55,15 @@ class TrustStoreBuilderExtensionTest extends Specification {
         def e = thrown(ProjectConfigurationException)
         e.message == "The following properties have to be configured appropriately: include"
     }
+
+    def "throwing exception if not supported KeyStoreType is used"() {
+        when:
+        classUnderTest.trustStore("") {
+            it.path("build/cacerts.bin")
+        }
+
+        then:
+        def e = thrown(ProjectConfigurationException)
+        e.message == "The following properties have to be configured appropriately: path"
+    }
 }
