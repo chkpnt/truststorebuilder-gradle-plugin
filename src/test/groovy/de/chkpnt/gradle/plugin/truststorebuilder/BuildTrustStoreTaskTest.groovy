@@ -59,7 +59,7 @@ class BuildTrustStoreTaskTest extends Specification {
         classUnderTest.includes.set(["**/*.pem"])
 
         when:
-        classUnderTest.importCerts()
+        classUnderTest.buildTrustStore()
 
         then:
         def ks = certificateService.loadKeystore(testProjectDir.resolve("truststore.jks"), "changeit")
@@ -84,7 +84,7 @@ class BuildTrustStoreTaskTest extends Specification {
         classUnderTest.includes.set(["**/*.pem"])
 
         when:
-        classUnderTest.importCerts()
+        classUnderTest.buildTrustStore()
 
         then:
         Files.exists(outputdir)

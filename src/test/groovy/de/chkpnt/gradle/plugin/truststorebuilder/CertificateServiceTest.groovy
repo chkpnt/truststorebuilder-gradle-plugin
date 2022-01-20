@@ -158,7 +158,7 @@ class CertificateServiceTest extends Specification {
     def "New Keystore can be saved to the filesystem"(filename) {
         given:
         def file = fs.getPath("keystore.jks")
-        def ks = classUnderTest.newKeystore(KeyStoreType.JKS)
+        def ks = classUnderTest.newKeyStore(KeyStoreType.JKS)
         assert Files.notExists(file)
 
         when:

@@ -29,6 +29,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.util.PatternSet
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.KeyStore
 import java.security.cert.X509Certificate
 
 // I do not inherit from SourceTask (which would provide source and includes for free),
@@ -66,30 +67,35 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
     }
 
     @TaskAction
-    fun importCerts() {
+    fun buildTrustStore() {
         prepareOutputDir(trustStorePath.get().parent)
 
         val type = checkNotNull(trustStorePath.get().keyStoreType()) // is ensured to be not null via TrustStoreSpec
-        val jks = certificateService.newKeystore(type)
+        val keystore = certificateService.newKeyStore(type)
 
         val patterns = PatternSet().include(includes.get())
-        project.fileTree(source.get()).matching(patterns).forEach {
-            val certFile = it.toPath()
-            certificateService.loadCertificates(certFile).forEach { cert ->
-                val alias = getCertAlias(cert)
-                if (certificateService.containsAlias(jks, alias)) {
-                    project.logger.warn("Certificate $alias exists multiple times in source")
-                }
-                certificateService.addCertificateToKeystore(jks, cert, alias)
-            }
+        for (file in project.fileTree(source.get()).matching(patterns)) {
+            val certFile = file.toPath()
+            val certificates = certificateService.loadCertificates(certFile)
+            importCertificatesInto(keystore, certificates)
         }
 
-        certificateService.storeKeystore(jks, trustStorePath.get(), trustStorePassword.get())
+        certificateService.storeKeystore(keystore, trustStorePath.get(), trustStorePassword.get())
     }
 
     private fun prepareOutputDir(outputDir: Path?) {
         if (outputDir != null && Files.notExists(outputDir)) {
             Files.createDirectories(outputDir)
+        }
+    }
+
+    private fun importCertificatesInto(keystore: KeyStore, certs: List<X509Certificate>) {
+        for (cert in certs) {
+            val alias = getCertAlias(cert)
+            if (certificateService.containsAlias(keystore, alias)) {
+                project.logger.warn("Certificate $alias exists multiple times in source")
+            }
+            certificateService.addCertificateToKeystore(keystore, cert, alias)
         }
     }
 

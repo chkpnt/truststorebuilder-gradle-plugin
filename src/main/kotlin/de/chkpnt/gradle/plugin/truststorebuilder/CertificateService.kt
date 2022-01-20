@@ -38,7 +38,7 @@ interface CertificateService {
     fun loadCertificates(file: Path): List<X509Certificate>
     fun deriveAlias(cert: X509Certificate): String
     fun containsAlias(ks: KeyStore, alias: String): Boolean
-    fun newKeystore(type: KeyStoreType): KeyStore
+    fun newKeyStore(type: KeyStoreType): KeyStore
     fun storeKeystore(ks: KeyStore, file: Path, password: String)
 }
 
@@ -113,7 +113,7 @@ class DefaultCertificateService : CertificateService {
         return ks.containsAlias(alias)
     }
 
-    override fun newKeystore(type: KeyStoreType): KeyStore {
+    override fun newKeyStore(type: KeyStoreType): KeyStore {
         val keystore = KeyStore.getInstance(type.name)
         keystore.load(null)
         return keystore
