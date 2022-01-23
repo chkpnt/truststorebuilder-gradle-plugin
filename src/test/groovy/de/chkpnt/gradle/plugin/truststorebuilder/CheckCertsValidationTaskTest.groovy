@@ -23,6 +23,7 @@ import spock.lang.TempDir
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class CheckCertsValidationTaskTest extends Specification {
 
@@ -85,7 +86,8 @@ class CheckCertsValidationTaskTest extends Specification {
 
         then:
         def e = thrown(TrustStoreBuilderError)
-        e.message == "Certificate \"ISRG Root X1 [CABD2A7]\" is already or becomes invalid within the next 30 days: certs${testProjectDir.fileSystem.separator}letsencrypt.pem"
+        def path = Paths.get("certs", "letsencrypt.pem")
+        e.message == "Certificate \"ISRG Root X1 [CABD2A7]\" is already or becomes invalid within the next 30 days: $path"
     }
 
     def "when all certificates are valid nothing happens"() {

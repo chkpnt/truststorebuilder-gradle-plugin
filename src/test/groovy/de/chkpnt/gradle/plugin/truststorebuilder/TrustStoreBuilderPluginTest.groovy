@@ -72,9 +72,9 @@ class TrustStoreBuilderPluginTest extends Specification {
         def result = buildGradleRunner("tasks", "--all").build()
 
         then:
-        println(result.output)
-        result.output.contains("buildTrustStore - Adds all certificates found under 'src/main/certs' to the TrustStore.\n")
-        result.output.contains("checkCertificates - Checks the validation of certificates.\n")
+        def path = Paths.get("src", "main", "certs")
+        result.output.contains("buildTrustStore - Adds all certificates found under '$path' to the TrustStore.")
+        result.output.contains("checkCertificates - Checks the validation of certificates.")
     }
 
     def "buildTrustStore and checkCertificates tasks are included in lifecycle"() {
@@ -240,7 +240,8 @@ class TrustStoreBuilderPluginTest extends Specification {
         def result = buildGradleRunner("tasks", "--all").build()
 
         then:
-        result.output.contains("buildTrustStoreForAppX - Adds all certificates found under 'src/certs/AppX' to the TrustStore.\n")
+        def path = Paths.get("src", "certs", "AppX")
+        result.output.contains("buildTrustStoreForAppX - Adds all certificates found under '$path' to the TrustStore.")
     }
 
     private Path getDefaultTrustStorePath() {
