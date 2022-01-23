@@ -1,85 +1,178 @@
-<HTML>
-<HEAD>
-<meta charset="UTF-8">
-<title>de.chkpnt.gradle.plugin.truststorebuilder - truststorebuilder-gradle-plugin</title>
-<link rel="stylesheet" href="../../style.css">
-</HEAD>
-<BODY>
-<a href="../index.html">truststorebuilder-gradle-plugin</a>&nbsp;/&nbsp;<a href="./index.html">de.chkpnt.gradle.plugin.truststorebuilder</a><br/>
-<br/>
-<h2>Package de.chkpnt.gradle.plugin.truststorebuilder</h2>
-<h3>Types</h3>
-<table>
-<tbody>
-<tr>
-<td>
-<h4><a href="-certificate-service/index.html">CertificateService</a></h4>
-</td>
-<td>
-<code><span class="keyword">interface </span><span class="identifier">CertificateService</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-check-certs-validation-task/index.html">CheckCertsValidationTask</a></h4>
-</td>
-<td>
-<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">CheckCertsValidationTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">DefaultTask</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-default-certificate-service/index.html">DefaultCertificateService</a></h4>
-</td>
-<td>
-<code><span class="keyword">class </span><span class="identifier">DefaultCertificateService</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-certificate-service/index.html"><span class="identifier">CertificateService</span></a></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-default-file-adapter/index.html">DefaultFileAdapter</a></h4>
-</td>
-<td>
-<code><span class="keyword">class </span><span class="identifier">DefaultFileAdapter</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-file-adapter/index.html"><span class="identifier">FileAdapter</span></a></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-file-adapter/index.html">FileAdapter</a></h4>
-</td>
-<td>
-<code><span class="keyword">interface </span><span class="identifier">FileAdapter</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-import-certs-task/index.html">ImportCertsTask</a></h4>
-</td>
-<td>
-<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">ImportCertsTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">DefaultTask</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-trust-store-builder-extension/index.html">TrustStoreBuilderExtension</a></h4>
-</td>
-<td>
-<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">TrustStoreBuilderExtension</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="-trust-store-builder-plugin/index.html">TrustStoreBuilderPlugin</a></h4>
-</td>
-<td>
-<code><span class="keyword">class </span><span class="identifier">TrustStoreBuilderPlugin</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Plugin</span><span class="symbol">&lt;</span><span class="identifier">Project</span><span class="symbol">&gt;</span></code></td>
-</tr>
-</tbody>
-</table>
-<h3>Exceptions</h3>
-<table>
-<tbody>
-<tr>
-<td>
-<h4><a href="-check-cert-validation-error/index.html">CheckCertValidationError</a></h4>
-</td>
-<td>
-<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">CheckCertValidationError</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">GradleException</span></code></td>
-</tr>
-</tbody>
-</table>
-</BODY>
-</HTML>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>de.chkpnt.gradle.plugin.truststorebuilder</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../styles/style.css" rel="Stylesheet"><link href="../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../styles/main.css" rel="Stylesheet"><link href="../../styles/prism.css" rel="Stylesheet"><link href="../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../scripts/main.js" defer="defer"></script><script type="text/javascript" src="../../scripts/prism.js" async="async"></script>  </head>
+  <body>
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../index.html">truststorebuilder-gradle-plugin</a></div>
+      <div>0.6.0-SNAPSHOT</div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div class="main-content" id="content" pageIds="truststorebuilder-gradle-plugin::de.chkpnt.gradle.plugin.truststorebuilder////PointingToDeclaration//769193423">
+          <div class="breadcrumbs"><a href="../../index.html">truststorebuilder-gradle-plugin</a>/<a href="index.html">de.chkpnt.gradle.plugin.truststorebuilder</a></div>
+          <div class="cover ">
+            <h1 class="cover"><span>Package de.</span><wbr></wbr><span>chkpnt.</span><wbr></wbr><span>gradle.</span><wbr></wbr><span>plugin.</span><wbr></wbr><span><span>truststorebuilder</span></span></h1>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button></div>
+            <div class="tabs-section-body">
+              <h2 class="">Types</h2>
+              <div class="table" data-togglable="Types"><a data-name="-1898046377%2FClasslikes%2F769193423" anchor-label="BuildTrustStoreTask" id="-1898046377%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-build-trust-store-task/index.html"><span>Build</span><wbr></wbr><span>Trust</span><wbr></wbr><span>Store</span><wbr></wbr><span><span>Task</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1898046377%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-build-trust-store-task/index.html">BuildTrustStoreTask</a> : <span data-unresolved-link="org.gradle.api/DefaultTask///PointingToDeclaration/">DefaultTask</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="764258129%2FClasslikes%2F769193423" anchor-label="CertificateService" id="764258129%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-certificate-service/index.html"><span>Certificate</span><wbr></wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="764258129%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-certificate-service/index.html">CertificateService</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="136640426%2FClasslikes%2F769193423" anchor-label="CheckCertsValidationTask" id="136640426%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-check-certs-validation-task/index.html"><span>Check</span><wbr></wbr><span>Certs</span><wbr></wbr><span>Validation</span><wbr></wbr><span><span>Task</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="136640426%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-check-certs-validation-task/index.html">CheckCertsValidationTask</a> : <span data-unresolved-link="org.gradle.api/DefaultTask///PointingToDeclaration/">DefaultTask</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1697460588%2FClasslikes%2F769193423" anchor-label="CheckCertValidationError" id="1697460588%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-check-cert-validation-error/index.html"><span>Check</span><wbr></wbr><span>Cert</span><wbr></wbr><span>Validation</span><wbr></wbr><span><span>Error</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1697460588%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-check-cert-validation-error/index.html">CheckCertValidationError</a><span class="token punctuation">(</span>file<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html">Path</a><span class="token punctuation">, </span>reason<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span> : <span data-unresolved-link="org.gradle.api/GradleException///PointingToDeclaration/">GradleException</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-386580588%2FClasslikes%2F769193423" anchor-label="DefaultCertificateService" id="-386580588%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-default-certificate-service/index.html"><span>Default</span><wbr></wbr><span>Certificate</span><wbr></wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-386580588%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-default-certificate-service/index.html">DefaultCertificateService</a> : <a href="-certificate-service/index.html">CertificateService</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-418403181%2FClasslikes%2F769193423" anchor-label="KeyStoreType" id="-418403181%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-key-store-type/index.html"><span>Key</span><wbr></wbr><span>Store</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-418403181%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-key-store-type/index.html">KeyStoreType</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-key-store-type/index.html">KeyStoreType</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="116754146%2FClasslikes%2F769193423" anchor-label="TrustStoreBuilderExtension" id="116754146%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-trust-store-builder-extension/index.html"><span>Trust</span><wbr></wbr><span>Store</span><wbr></wbr><span>Builder</span><wbr></wbr><span><span>Extension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="116754146%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-trust-store-builder-extension/index.html">TrustStoreBuilderExtension</a><span class="token punctuation">(</span>project<span class="token operator">: </span><span data-unresolved-link="org.gradle.api/Project///PointingToDeclaration/">Project</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="737245262%2FClasslikes%2F769193423" anchor-label="TrustStoreBuilderPlugin" id="737245262%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-trust-store-builder-plugin/index.html"><span>Trust</span><wbr></wbr><span>Store</span><wbr></wbr><span>Builder</span><wbr></wbr><span><span>Plugin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="737245262%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-trust-store-builder-plugin/index.html">TrustStoreBuilderPlugin</a> : <span data-unresolved-link="org.gradle.api/Plugin///PointingToDeclaration/">Plugin</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="org.gradle.api/Project///PointingToDeclaration/">Project</span><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1903018347%2FClasslikes%2F769193423" anchor-label="TrustStoreSpec" id="1903018347%2FClasslikes%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-trust-store-spec/index.html"><span>Trust</span><wbr></wbr><span>Store</span><wbr></wbr><span><span>Spec</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1903018347%2FClasslikes%2F769193423"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-trust-store-spec/index.html">TrustStoreSpec</a><span class="token punctuation">(</span>project<span class="token operator">: </span><span data-unresolved-link="org.gradle.api/Project///PointingToDeclaration/">Project</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+
