@@ -17,21 +17,17 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import java.nio.file.Path
 
-class TrustStoreSpec(private val project: Project) {
+class CheckCertsSpec(private val project: Project) {
 
-    internal val path: Property<Path> = project.objects.property(Path::class.java)
-        .convention(project.layout.buildDirectory.file("cacerts.jks").map { it.asFile.toPath() })
-    internal val password: Property<String> = project.objects.property(String::class.java)
-        .convention("changeit")
     internal val source: Property<Path> = project.objects.property(Path::class.java)
         .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
     internal val includes: ListProperty<String> = project.objects.listProperty(String::class.java)
         .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
+    internal val excludes: ListProperty<String> = project.objects.listProperty(String::class.java)
 
     /**
      * Number of days the certificates have to be at least valid. Defaults to 90 days.
@@ -40,9 +36,9 @@ class TrustStoreSpec(private val project: Project) {
         .convention(90)
 
     /**
-     * Should the `build`-task depend on `buildTrustStore<Name>`? Defaults to true.
+     * Should the `check`-task depend on `checkCertificates<Name>`? Defaults to true.
      */
-    var buildEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+    var checkEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
         .convention(true)
 
     /**
@@ -65,36 +61,10 @@ class TrustStoreSpec(private val project: Project) {
     }
 
     /**
-     * Path pointing to the TrustStore being built.
-     * Can be anything that can be handled by `project.file(...)`.
-     *
-     * The type of the TrustStore is derived from the file extension.
-     * Supported are <i>jks</i>, <i>p12</i>, and <i>pfx</i>.
-     *
-     * Defaults to '$buildDir/cacerts.jks'
-     *
-     * @see https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html#file-java.lang.Object-
+     * Exclusions for the source directory.
+     * Defaults to [].
      */
-    fun path(value: Any) {
-        path.set(project.file(value).toPath())
-    }
-
-    /**
-     * The password used for the TrustStore. Defaults to 'changeit'.
-     */
-    fun password(value: String) {
-        password.set(value)
-    }
-
-    internal fun check() {
-        val listOfImproperConfiguredProperties = mutableListOf<String>()
-        if (path.get().keyStoreType() == null) listOfImproperConfiguredProperties.add("path")
-        if (password.getOrElse("").isBlank()) listOfImproperConfiguredProperties.add("password")
-        if (includes.getOrElse(emptyList()).filterNot { it.isBlank() }.isEmpty()) listOfImproperConfiguredProperties.add("include")
-
-        if (listOfImproperConfiguredProperties.any()) {
-            val improperConfiguredProperties = listOfImproperConfiguredProperties.joinToString(separator = ", ")
-            throw ProjectConfigurationException("The following properties have to be configured appropriately: $improperConfiguredProperties", IllegalArgumentException())
-        }
+    fun exclude(vararg patterns: String) {
+        excludes.addAll(patterns.toList())
     }
 }

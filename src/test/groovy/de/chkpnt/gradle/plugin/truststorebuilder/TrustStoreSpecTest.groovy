@@ -46,7 +46,6 @@ class TrustStoreSpecTest extends Specification {
             "**/*.pem"
         ])
         classUnderTest.atLeastValidDays.get() == 90
-        classUnderTest.checkEnabled.get() == true
         classUnderTest.buildEnabled.get() == true
     }
 

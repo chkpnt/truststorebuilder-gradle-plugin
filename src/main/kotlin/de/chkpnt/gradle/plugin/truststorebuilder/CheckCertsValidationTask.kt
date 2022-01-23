@@ -16,27 +16,20 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.util.PatternSet
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.nio.file.Path
 import java.security.cert.X509Certificate
 import java.time.Duration
 
-abstract class CheckCertsValidationTask() : DefaultTask() {
+abstract class CheckCertsValidationTask() : SourceTask() {
 
-    @get:InputDirectory
-    internal abstract val source: Property<Path>
     @get:Input
-    internal abstract val includes: ListProperty<String>
-    @get:Input
-    internal abstract val atLeastValidDays: Property<Int>
+    abstract val atLeastValidDays: Property<Int>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
@@ -46,43 +39,12 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
 
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
-        description = "Checks the validation of the certificates to import."
-    }
-
-    /**
-     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
-     */
-    fun source(directory: Any) {
-        source.set(project.file(directory).toPath())
-    }
-
-    /**
-     * Filter for the source directory.
-     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
-     */
-    fun include(vararg patterns: String) {
-        includes.set(patterns.toList())
-    }
-
-    /**
-     * Filter for the source directory.
-     * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
-     */
-    fun include(patterns: Iterable<String>) {
-        includes.set(patterns)
-    }
-
-    /**
-     * Number of days the certificates have to be at least valid. Defaults to 90 days.
-     */
-    fun atLeastValidDays(numberOfDays: Int) {
-        atLeastValidDays.set(numberOfDays)
+        description = "Checks the validation of certificates."
     }
 
     @TaskAction
     fun testValidation() {
-        val patterns = PatternSet().include(includes.get())
-        for (file in project.fileTree(source.get()).matching(patterns)) {
+        for (file in source.files) {
             val certFile = file.toPath()
             certificateService.loadCertificates(certFile)
                 .forEach { checkValidation(it, certFile) }

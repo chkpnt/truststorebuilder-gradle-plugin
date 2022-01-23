@@ -50,6 +50,8 @@ class TrustStoreBuilderPluginTest extends Specification {
             trustStoreBuilder {
                 trustStore {
                 }
+                checkCertificates {
+                }
             }
         """
         def settingsFile = testProjectDir.resolve('settings.gradle').toFile()
@@ -72,10 +74,25 @@ class TrustStoreBuilderPluginTest extends Specification {
         then:
         println(result.output)
         result.output.contains("buildTrustStore - Adds all certificates found under 'src/main/certs' to the TrustStore.\n")
-        result.output.contains("checkCertificates - Checks the validation of the certificates to import.\n")
+        result.output.contains("checkCertificates - Checks the validation of certificates.\n")
     }
 
     def "buildTrustStore and checkCertificates tasks are included in lifecycle"() {
+        given:
+        buildFile.text = """
+            plugins {
+                id 'de.chkpnt.truststorebuilder'
+            }
+
+            trustStoreBuilder {
+                trustStore {
+                }
+                checkCertificates {
+                    exclude("Mozilla/cacert.pem") // contains expired certs
+                }
+            }
+        """
+
         when:
         def result = buildGradleRunner("build").build()
 
@@ -94,8 +111,10 @@ class TrustStoreBuilderPluginTest extends Specification {
 
             trustStoreBuilder {
                 trustStore {
-                    checkEnabled.set(false)
                     buildEnabled.set(false)
+                }
+                checkCertificates {
+                    checkEnabled.set(false)
                 }
             }
         """

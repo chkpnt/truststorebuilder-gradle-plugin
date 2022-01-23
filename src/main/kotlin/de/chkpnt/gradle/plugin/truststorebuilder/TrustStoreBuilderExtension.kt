@@ -23,50 +23,62 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 open class TrustStoreBuilderExtension(private val project: Project) {
 
     /**
-     * Configures and registers the tasks `buildTrustStore` and `checkCertificates`.
+     * Configures and registers the task `buildTrustStore`.
      */
     fun trustStore(action: Action<TrustStoreSpec>) {
         trustStore("", action)
     }
 
     /**
-     * Configures and registers the tasks `buildTrustStore<Name>` and `checkCertificates<Name>`.
+     * Configures and registers the task `buildTrustStore<Name>`.
      */
     fun trustStore(name: String, action: Action<TrustStoreSpec>) {
         val trustStoreSpec = TrustStoreSpec(project)
         action.execute(trustStoreSpec)
         trustStoreSpec.check()
-        registerTasks(name, trustStoreSpec)
+        registerBuildTrustStoreTask(name, trustStoreSpec)
     }
 
-    private fun registerTasks(name: String, trustStoreSpec: TrustStoreSpec) {
+    /**
+     * Configures and registers the task `checkCertificates`.
+     */
+    fun checkCertificates(action: Action<CheckCertsSpec>) {
+        val checkCertsSpec = CheckCertsSpec(project)
+        action.execute(checkCertsSpec)
+        registerCheckCertificatesTask(checkCertsSpec)
+    }
+
+    private fun registerBuildTrustStoreTask(name: String, spec: TrustStoreSpec) {
         val buildTaskName = "$BUILD_TRUSTSTORE_TASK_NAME_PREFIX${name.replaceFirstChar(Char::titlecase)}"
         val buildTask = project.tasks
             .register(buildTaskName, BuildTrustStoreTask::class.java) { task ->
-                task.trustStorePath.set(trustStoreSpec.path)
-                task.trustStorePassword.set(trustStoreSpec.password)
-                task.source.set(trustStoreSpec.source)
-                task.includes.set(trustStoreSpec.includes)
-            }
-
-        val checkTaskName = "$CHECK_CERTS_TASK_NAME_PREFIX${name.replaceFirstChar(Char::titlecase)}"
-        val checkTask = project.tasks
-            .register(checkTaskName, CheckCertsValidationTask::class.java) { task ->
-                task.source.set(trustStoreSpec.source)
-                task.includes.set(trustStoreSpec.includes)
-                task.atLeastValidDays.set(trustStoreSpec.atLeastValidDays)
+                task.trustStorePath.set(spec.path)
+                task.trustStorePassword.set(spec.password)
+                task.source.set(spec.source)
+                task.includes.set(spec.includes)
             }
 
         project.tasks
             .named(LifecycleBasePlugin.BUILD_TASK_NAME) { task ->
-                if (trustStoreSpec.buildEnabled.get()) {
+                if (spec.buildEnabled.get()) {
                     task.dependsOn(buildTask)
                 }
+            }
+    }
+
+    private fun registerCheckCertificatesTask(spec: CheckCertsSpec) {
+        val checkTaskName = "$CHECK_CERTS_TASK_NAME"
+        val checkTask = project.tasks
+            .register(checkTaskName, CheckCertsValidationTask::class.java) { task ->
+                task.source(spec.source.get())
+                task.include(spec.includes.get())
+                task.exclude(spec.excludes.get())
+                task.atLeastValidDays.set(spec.atLeastValidDays)
             }
 
         project.tasks
             .named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { task ->
-                if (trustStoreSpec.checkEnabled.get()) {
+                if (spec.checkEnabled.get()) {
                     task.dependsOn(checkTask)
                 }
             }
@@ -75,6 +87,6 @@ open class TrustStoreBuilderExtension(private val project: Project) {
     companion object {
 
         private const val BUILD_TRUSTSTORE_TASK_NAME_PREFIX = "buildTrustStore"
-        private const val CHECK_CERTS_TASK_NAME_PREFIX = "checkCertificates"
+        private const val CHECK_CERTS_TASK_NAME = "checkCertificates"
     }
 }

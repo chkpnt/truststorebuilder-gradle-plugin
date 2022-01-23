@@ -41,7 +41,7 @@ class CheckCertsValidationTaskTest extends Specification {
         classUnderTest = project.task('testCertValidation', type: CheckCertsValidationTask)
 
         classUnderTest.certificateService = certificateServiceMock
-        classUnderTest.atLeastValidDays(30)
+        classUnderTest.atLeastValidDays.set(30)
         classUnderTest.source("certs")
         classUnderTest.include("**/*.pem")
     }

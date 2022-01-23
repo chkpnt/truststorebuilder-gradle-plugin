@@ -35,6 +35,7 @@ import java.security.cert.X509Certificate
 // I do not inherit from SourceTask (which would provide source and includes for free),
 // as I'd like to print the source directory in the task's description. With SourceTask,
 // I'd only have access to the FileTree, which doesn't have a root directory.
+// TODO: Gregor, 2021-01-23: Rethink...
 
 abstract class BuildTrustStoreTask() : DefaultTask() {
 
