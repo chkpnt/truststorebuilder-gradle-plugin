@@ -27,7 +27,7 @@ import java.nio.file.Path
 class CheckCertsValidationTaskTest extends Specification {
 
     private CheckCertsValidationTask classUnderTest
-    private CertificateService certificateServiceMock = Mock()
+    private CertificateService certificateServiceMock = Spy(DefaultCertificateService)
     @TempDir
     private Path testProjectDir
     private Project project
@@ -54,8 +54,8 @@ class CheckCertsValidationTaskTest extends Specification {
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(CheckCertValidationError)
-        e.message == "Could not load certificate: certs${testProjectDir.fileSystem.separator}corrupt.pem"
+        def e = thrown(TrustStoreBuilderError)
+        e.message.startsWith( "Could not load certificate: ")
     }
 
     def "loading a non-certificate"() {
@@ -69,8 +69,8 @@ class CheckCertsValidationTaskTest extends Specification {
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(CheckCertValidationError)
-        e.message == "Could not load certificate: certs${testProjectDir.fileSystem.separator}notACert.txt"
+        def e = thrown(TrustStoreBuilderError)
+        e.message.startsWith( "Could not load certificate: ")
     }
 
     def "certificate letsencrypt.pem is invalid"() {
@@ -84,8 +84,8 @@ class CheckCertsValidationTaskTest extends Specification {
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(CheckCertValidationError)
-        e.message == "Certificate is already or becomes invalid within the next 30 days: certs${testProjectDir.fileSystem.separator}letsencrypt.pem"
+        def e = thrown(TrustStoreBuilderError)
+        e.message == "Certificate \"ISRG Root X1 [CABD2A7]\" is already or becomes invalid within the next 30 days: certs${testProjectDir.fileSystem.separator}letsencrypt.pem"
     }
 
     def "when all certificates are valid nothing happens"() {
@@ -101,5 +101,22 @@ class CheckCertsValidationTaskTest extends Specification {
 
         then:
         true
+    }
+
+    def "certificate bundle is supported"() {
+        given:
+        testProjectDir.resolve("certs/bundle.pem").text = """
+        $CertificateProvider.LETSENCRYPT_ROOT_CA
+        $CertificateProvider.CACERT_ROOT_CA
+        """
+
+        and:
+        certificateServiceMock.isCertificateValidInFuture(_, _) >> true
+
+        when:
+        classUnderTest.testValidation()
+
+        then:
+        2 * certificateServiceMock.isCertificateValidInFuture(_, _)
     }
 }

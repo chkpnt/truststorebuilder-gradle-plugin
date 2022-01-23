@@ -20,6 +20,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.security.KeyStore
 import java.security.MessageDigest
+import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.time.Clock
@@ -42,7 +43,7 @@ interface CertificateService {
     fun storeKeystore(ks: KeyStore, file: Path, password: String)
 }
 
-class DefaultCertificateService : CertificateService {
+internal open class DefaultCertificateService : CertificateService {
 
     var clock: Clock = Clock.systemDefaultZone()
 
@@ -76,8 +77,13 @@ class DefaultCertificateService : CertificateService {
     }
 
     override fun loadCertificates(file: Path): List<X509Certificate> {
-        val inputStream = Files.newInputStream(file)
-        return cf.generateCertificates(inputStream).map { it as X509Certificate }
+        Files.newInputStream(file).use { inputStream ->
+            try {
+                return cf.generateCertificates(inputStream).map { it as X509Certificate }
+            } catch (e: CertificateException) {
+                throw TrustStoreBuilderError(file, "Could not load certificate")
+            }
+        }
     }
 
     override fun deriveAlias(cert: X509Certificate): String {

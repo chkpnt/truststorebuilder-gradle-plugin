@@ -17,7 +17,6 @@
 package de.chkpnt.gradle.plugin.truststorebuilder
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -26,10 +25,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.util.PatternSet
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import java.nio.file.Files
 import java.nio.file.Path
-import java.security.cert.CertificateException
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.time.Duration
 
@@ -44,11 +40,6 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
-    @Internal
-    var certificateFactory = CertificateFactory.getInstance("X.509")
-
-    private val INVALID_REASON: String
-        get() = "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days"
 
     private val atLeastValid: Duration
         get() = Duration.ofDays(atLeastValidDays.get().toLong())
@@ -91,38 +82,20 @@ abstract class CheckCertsValidationTask() : DefaultTask() {
     @TaskAction
     fun testValidation() {
         val patterns = PatternSet().include(includes.get())
-        project.fileTree(source.get()).matching(patterns).forEach {
-            val certFile = it.toPath()
-            checkValidation(certFile)
+        for (file in project.fileTree(source.get()).matching(patterns)) {
+            val certFile = file.toPath()
+            certificateService.loadCertificates(certFile)
+                .forEach { checkValidation(it, certFile) }
         }
     }
 
-    private fun checkValidation(file: Path) {
-        val cert = loadX509Certificate(file)
-
+    private fun checkValidation(cert: X509Certificate, path: Path) {
         if (!certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
             val relativePath = project.projectDir
                 .toPath()
-                .relativize(file)
-            throw CheckCertValidationError(relativePath, INVALID_REASON)
+                .relativize(path)
+            val alias = certificateService.deriveAlias(cert)
+            throw TrustStoreBuilderError(relativePath, "Certificate \"$alias\" is already or becomes invalid within the next ${atLeastValid.toDays()} days")
         }
     }
-
-    private fun loadX509Certificate(file: Path): X509Certificate {
-        Files.newInputStream(file).use { inputStream ->
-            try {
-                return certificateFactory.generateCertificate(inputStream) as X509Certificate
-            } catch (e: CertificateException) {
-                val relativePath = project.projectDir
-                    .toPath()
-                    .relativize(file)
-                throw CheckCertValidationError(relativePath, "Could not load certificate")
-            }
-        }
-    }
-}
-
-data class CheckCertValidationError(val file: Path, val reason: String) : GradleException() {
-
-    override val message: String? = "$reason: $file"
 }
