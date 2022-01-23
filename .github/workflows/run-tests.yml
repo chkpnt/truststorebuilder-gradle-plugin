@@ -23,7 +23,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       
     - name: Build
-      run: ./gradlew build
+      run: ./gradlew assemble testClasses
 
     - name: Test
       run: ./gradlew check
