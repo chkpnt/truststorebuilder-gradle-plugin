@@ -52,7 +52,11 @@ class TrustStoreSpec(private val project: Project) {
         .convention(true)
 
     /**
-     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
+     * The directory which is scanned for certificates, which is resolved using `project.file(...)`.
+     *
+     * Defaults to '$projectDir/src/main/certs'.
+     *
+     * {@see https://docs.gradle.org/current/dsl/org.gradle.api.Project.html#org.gradle.api.Project:file(java.lang.Object)}
      */
     fun source(directory: Any) {
         source.set(project.file(directory).toPath())
@@ -69,6 +73,10 @@ class TrustStoreSpec(private val project: Project) {
     /**
      * Path pointing to the TrustStore being built.
      * Can be anything that can be handled by `project.file(...)`.
+     *
+     * The type of the TrustStore is derived from the file extension.
+     * Supported are <i>jks</i>, <i>p12</i>, and <i>pfx</i>.
+     *
      * Defaults to '$buildDir/cacerts.jks'
      *
      * @see https://docs.gradle.org/current/javadoc/org/gradle/api/Project.html#file-java.lang.Object-

@@ -22,10 +22,16 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 open class TrustStoreBuilderExtension(private val project: Project) {
 
+    /**
+     * Configures and registers the tasks `buildTrustStore` and `checkCertificates`.
+     */
     fun trustStore(action: Action<TrustStoreSpec>) {
         trustStore("", action)
     }
 
+    /**
+     * Configures and registers the tasks `buildTrustStore<Name>` and `checkCertificates<Name>`.
+     */
     fun trustStore(name: String, action: Action<TrustStoreSpec>) {
         val trustStoreSpec = TrustStoreSpec(project)
         action.execute(trustStoreSpec)
