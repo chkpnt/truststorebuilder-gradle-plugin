@@ -233,6 +233,7 @@ class TrustStoreBuilderPluginTest extends Specification {
     private def GradleRunner buildGradleRunner(String... tasks) {
         GradleRunner.create()
                 .withDebug(true)
+                .withGradleVersion("7.0")
                 .withProjectDir(testProjectDir.toFile())
                 .withArguments(tasks)
                 .withPluginClasspath()
