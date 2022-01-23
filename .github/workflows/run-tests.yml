@@ -28,6 +28,12 @@ jobs:
     - name: Test
       run: ./gradlew check
 
+    - name: SonarQube analysis
+      run: ./gradlew sonarqube
+      if: github.ref == 'refs/heads/main'
+      env:
+        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
     - name: Upload to codecov.io
       uses: codecov/codecov-action@v2
       with:
