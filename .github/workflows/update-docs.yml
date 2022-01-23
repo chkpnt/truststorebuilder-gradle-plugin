@@ -1,0 +1,24 @@
+name: Update docs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.WORKFLOW_SSH_KEY }}
+
+      - uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.WORKFLOW_SSH_KEY }}
+
+      - name: Set Git author information
+        run: |
+          git config --global user.name "chkpnt CI"
+          git config --global user.email "chkpnt-ci@chkpnt.de"
+
+      - name: Generate docs and publish them to GitHub Pages
+        run: ./gradlew docs gitPublishPush
