@@ -40,19 +40,19 @@ class TrustStoreSpec(private val project: Project) {
         .convention(90)
 
     /**
-     * Should the `check`-task depend on `checkCertificates`? Defaults to true.
+     * Should the `check`-task depend on `checkCertificates<Name>`? Defaults to true.
      */
     var checkEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
         .convention(true)
 
     /**
-     * Should the `build`-task depend on `buildTrustStore`? Defaults to true.
+     * Should the `build`-task depend on `buildTrustStore<Name>`? Defaults to true.
      */
     var buildEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
         .convention(true)
 
     /**
-     * The directory which is scanned for certificates, which is resolved using `project.file(...)`.
+     * The directory which is scanned for certificates and bundles, which is resolved using `project.file(...)`.
      *
      * Defaults to '$projectDir/src/main/certs'.
      *
