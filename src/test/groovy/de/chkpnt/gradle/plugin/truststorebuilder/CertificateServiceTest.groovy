@@ -132,7 +132,7 @@ class CertificateServiceTest extends Specification {
         def dn = classUnderTest.deriveAlias(caCertCertificate)
 
         then:
-        dn == "CA Cert Signing Authority [135CEC3]"
+        dn == "CA Cert Signing Authority [135CEC36]"
     }
 
     def "Fingerprint is calculated correctly"() {

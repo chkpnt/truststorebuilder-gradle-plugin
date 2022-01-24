@@ -100,7 +100,7 @@ internal open class DefaultCertificateService : CertificateService {
         val sha1 = sha1(cert)
         return sha1.map { String.format("%02X", (it.toInt() and 0xFF)) }
             .joinToString(separator = "")
-            .take(7)
+            .take(8)
     }
 
     fun fingerprintSha1(cert: X509Certificate): String {
