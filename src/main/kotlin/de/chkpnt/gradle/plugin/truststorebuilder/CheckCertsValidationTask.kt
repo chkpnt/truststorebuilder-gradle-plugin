@@ -16,6 +16,7 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
+import org.gradle.api.GradleException
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
@@ -44,20 +45,38 @@ abstract class CheckCertsValidationTask() : SourceTask() {
 
     @TaskAction
     fun testValidation() {
+        val invalidCerts = mutableMapOf<Path, MutableList<X509Certificate>>()
+
         for (file in source.files) {
             val certFile = file.toPath()
             certificateService.loadCertificates(certFile)
-                .forEach { checkValidation(it, certFile) }
+                .forEach { checkValidation(it, certFile, invalidCerts) }
+        }
+
+        if (invalidCerts.isNotEmpty()) {
+            val messageBuilder = StringBuilder()
+            invalidCerts.forEach { (path, certs) ->
+                messageBuilder.append("The following certificates in $path are already or become invalid within the next ${atLeastValid.toDays()} days:")
+                    .appendLineSeparator()
+                certs.map(certificateService::deriveAlias).forEach { alias ->
+                    messageBuilder.append(" - $alias").appendLineSeparator()
+                }
+            }
+            throw CheckCertsValidationError(messageBuilder.toString())
         }
     }
 
-    private fun checkValidation(cert: X509Certificate, path: Path) {
+    private fun checkValidation(cert: X509Certificate, path: Path, invalidCerts: MutableMap<Path, MutableList<X509Certificate>>) {
         if (!certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
             val relativePath = project.projectDir
                 .toPath()
                 .relativize(path)
-            val alias = certificateService.deriveAlias(cert)
-            throw TrustStoreBuilderError(relativePath, "Certificate \"$alias\" is already or becomes invalid within the next ${atLeastValid.toDays()} days")
+            invalidCerts.getOrPut(relativePath) { mutableListOf() }
+                .add(cert)
         }
     }
 }
+
+private fun StringBuilder.appendLineSeparator(): StringBuilder = append(System.lineSeparator())
+
+class CheckCertsValidationError(override val message: String) : GradleException(message)

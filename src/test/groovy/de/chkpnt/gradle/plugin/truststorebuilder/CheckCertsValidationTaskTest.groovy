@@ -85,9 +85,10 @@ class CheckCertsValidationTaskTest extends Specification {
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(TrustStoreBuilderError)
+        def e = thrown(CheckCertsValidationError)
         def path = Paths.get("certs", "letsencrypt.pem")
-        e.message == "Certificate \"ISRG Root X1 [CABD2A7]\" is already or becomes invalid within the next 30 days: $path"
+        e.message.startsWith("The following certificates in $path are already or become invalid within the next 30 days:")
+        e.message.contains(" - ISRG Root X1 [CABD2A7]")
     }
 
     def "when all certificates are valid nothing happens"() {
