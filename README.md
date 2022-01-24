@@ -80,13 +80,13 @@ A `TrustStoreSpec` consists the following settings:
 
 The function `checkCertificates` takes a `CheckCertsSpec`, consisting of the following settings:
 
-| Setting                          | Description                                                  | Default                              | Type                |
-|----------------------------------|--------------------------------------------------------------|--------------------------------------|---------------------|
-| source(directory: Any*)          | The directory which is scanned for certificates and bundles. | $projectDir/src/main/certs           | function            |
-| include(vararg patterns: String) | Filter for the source directory.                             | ['**/*.crt', '**/*.cer', '**/*.pem'] | function            |
-| exclude(vararg patterns: String) | Exclusions for the source directory.                         | ['**/*.crt', '**/*.cer', '**/*.pem'] | function            |
-| atLeastValidDays                 | Number of days the certificates have to be at least valid.   | 90                                   | Property\<Int\>     |
-| checkEnabled                     | Should the `check`-task depend on `checkCertificates<Name>`? | true                                 | Property\<Boolean\> |
+| Setting                          | Description                                                        | Default                              | Type                |
+|----------------------------------|--------------------------------------------------------------------|--------------------------------------|---------------------|
+| source(directory: Any*)          | The directory which is scanned for certificates and bundles.       | $projectDir/src/main/certs           | function            |
+| include(vararg patterns: String) | Filter for the source directory, can be called multiple times.     | ['**/*.crt', '**/*.cer', '**/*.pem'] | function            |
+| exclude(vararg patterns: String) | Exclusions for the source directory, can be called multiple times. | []                                   | function            |
+| atLeastValidDays                 | Number of days the certificates have to be at least valid.         | 90                                   | Property\<Int\>     |
+| checkEnabled                     | Should the `check`-task depend on `checkCertificates`?             | true                                 | Property\<Boolean\> |
 
 _\* Anything, that can be handled by [project.file(...)](https://docs.gradle.org/current/dsl/org.gradle.api.Project.html#org.gradle.api.Project:file%28java.lang.Object%29)._
 

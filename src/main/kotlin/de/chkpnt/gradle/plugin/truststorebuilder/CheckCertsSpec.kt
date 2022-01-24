@@ -53,7 +53,8 @@ class CheckCertsSpec(private val project: Project) {
     }
 
     /**
-     * Filter for the source directory.
+     * Filter for the source directory, can be called multiple times.
+     *
      * Defaults to ['**&#47;*.crt', '**&#47;*.cer', '**&#47;*.pem'].
      */
     fun include(vararg patterns: String) {
@@ -61,7 +62,8 @@ class CheckCertsSpec(private val project: Project) {
     }
 
     /**
-     * Exclusions for the source directory.
+     * Exclusions for the source directory, can be called multiple times.
+     *
      * Defaults to [].
      */
     fun exclude(vararg patterns: String) {
