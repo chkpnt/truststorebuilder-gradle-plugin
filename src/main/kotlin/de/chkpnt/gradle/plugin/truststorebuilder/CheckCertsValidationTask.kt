@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 Gregor Dschung
+ * Copyright 2016 - 2022 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,75 +16,67 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.security.cert.CertificateException
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
-import java.time.Duration
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.language.base.plugins.LifecycleBasePlugin
+import java.nio.file.Path
+import java.security.cert.X509Certificate
+import java.time.Duration
 
-open class CheckCertsValidationTask() : DefaultTask() {
+abstract class CheckCertsValidationTask() : SourceTask() {
 
-    @InputDirectory
-    val inputDir: Property<Path> = project.objects.property(Path::class.java)
-    @Input
-    val acceptedFileEndings: ListProperty<String> = project.objects.listProperty(String::class.java)
-    @Input
-    val atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
+    @get:Input
+    abstract val atLeastValidDays: Property<Int>
 
     @Internal
     var certificateService: CertificateService = DefaultCertificateService()
-    @Internal
-    var certificateFactory = CertificateFactory.getInstance("X.509")
+
+    private val atLeastValid: Duration
+        get() = Duration.ofDays(atLeastValidDays.get().toLong())
 
     init {
-        // After updating to Gradle 5: https://github.com/gradle/gradle/issues/6108
-        acceptedFileEndings.set(emptyList())
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Checks the validation of certificates."
     }
-
-    private val INVALID_REASON: String
-        get() = "Certificate is already or becomes invalid within the next ${atLeastValid.toDays()} days"
-
-    val atLeastValid: Duration
-        @Input
-        get() = Duration.ofDays(atLeastValidDays.get().toLong())
 
     @TaskAction
     fun testValidation() {
-        val certFiles = PathScanner.scanForFilesWithFileEnding(inputDir.get(), acceptedFileEndings.get())
-        for (certFile in certFiles) {
-            checkValidation(certFile)
+        val invalidCerts = mutableMapOf<Path, MutableList<X509Certificate>>()
+
+        for (file in source.files) {
+            val certFile = file.toPath()
+            certificateService.loadCertificates(certFile)
+                .forEach { checkValidation(it, certFile, invalidCerts) }
         }
-    }
 
-    private fun checkValidation(file: Path) {
-        val cert = loadX509Certificate(file)
-
-        if (!certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
-            throw CheckCertValidationError(file, INVALID_REASON)
-        }
-    }
-
-    private fun loadX509Certificate(file: Path): X509Certificate {
-        Files.newInputStream(file).use { inputStream ->
-            try {
-                return certificateFactory.generateCertificate(inputStream) as X509Certificate
-            } catch (e: CertificateException) {
-                throw CheckCertValidationError(file, "Could not load certificate")
+        if (invalidCerts.isNotEmpty()) {
+            val messageBuilder = StringBuilder()
+            invalidCerts.forEach { (path, certs) ->
+                messageBuilder.append("The following certificates in $path are already or become invalid within the next ${atLeastValid.toDays()} days:")
+                    .appendLineSeparator()
+                certs.map(certificateService::deriveAlias).forEach { alias ->
+                    messageBuilder.append(" - $alias").appendLineSeparator()
+                }
             }
+            throw CheckCertsValidationError(messageBuilder.toString())
+        }
+    }
+
+    private fun checkValidation(cert: X509Certificate, path: Path, invalidCerts: MutableMap<Path, MutableList<X509Certificate>>) {
+        if (!certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
+            val relativePath = project.projectDir
+                .toPath()
+                .relativize(path)
+            invalidCerts.getOrPut(relativePath) { mutableListOf() }
+                .add(cert)
         }
     }
 }
 
-data class CheckCertValidationError(val file: Path, val reason: String) : GradleException() {
+private fun StringBuilder.appendLineSeparator(): StringBuilder = append(System.lineSeparator())
 
-    override val message: String? = "$reason: $file"
-}
+class CheckCertsValidationError(override val message: String) : GradleException(message)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 Gregor Dschung
+ * Copyright 2016 - 2022 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ omTxJBzcoTWcFbLUvFUufQb1nA5V9FrWk9p2rSVzTMVD
 """
 
     static String CACERT_ROOT_CA_FINGERPRINT_SHA1="13:5C:EC:36:F4:9C:B8:E9:3B:1A:B2:70:CD:80:88:46:76:CE:8F:33"
+    static String CACERT_ROOT_CA_ALIAS = "ca cert signing authority [135cec36]"
 
     static final String LETSENCRYPT_ROOT_CA = """
 -----BEGIN CERTIFICATE-----
@@ -99,6 +100,7 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 """
 
     static String LETSENCRYPT_ROOT_CA_FINGERPRINT_SHA1="CA:BD:2A:79:A1:07:6A:31:F2:1D:25:36:35:CB:03:9D:43:29:A5:E8"
+    static String LETSENCRYPT_ROOT_CA_ALIAS = "isrg root x1 [cabd2a79]"
 
     static final String CORRUPT = """
 -----BEGIN CERTIFICATE-----

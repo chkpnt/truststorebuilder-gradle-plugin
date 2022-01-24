@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 Gregor Dschung
+ * Copyright 2016 - 2022 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,84 +16,85 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.FileSystem
-import java.nio.file.Files
-
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
-
-import com.google.common.jimfs.Jimfs
-
 import spock.lang.Specification
+import spock.lang.TempDir
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 class CheckCertsValidationTaskTest extends Specification {
 
     private CheckCertsValidationTask classUnderTest
-    private CertificateService certificateServiceMock = Mock()
-    private FileSystem fs
+    private CertificateService certificateServiceMock = Spy(DefaultCertificateService)
+    @TempDir
+    private Path testProjectDir
     private Project project
 
     def setup() {
-        fs = Jimfs.newFileSystem()
-        Files.createDirectory(fs.getPath("certs"))
+        Files.createDirectory(testProjectDir.resolve("certs"))
 
-        project = ProjectBuilder.builder().build()
+        project = ProjectBuilder.builder()
+                .withProjectDir(testProjectDir.toFile())
+                .build()
         classUnderTest = project.task('testCertValidation', type: CheckCertsValidationTask)
 
         classUnderTest.certificateService = certificateServiceMock
-        classUnderTest.atLeastValidDays = 30
-        classUnderTest.inputDir = fs.getPath("certs")
-        classUnderTest.acceptedFileEndings = ["pem"]
+        classUnderTest.atLeastValidDays.set(30)
+        classUnderTest.source("certs")
+        classUnderTest.include("**/*.pem")
     }
 
     def "loading a corrupt certificate"() {
         given:
-        fs.getPath("certs/corrupt.pem").text = CertificateProvider.CORRUPT
+        testProjectDir.resolve("certs/corrupt.pem").text = CertificateProvider.CORRUPT
 
         when:
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(CheckCertValidationError)
-        e.message == "Could not load certificate: certs${fs.separator}corrupt.pem"
+        def e = thrown(TrustStoreBuilderError)
+        e.message.startsWith( "Could not load certificate: ")
     }
 
     def "loading a non-certificate"() {
         given:
-        fs.getPath("certs/notACert.txt").text = CertificateProvider.NOT_A_CERT
+        testProjectDir.resolve("certs/notACert.txt").text = CertificateProvider.NOT_A_CERT
 
         and:
-        classUnderTest.acceptedFileEndings = ["txt"]
+        classUnderTest.include("**/*.txt")
 
         when:
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(CheckCertValidationError)
-        e.message == "Could not load certificate: certs${fs.separator}notACert.txt"
+        def e = thrown(TrustStoreBuilderError)
+        e.message.startsWith( "Could not load certificate: ")
     }
 
     def "certificate letsencrypt.pem is invalid"() {
         given:
-        fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
-        fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+        testProjectDir.resolve("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
 
         and:
-        certificateServiceMock.isCertificateValidInFuture(_, _) >>> [true, false]
+        certificateServiceMock.isCertificateValidInFuture(_, _) >> false
 
         when:
         classUnderTest.testValidation()
 
         then:
-        def e = thrown(CheckCertValidationError)
-        e.message == "Certificate is already or becomes invalid within the next 30 days: certs${fs.separator}letsencrypt.pem"
+        def e = thrown(CheckCertsValidationError)
+        def path = Paths.get("certs", "letsencrypt.pem")
+        e.message.startsWith("The following certificates in $path are already or become invalid within the next 30 days:")
+        e.message.contains(" - ISRG Root X1 [CABD2A79]")
     }
 
     def "when all certificates are valid nothing happens"() {
         given:
-        fs.getPath("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
-        fs.getPath("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
+        testProjectDir.resolve("certs/cacert.pem").text = CertificateProvider.CACERT_ROOT_CA
+        testProjectDir.resolve("certs/letsencrypt.pem").text = CertificateProvider.LETSENCRYPT_ROOT_CA
 
         and:
         certificateServiceMock.isCertificateValidInFuture(_, _) >> true
@@ -103,5 +104,22 @@ class CheckCertsValidationTaskTest extends Specification {
 
         then:
         true
+    }
+
+    def "certificate bundle is supported"() {
+        given:
+        testProjectDir.resolve("certs/bundle.pem").text = """
+        $CertificateProvider.LETSENCRYPT_ROOT_CA
+        $CertificateProvider.CACERT_ROOT_CA
+        """
+
+        and:
+        certificateServiceMock.isCertificateValidInFuture(_, _) >> true
+
+        when:
+        classUnderTest.testValidation()
+
+        then:
+        2 * certificateServiceMock.isCertificateValidInFuture(_, _)
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 Gregor Dschung
+ * Copyright 2016 - 2022 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,63 +16,77 @@
 
 package de.chkpnt.gradle.plugin.truststorebuilder
 
-import java.nio.file.Path
+import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-open class TrustStoreBuilderExtension(project: Project) {
-
-    private val project: Project = project
-
-    /**
-     * The password used for the TrustStore. Defaults to 'changeit'.
-     */
-    var password: String = "changeit"
+open class TrustStoreBuilderExtension(private val project: Project) {
 
     /**
-     * Path pointing to the TrustStore being built. Defaults to '$buildDir/cacerts.jks'.
+     * Configures and registers the task `buildTrustStore`.
      */
-    var trustStore: Any? = null
-    val trustStorePath: Path
-        get() {
-            val _trustStore = trustStore
-            return if (_trustStore != null) {
-                project.file(_trustStore).toPath()
-            } else {
-                project.buildDir.toPath().resolve("cacerts.jks")
+    fun trustStore(action: Action<TrustStoreSpec>) {
+        trustStore("", action)
+    }
+
+    /**
+     * Configures and registers the task `buildTrustStore<Name>`.
+     */
+    fun trustStore(name: String, action: Action<TrustStoreSpec>) {
+        val trustStoreSpec = TrustStoreSpec(project)
+        action.execute(trustStoreSpec)
+        trustStoreSpec.check()
+        registerBuildTrustStoreTask(name, trustStoreSpec)
+    }
+
+    /**
+     * Configures and registers the task `checkCertificates`.
+     */
+    fun checkCertificates(action: Action<CheckCertsSpec>) {
+        val checkCertsSpec = CheckCertsSpec(project)
+        action.execute(checkCertsSpec)
+        registerCheckCertificatesTask(checkCertsSpec)
+    }
+
+    private fun registerBuildTrustStoreTask(name: String, spec: TrustStoreSpec) {
+        val buildTaskName = "$BUILD_TRUSTSTORE_TASK_NAME_PREFIX${name.replaceFirstChar(Char::titlecase)}"
+        val buildTask = project.tasks
+            .register(buildTaskName, BuildTrustStoreTask::class.java) { task ->
+                task.trustStorePath.set(spec.path)
+                task.trustStorePassword.set(spec.password)
+                task.source.set(spec.source)
+                task.includes.set(spec.includes)
             }
-        }
 
-    /**
-     * The directory which is scanned for certificates. Defaults to '$projectDir/src/main/certs'.
-     */
-    var inputDir: Any? = null
-    val inputDirPath: Path
-        get() {
-            val _inputDir = inputDir
-            return if (_inputDir != null) {
-                project.file(_inputDir).toPath()
-            } else {
-                project.file("src/main/certs").toPath()
+        project.tasks
+            .named(LifecycleBasePlugin.BUILD_TASK_NAME) { task ->
+                if (spec.buildEnabled.get()) {
+                    task.dependsOn(buildTask)
+                }
             }
-        }
+    }
 
-    /**
-     * A file being processed as a certificate has to have a file ending from this list. Defaults to  ['crt', 'cer', 'pem'].
-     */
-    var acceptedFileEndings: List<String> = mutableListOf("crt", "cer", "pem")
+    private fun registerCheckCertificatesTask(spec: CheckCertsSpec) {
+        val checkTaskName = "$CHECK_CERTS_TASK_NAME"
+        val checkTask = project.tasks
+            .register(checkTaskName, CheckCertsValidationTask::class.java) { task ->
+                task.source(spec.source.get())
+                task.include(spec.includes.get())
+                task.exclude(spec.excludes.get())
+                task.atLeastValidDays.set(spec.atLeastValidDays)
+            }
 
-    /**
-     * Number of days the certificates have to be at least valid. Defaults to 90 days.
-     */
-    var atLeastValidDays: Int = 90
+        project.tasks
+            .named(LifecycleBasePlugin.CHECK_TASK_NAME).configure { task ->
+                if (spec.checkEnabled.get()) {
+                    task.dependsOn(checkTask)
+                }
+            }
+    }
 
-    /**
-     * Should the `check`-task depend on `checkCertificates`? Defaults to true.
-     */
-    var checkEnabled: Boolean = true
+    companion object {
 
-    /**
-     * Should the `build`-task depend on `buildTrustStore`? Defaults to true.
-     */
-    var buildEnabled: Boolean = true
+        private const val BUILD_TRUSTSTORE_TASK_NAME_PREFIX = "buildTrustStore"
+        private const val CHECK_CERTS_TASK_NAME = "checkCertificates"
+    }
 }

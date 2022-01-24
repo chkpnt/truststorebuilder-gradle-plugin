@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 Gregor Dschung
+ * Copyright 2016 - 2022 Gregor Dschung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,6 +127,14 @@ class CertificateServiceTest extends Specification {
         // the PrivateKeyEntry "mysecretcert" is protected with the password "secret"
     }
 
+    def "Derive alias from certificate"() {
+        when:
+        def dn = classUnderTest.deriveAlias(caCertCertificate)
+
+        then:
+        dn == "CA Cert Signing Authority [135CEC36]"
+    }
+
     def "Fingerprint is calculated correctly"() {
         when:
         def fingerprint = classUnderTest.fingerprintSha1(caCertCertificate)
@@ -141,16 +149,16 @@ class CertificateServiceTest extends Specification {
         file.write(CertificateProvider.CACERT_ROOT_CA)
 
         when:
-        def cert = classUnderTest.loadCertificate(file)
+        def certs = classUnderTest.loadCertificates(file)
 
         then:
-        cert == caCertCertificate
+        certs.find() == caCertCertificate
     }
 
-    def "New Keystore can be saved to the filesystem"() {
+    def "New Keystore can be saved to the filesystem"(filename) {
         given:
         def file = fs.getPath("keystore.jks")
-        def ks = classUnderTest.newKeystore()
+        def ks = classUnderTest.newKeyStore(KeyStoreType.JKS)
         assert Files.notExists(file)
 
         when:
@@ -158,6 +166,12 @@ class CertificateServiceTest extends Specification {
 
         then:
         Files.exists(file)
+
+        where:
+        filename       | _
+        "keystore.jks" | _
+        "keystore.p12" | _
+        "keystore.pfx" | _
     }
 
     private def prepareKeystore(String filename) {

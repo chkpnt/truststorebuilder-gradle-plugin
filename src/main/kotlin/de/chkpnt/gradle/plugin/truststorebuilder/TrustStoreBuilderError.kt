@@ -14,3 +14,12 @@
  * limitations under the License.
  */
 
+package de.chkpnt.gradle.plugin.truststorebuilder
+
+import org.gradle.api.GradleException
+import java.nio.file.Path
+
+data class TrustStoreBuilderError(val file: Path, val reason: String) : GradleException() {
+
+    override val message: String? = "$reason: $file"
+}

@@ -1,5 +1,20 @@
 # Release notes
 
+# v0.6.0
+## What's Changed
+* Added support for certificate bundles (#64), so it is now very easy to import a bundle like the [CA certificates extracted from Mozilla](https://curl.se/docs/caextract.html)
+* Added support for PKCS12 containers (#68)
+* Added support to build multiple TrustStores
+* Removed the feature to configure the certificate's alias for the TrustStore. The alias is now derived from the CN of the certificate and its fingerprint (sha1).
+* Separated the configuration of the `buildTrustStore`-tasks and the `checkCertificates`-task
+* Updated dependencies
+* Plugin requires Gradle 7.0
+
+**Full Changelog**: https://github.com/chkpnt/truststorebuilder-gradle-plugin/compare/0.5.1...0.6.0
+
+## Migration from previous versions
+The DSL provided by the `trustStoreBuilder`-extension changed a lot. Please have a look at the examples in the [README.md](https://github.com/chkpnt/truststorebuilder-gradle-plugin#readme) and the [demo project](https://github.com/chkpnt/truststorebuilder-gradle-plugin-demo).
+
 # v0.5.1
 * Remove runtime dependency to kotlin-stdlib
 
