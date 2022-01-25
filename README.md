@@ -12,7 +12,7 @@ Additionally, a validation check for the certificates is provided by this plugin
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/c5cu6n9ngma600y9?svg=true)](https://ci.appveyor.com/project/chkpnt/truststorebuilder-gradle-plugin/branch/main)
 [![KDoc](https://img.shields.io/badge/Docs-KDoc-lightgrey.svg)](https://chkpnt.github.io/truststorebuilder-gradle-plugin/kdoc/index.html)
 [![SonarQube](https://img.shields.io/badge/SonarQube-sonar.chkpnt.de-blue.svg)](https://sonar.chkpnt.de/dashboard?id=de.chkpnt%3Atruststorebuilder-gradle-plugin)
-[![Tests](https://img.shields.io/sonar/tests/de.chkpnt:truststorebuilder-gradle-plugin?label=Tests&server=https%3A%2F%2Fsonar.chkpnt.de&sonarVersion=8.9)](https://sonar.chkpnt.de/component_measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)
+[![Tests](https://img.shields.io/sonar/tests/de.chkpnt:truststorebuilder-gradle-plugin?label=Tests&server=https%3A%2F%2Fsonar.chkpnt.de&sonarVersion=8.9)](https://sonar.chkpnt.de/component_measures?id=de.chkpnt%3Atruststorebuilder-gradle-plugin&metric=tests)  
 [![Codecov](https://img.shields.io/badge/Other%20CI%20tool-codecov.io-blue.svg)](https://codecov.io/)
 [![Test coverage by codecov.io](https://codecov.io/gh/chkpnt/truststorebuilder-gradle-plugin/branch/main/graph/badge.svg)](https://codecov.io/github/chkpnt/truststorebuilder-gradle-plugin?branch=main)
 
