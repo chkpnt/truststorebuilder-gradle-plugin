@@ -1,6 +1,6 @@
 # Build your Java TrustStore with Gradle
 
-This Gradle plugin for Gradle 7.0 and newer can build a Java TrustStore from existing certificates and bundles.
+This Gradle plugin for Gradle 7.0 and newer can build a Java TrustStore from existing certificates and bundles like the [Mozilla CA certificate store](https://curl.se/docs/caextract.html).
 TrustStores can be built in the JKS format or as PKCS12-containers.
 Additionally, a validation check for the certificates is provided by this plugin, too.
 
