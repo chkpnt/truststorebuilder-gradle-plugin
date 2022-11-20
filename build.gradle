@@ -44,7 +44,7 @@ dependencies {
 	testImplementation gradleTestKit()
 	testImplementation 'commons-io:commons-io:2.11.0'
 	testImplementation 'com.google.jimfs:jimfs:1.2'      // In-Memory Filesystem
-	testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0', {
+	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0', {
 		exclude group: 'org.codehaus.groovy'
 	}
 	testImplementation 'org.hamcrest:hamcrest-all:1.3'
