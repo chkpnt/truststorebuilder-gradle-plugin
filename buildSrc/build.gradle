@@ -13,6 +13,6 @@ dependencies {
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.1.2")
     implementation("org.ajoberstar.git-publish:gradle-git-publish:3.0.1")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.6.10")
-    implementation("com.hello2morrow:sonargraph-gradle-plugin:8.8.0")
+    implementation("com.hello2morrow:sonargraph-gradle-plugin:12.6.1")
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3")
 }
