@@ -52,15 +52,15 @@ publishing {
  * Publish to plugins.gradle.org
  *********************************/
 
-pluginBundle {
+gradlePlugin {
     website = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin'
     vcsUrl = 'https://github.com/chkpnt/truststorebuilder-gradle-plugin.git'
     description = 'Building Java TrustStores with Gradle.'
-    tags = ['truststore', 'certificates', 'ca']
 
     plugins {
         truststorebuilder {
             displayName = 'Gradle TrustStore-builder plugin'
+            tags.set(['truststore', 'certificates', 'ca'])
         }
     }
 }
