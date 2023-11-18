@@ -56,7 +56,7 @@ test {
 }
 
 wrapper {
-	gradleVersion = '7.3.3'
+	gradleVersion = '7.6.3'
 	distributionType = 'all'
 }
 
