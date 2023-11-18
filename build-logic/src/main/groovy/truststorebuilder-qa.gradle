@@ -1,7 +1,7 @@
 plugins {
     id("jacoco")
     id "org.sonarqube"
-    id "com.hello2morrow.sonargraph"
+//    id "com.hello2morrow.sonargraph"
 }
 
 /***************************
@@ -40,27 +40,27 @@ sonarqube {
 }
 
 /*********************************
- * Sonargraph
+ * Sonargraph (inactive)
  *********************************/
-
-sonargraphDynamicReport {
-    activationCode = System.getenv("SONARGRAPH_ACTIVATION_CODE")
-    prepareForSonarQube = true
-    reportType = "full"
-    reportFormat = "xml, html"
-    qualityModelFile = "Sonargraph:Java.sgqm" //default Java quality model
-    reportFileName = "sonargraph"
-    failSet	{
-        failOnEmptyWorkspace = true
-    }
-}
-
-// Unfortunately, sonargraphDynamicReport.reportDirectory returns
-// not the default value but null if not set explicitly :-/
-task prepareSonargraphReportForGhPages(type: Copy) {
-    from "$buildDir/sonargraph"
-    into "${ghPagesGroomingDir}/reports"
-    exclude '*.xml'
-}
-
-tasks["sonargraphDynamicReport"].finalizedBy(prepareSonargraphReportForGhPages)
+//
+//sonargraphDynamicReport {
+//    activationCode = System.getenv("SONARGRAPH_ACTIVATION_CODE")
+//    prepareForSonarQube = true
+//    reportType = "full"
+//    reportFormat = "xml, html"
+//    qualityModelFile = "Sonargraph:Java.sgqm" //default Java quality model
+//    reportFileName = "sonargraph"
+//    failSet	{
+//        failOnEmptyWorkspace = true
+//    }
+//}
+//
+//// Unfortunately, sonargraphDynamicReport.reportDirectory returns
+//// not the default value but null if not set explicitly :-/
+//task prepareSonargraphReportForGhPages(type: Copy) {
+//    from "$buildDir/sonargraph"
+//    into "${ghPagesGroomingDir}/reports"
+//    exclude '*.xml'
+//}
+//
+//tasks["sonargraphDynamicReport"].finalizedBy(prepareSonargraphReportForGhPages)
