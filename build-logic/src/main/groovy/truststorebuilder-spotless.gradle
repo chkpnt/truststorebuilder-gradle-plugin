@@ -21,7 +21,8 @@ spotless {
     groovy {
         excludeJava()
         licenseHeaderFile "${rootDir}/gradle/formatter/spotless.license.txt"
-        greclipse().configFile "${rootDir}/gradle/formatter/greclipse.properties"
+        // Do not update to greclipse > 4.27 due to https://github.com/diffplug/spotless/issues/1860
+        greclipse('4.27').configFile "${rootDir}/gradle/formatter/greclipse.properties"
     }
 
 }
