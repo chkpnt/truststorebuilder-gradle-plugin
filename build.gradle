@@ -43,7 +43,7 @@ dependencies {
 
 	testImplementation localGroovy()
 	testImplementation gradleTestKit()
-	testImplementation 'commons-io:commons-io:2.11.0'
+	testImplementation 'commons-io:commons-io:2.15.1'
 	testImplementation 'com.google.jimfs:jimfs:1.2'      // In-Memory Filesystem
 	testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0', {
 		exclude group: 'org.codehaus.groovy'
