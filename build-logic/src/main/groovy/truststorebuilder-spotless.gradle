@@ -21,8 +21,7 @@ spotless {
     groovy {
         excludeJava()
         licenseHeaderFile "${rootDir}/gradle/formatter/spotless.license.txt"
-        
-        greclipse('4.12.0').configFile "${rootDir}/gradle/formatter/greclipse.properties"
+        greclipse().configFile "${rootDir}/gradle/formatter/greclipse.properties"
     }
 
 }
