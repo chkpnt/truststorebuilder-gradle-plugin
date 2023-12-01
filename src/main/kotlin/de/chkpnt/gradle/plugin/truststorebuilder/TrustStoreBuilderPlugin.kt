@@ -21,7 +21,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
 
 class TrustStoreBuilderPlugin : Plugin<Project> {
-
     override fun apply(project: Project) {
         project.pluginManager
             .apply(BasePlugin::class.java)

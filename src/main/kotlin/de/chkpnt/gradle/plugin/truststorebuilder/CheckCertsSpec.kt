@@ -22,24 +22,27 @@ import org.gradle.api.provider.Property
 import java.nio.file.Path
 
 class CheckCertsSpec(private val project: Project) {
-
-    internal val source: Property<Path> = project.objects.property(Path::class.java)
-        .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
-    internal val includes: ListProperty<String> = project.objects.listProperty(String::class.java)
-        .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
+    internal val source: Property<Path> =
+        project.objects.property(Path::class.java)
+            .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
+    internal val includes: ListProperty<String> =
+        project.objects.listProperty(String::class.java)
+            .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
     internal val excludes: ListProperty<String> = project.objects.listProperty(String::class.java)
 
     /**
      * Number of days the certificates have to be at least valid. Defaults to 90 days.
      */
-    var atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
-        .convention(90)
+    var atLeastValidDays: Property<Int> =
+        project.objects.property(Int::class.java)
+            .convention(90)
 
     /**
      * Should the `check`-task depend on `checkCertificates<Name>`? Defaults to true.
      */
-    var checkEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
-        .convention(true)
+    var checkEnabled: Property<Boolean> =
+        project.objects.property(Boolean::class.java)
+            .convention(true)
 
     /**
      * The directory which is scanned for certificates and bundles, which is resolved using `project.file(...)`.

@@ -28,7 +28,6 @@ import java.security.cert.X509Certificate
 import java.time.Duration
 
 abstract class CheckCertsValidationTask() : SourceTask() {
-
     @get:Input
     abstract val atLeastValidDays: Property<Int>
 
@@ -56,7 +55,9 @@ abstract class CheckCertsValidationTask() : SourceTask() {
         if (invalidCerts.isNotEmpty()) {
             val messageBuilder = StringBuilder()
             invalidCerts.forEach { (path, certs) ->
-                messageBuilder.append("The following certificates in $path are already or become invalid within the next ${atLeastValid.toDays()} days:")
+                messageBuilder.append(
+                    "The following certificates in $path are already or become invalid within the next ${atLeastValid.toDays()} days:",
+                )
                     .appendLineSeparator()
                 certs.map(certificateService::deriveAlias).forEach { alias ->
                     messageBuilder.append(" - $alias").appendLineSeparator()
@@ -66,11 +67,16 @@ abstract class CheckCertsValidationTask() : SourceTask() {
         }
     }
 
-    private fun checkValidation(cert: X509Certificate, path: Path, invalidCerts: MutableMap<Path, MutableList<X509Certificate>>) {
+    private fun checkValidation(
+        cert: X509Certificate,
+        path: Path,
+        invalidCerts: MutableMap<Path, MutableList<X509Certificate>>,
+    ) {
         if (!certificateService.isCertificateValidInFuture(cert, atLeastValid)) {
-            val relativePath = project.projectDir
-                .toPath()
-                .relativize(path)
+            val relativePath =
+                project.projectDir
+                    .toPath()
+                    .relativize(path)
             invalidCerts.getOrPut(relativePath) { mutableListOf() }
                 .add(cert)
         }

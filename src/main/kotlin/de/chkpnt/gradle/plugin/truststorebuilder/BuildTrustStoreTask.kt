@@ -38,7 +38,6 @@ import java.security.cert.X509Certificate
 // TODO: Gregor, 2021-01-23: Rethink...
 
 abstract class BuildTrustStoreTask() : DefaultTask() {
-
     @get:OutputFile
     abstract val trustStorePath: Property<Path>
 
@@ -60,10 +59,11 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
 
     @Console
     override fun getDescription(): String {
-        val sourceDirName = project.projectDir
-            .toPath()
-            .relativize(source.get())
-            .toString()
+        val sourceDirName =
+            project.projectDir
+                .toPath()
+                .relativize(source.get())
+                .toString()
         return "Adds all certificates found under '$sourceDirName' to the TrustStore."
     }
 
@@ -90,7 +90,10 @@ abstract class BuildTrustStoreTask() : DefaultTask() {
         }
     }
 
-    private fun importCertificatesInto(keystore: KeyStore, certs: List<X509Certificate>) {
+    private fun importCertificatesInto(
+        keystore: KeyStore,
+        certs: List<X509Certificate>,
+    ) {
         for (cert in certs) {
             val alias = getCertAlias(cert)
             if (certificateService.containsAlias(keystore, alias)) {

@@ -19,8 +19,9 @@ package de.chkpnt.gradle.plugin.truststorebuilder
 import java.nio.file.Path
 import kotlin.io.path.extension
 
-internal fun Path.keyStoreType(): KeyStoreType? = when (this.extension.lowercase()) {
-    "jks" -> KeyStoreType.JKS
-    "p12", "pfx" -> KeyStoreType.PKCS12
-    else -> null
-}
+internal fun Path.keyStoreType(): KeyStoreType? =
+    when (this.extension.lowercase()) {
+        "jks" -> KeyStoreType.JKS
+        "p12", "pfx" -> KeyStoreType.PKCS12
+        else -> null
+    }

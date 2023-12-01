@@ -23,27 +23,32 @@ import org.gradle.api.provider.Property
 import java.nio.file.Path
 
 class TrustStoreSpec(private val project: Project) {
-
-    internal val path: Property<Path> = project.objects.property(Path::class.java)
-        .convention(project.layout.buildDirectory.file("cacerts.jks").map { it.asFile.toPath() })
-    internal val password: Property<String> = project.objects.property(String::class.java)
-        .convention("changeit")
-    internal val source: Property<Path> = project.objects.property(Path::class.java)
-        .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
-    internal val includes: ListProperty<String> = project.objects.listProperty(String::class.java)
-        .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
+    internal val path: Property<Path> =
+        project.objects.property(Path::class.java)
+            .convention(project.layout.buildDirectory.file("cacerts.jks").map { it.asFile.toPath() })
+    internal val password: Property<String> =
+        project.objects.property(String::class.java)
+            .convention("changeit")
+    internal val source: Property<Path> =
+        project.objects.property(Path::class.java)
+            .convention(project.layout.projectDirectory.dir("src/main/certs").asFile.toPath())
+    internal val includes: ListProperty<String> =
+        project.objects.listProperty(String::class.java)
+            .convention(listOf("**/*.crt", "**/*.cer", "**/*.pem"))
 
     /**
      * Number of days the certificates have to be at least valid. Defaults to 90 days.
      */
-    var atLeastValidDays: Property<Int> = project.objects.property(Int::class.java)
-        .convention(90)
+    var atLeastValidDays: Property<Int> =
+        project.objects.property(Int::class.java)
+            .convention(90)
 
     /**
      * Should the `build`-task depend on `buildTrustStore<Name>`? Defaults to true.
      */
-    var buildEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
-        .convention(true)
+    var buildEnabled: Property<Boolean> =
+        project.objects.property(Boolean::class.java)
+            .convention(true)
 
     /**
      * The directory which is scanned for certificates and bundles, which is resolved using `project.file(...)`.
@@ -94,7 +99,10 @@ class TrustStoreSpec(private val project: Project) {
 
         if (listOfImproperConfiguredProperties.any()) {
             val improperConfiguredProperties = listOfImproperConfiguredProperties.joinToString(separator = ", ")
-            throw ProjectConfigurationException("The following properties have to be configured appropriately: $improperConfiguredProperties", IllegalArgumentException())
+            throw ProjectConfigurationException(
+                "The following properties have to be configured appropriately: $improperConfiguredProperties",
+                IllegalArgumentException(),
+            )
         }
     }
 }

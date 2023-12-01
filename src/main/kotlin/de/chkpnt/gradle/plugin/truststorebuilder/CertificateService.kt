@@ -30,26 +30,49 @@ import java.time.ZoneOffset
 import javax.naming.ldap.LdapName
 
 enum class KeyStoreType {
-    JKS, PKCS12
+    JKS,
+    PKCS12,
 }
 
 interface CertificateService {
-    fun isCertificateValidInFuture(cert: X509Certificate, duration: Duration): Boolean
-    fun addCertificateToKeystore(ks: KeyStore, cert: X509Certificate, alias: String)
+    fun isCertificateValidInFuture(
+        cert: X509Certificate,
+        duration: Duration,
+    ): Boolean
+
+    fun addCertificateToKeystore(
+        ks: KeyStore,
+        cert: X509Certificate,
+        alias: String,
+    )
+
     fun loadCertificates(file: Path): List<X509Certificate>
+
     fun deriveAlias(cert: X509Certificate): String
-    fun containsAlias(ks: KeyStore, alias: String): Boolean
+
+    fun containsAlias(
+        ks: KeyStore,
+        alias: String,
+    ): Boolean
+
     fun newKeyStore(type: KeyStoreType): KeyStore
-    fun storeKeystore(ks: KeyStore, file: Path, password: String)
+
+    fun storeKeystore(
+        ks: KeyStore,
+        file: Path,
+        password: String,
+    )
 }
 
 internal open class DefaultCertificateService : CertificateService {
-
     var clock: Clock = Clock.systemDefaultZone()
 
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
 
-    override fun isCertificateValidInFuture(cert: X509Certificate, duration: Duration): Boolean {
+    override fun isCertificateValidInFuture(
+        cert: X509Certificate,
+        duration: Duration,
+    ): Boolean {
         val notAfterInstant = cert.notAfter.toInstant()
         val notAfter = LocalDateTime.ofInstant(notAfterInstant, ZoneOffset.UTC)
 
@@ -58,12 +81,19 @@ internal open class DefaultCertificateService : CertificateService {
         return thresholdDateTime.isBefore(notAfter)
     }
 
-    override fun addCertificateToKeystore(ks: KeyStore, cert: X509Certificate, alias: String) {
+    override fun addCertificateToKeystore(
+        ks: KeyStore,
+        cert: X509Certificate,
+        alias: String,
+    ) {
         val certEntry = KeyStore.TrustedCertificateEntry(cert)
         ks.setEntry(alias, certEntry, null)
     }
 
-    fun getCertificateFromKeystore(ks: KeyStore, alias: String): X509Certificate {
+    fun getCertificateFromKeystore(
+        ks: KeyStore,
+        alias: String,
+    ): X509Certificate {
         if (!ks.containsAlias(alias)) {
             throw IllegalArgumentException("The keystore does not contain a certificate for alias $alias")
         }
@@ -89,9 +119,10 @@ internal open class DefaultCertificateService : CertificateService {
     override fun deriveAlias(cert: X509Certificate): String {
         val dn = cert.subjectX500Principal.name
         val ldapName = LdapName(dn)
-        val cn = ldapName.rdns.firstOrNull {
-            it.type.equals("cn", true)
-        }?.value?.toString() ?: dn
+        val cn =
+            ldapName.rdns.firstOrNull {
+                it.type.equals("cn", true)
+            }?.value?.toString() ?: dn
         val fingerprint = shortFingerprintSha1(cert)
         return "$cn [$fingerprint]"
     }
@@ -115,7 +146,10 @@ internal open class DefaultCertificateService : CertificateService {
         return messageDigest.digest()
     }
 
-    override fun containsAlias(ks: KeyStore, alias: String): Boolean {
+    override fun containsAlias(
+        ks: KeyStore,
+        alias: String,
+    ): Boolean {
         return ks.containsAlias(alias)
     }
 
@@ -125,7 +159,10 @@ internal open class DefaultCertificateService : CertificateService {
         return keystore
     }
 
-    fun loadKeystore(file: Path, password: String): KeyStore {
+    fun loadKeystore(
+        file: Path,
+        password: String,
+    ): KeyStore {
         val type = file.keyStoreType() ?: throw IllegalArgumentException("Can't derive KeyStoreType for $file")
         val keystore = KeyStore.getInstance(type.name)
         Files.newInputStream(file).use { inputStream ->
@@ -134,7 +171,11 @@ internal open class DefaultCertificateService : CertificateService {
         return keystore
     }
 
-    override fun storeKeystore(ks: KeyStore, file: Path, password: String) {
+    override fun storeKeystore(
+        ks: KeyStore,
+        file: Path,
+        password: String,
+    ) {
         Files.newOutputStream(file).use { outputStream ->
             ks.store(outputStream, password.toCharArray())
         }
